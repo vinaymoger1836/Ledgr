@@ -1,6 +1,6 @@
 package com.ledgr.app.golden
 
-import com.ledgr.app.domain.rules.CategoryRulesParser
+import com.ledgr.app.domain.rules.RulesBundle
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -20,9 +20,9 @@ fun main(args: Array<String>) {
 
     var failures = 0
 
-    // Preflight (not a golden case): the shipped rule file the DB is seeded from must parse.
+    // Preflight (not a golden case): the shipped rule files the app loads at start-up must parse and agree.
     if (rules != null) {
-        failures += preflightCategories(File(rules, "categories.yaml"))
+        failures += preflightRules(rules)
     }
 
     for (case in cases) {
@@ -67,14 +67,23 @@ private fun runCase(case: GoldenCase, fixtures: File, expectedDir: File): Int {
     return 1
 }
 
-private fun preflightCategories(file: File): Int {
-    if (!file.isFile) {
-        System.err.println("[FAIL] rules preflight: ${file.path} not found")
-        return 1
+/** Parses all four rule files through the same `:domain` code the app uses, including cross-file checks. */
+private fun preflightRules(dir: File): Int {
+    val names = listOf("banks.yaml", "spam.yaml", "merchants.yaml", "categories.yaml")
+    val missing = names.map { File(dir, it) }.filterNot { it.isFile }
+    if (missing.isNotEmpty()) {
+        missing.forEach { System.err.println("[FAIL] rules preflight: ${it.path} not found") }
+        return missing.size
     }
     return try {
-        val parsed = CategoryRulesParser.parse(file.readText(Charsets.UTF_8))
-        println("[ OK ] rules preflight: categories.yaml v${parsed.version}, ${parsed.categories.size} categories")
+        fun text(name: String) = File(dir, name).readText(Charsets.UTF_8)
+        val bundle = RulesBundle.parse(text("banks.yaml"), text("spam.yaml"), text("merchants.yaml"), text("categories.yaml"))
+        println(
+            "[ OK ] rules preflight: v${bundle.version}: ${bundle.banks.banks.size} banks " +
+                "(${bundle.unverifiedBanks} unverified), ${bundle.merchants.merchants.size} merchants " +
+                "(${bundle.unverifiedMerchants} unverified), ${bundle.categories.categories.size} categories, " +
+                "${bundle.spam.classes.size} spam classes",
+        )
         0
     } catch (e: Exception) {
         System.err.println("[FAIL] rules preflight: ${e.message}")

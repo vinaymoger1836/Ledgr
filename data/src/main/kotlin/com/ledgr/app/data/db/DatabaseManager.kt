@@ -1,23 +1,25 @@
 package com.ledgr.app.data.db
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
+import com.ledgr.app.data.rules.RuleDataSync
+import com.ledgr.app.data.rules.RulesLoader
 import com.ledgr.app.data.security.DbKeyProvider
-import com.ledgr.app.domain.rules.CategoryRule
-import com.ledgr.app.domain.rules.CategoryRulesParser
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
-/** Whether the encrypted database could be opened. Failures are surfaced, never swallowed. */
+/** Whether the encrypted database could be opened and its rule data prepared. Failures are surfaced, never swallowed. */
 sealed interface DbStatus {
     data object Opening : DbStatus
     data class Ready(val categoryCount: Int) : DbStatus
@@ -28,11 +30,14 @@ sealed interface DbStatus {
  * Builds and opens the encrypted [LedgrDatabase] exactly once per process.
  *
  * Opening happens off the main thread at app start ([initialize]); anything that needs the database
- * later calls [requireDatabase], which returns the same instance or rethrows the original failure.
+ * later goes through [observe] / [withDb] (which hop to a background thread) or [requireDatabase], which
+ * returns the same instance or rethrows the original failure. Nothing injects the database directly, so a
+ * failed open can never crash a ViewModel's construction.
  */
 @Singleton
 class DatabaseManager @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val rulesLoader: RulesLoader,
 ) {
     private val _status = MutableStateFlow<DbStatus>(DbStatus.Opening)
     val status: StateFlow<DbStatus> = _status.asStateFlow()
@@ -46,8 +51,10 @@ class DatabaseManager @Inject constructor(
         failure?.let { throw IllegalStateException("The encrypted database is unavailable.", it) }
         try {
             val db = build()
-            // Force the open now so a wrong key or corrupt file fails here, in one place.
+            // Force the open now so a wrong key, corrupt file or failed migration fails here, in one place.
             db.openHelper.writableDatabase
+            // Shipped rule data (categories, starter merchants): insert what is missing, never overwrite.
+            RuleDataSync.apply(db, rulesLoader.load())
             database = db
             _status.value = DbStatus.Ready(categoryCount = countCategories(db))
             db
@@ -67,45 +74,35 @@ class DatabaseManager @Inject constructor(
         }
     }
 
+    /**
+     * A live query. Runs on the IO dispatcher; if the database is unavailable the flow just ends without
+     * emitting (the global banner already says so) instead of throwing into the UI.
+     */
+    fun <T> observe(query: (LedgrDatabase) -> Flow<T>): Flow<T> =
+        flow {
+            val db = try {
+                requireDatabase()
+            } catch (_: Throwable) {
+                return@flow
+            }
+            emitAll(query(db))
+        }.flowOn(Dispatchers.IO)
+
+    /** One-shot work on the IO dispatcher. Throws if the database is unavailable. */
+    suspend fun <T> withDb(block: suspend (LedgrDatabase) -> T): T =
+        withContext(Dispatchers.IO) { block(requireDatabase()) }
+
     private fun build(): LedgrDatabase {
         val passphrase = DbKeyProvider(context, LedgrDatabase.NAME).passphrase()
-        val seed = loadCategorySeed()
         System.loadLibrary("sqlcipher")
         return Room.databaseBuilder(context, LedgrDatabase::class.java, LedgrDatabase.NAME)
             .openHelperFactory(SupportOpenHelperFactory(passphrase))
-            .addCallback(CategorySeedCallback(seed))
+            .addMigrations(*Migrations.ALL)
             .build()
-    }
-
-    private fun loadCategorySeed(): List<CategoryRule> {
-        val text = context.assets.open(CATEGORIES_ASSET).use { it.readBytes().toString(Charsets.UTF_8) }
-        return CategoryRulesParser.parse(text).categories
     }
 
     private fun countCategories(db: LedgrDatabase): Int =
         db.openHelper.readableDatabase.query("SELECT COUNT(*) FROM category").use { c ->
             if (c.moveToFirst()) c.getInt(0) else 0
         }
-
-    /** Seeds default categories inside the transaction that creates the database. */
-    private class CategorySeedCallback(private val seed: List<CategoryRule>) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            for (rule in seed) {
-                val values = ContentValues().apply {
-                    put("key", rule.key)
-                    put("name", rule.name)
-                    put("icon", rule.icon)
-                    put("color", rule.color)
-                    put("kind", rule.kind.name)
-                    put("is_default", 1)
-                    put("hidden", 0)
-                }
-                db.insert("category", SQLiteDatabase.CONFLICT_ABORT, values)
-            }
-        }
-    }
-
-    private companion object {
-        const val CATEGORIES_ASSET = "rules/categories.yaml"
-    }
 }

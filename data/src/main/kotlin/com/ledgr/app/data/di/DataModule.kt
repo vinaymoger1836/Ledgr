@@ -5,10 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.ledgr.app.data.db.AccountDao
-import com.ledgr.app.data.db.CategoryDao
-import com.ledgr.app.data.db.DatabaseManager
-import com.ledgr.app.data.db.LedgrDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +12,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Note: the database and its DAOs are deliberately *not* provided here. They are reached only through
+ * `DatabaseManager.observe` / `withDb`, so constructing a ViewModel never touches (or crashes on) the database.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
@@ -24,13 +24,4 @@ object DataModule {
     @Singleton
     fun settingsDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(produceFile = { context.preferencesDataStoreFile("settings") })
-
-    @Provides
-    fun database(manager: DatabaseManager): LedgrDatabase = manager.requireDatabase()
-
-    @Provides
-    fun categoryDao(db: LedgrDatabase): CategoryDao = db.categoryDao()
-
-    @Provides
-    fun accountDao(db: LedgrDatabase): AccountDao = db.accountDao()
 }
