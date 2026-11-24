@@ -52,7 +52,7 @@ enum class HeaderNote { Confirmed, Unverified, Listed, Manual }
 
 data class HeaderChoice(val header: String, val selected: Boolean, val note: HeaderNote)
 
-enum class AccountFormError { Last4, Nickname, Duplicate, SaveFailed }
+enum class AccountFormError { Last4, Nickname, Duplicate, SaveFailed, HasTransactions }
 
 /** The add/edit account sheet. */
 data class AccountEditorUi(
@@ -284,8 +284,12 @@ class ProfileViewModel @Inject constructor(
     private fun delete() {
         val d = draft.value ?: return
         viewModelScope.launch {
-            val ok = runCatching { accounts.delete(d.id) }.isSuccess
-            if (ok) draft.value = null else fail(AccountFormError.SaveFailed)
+            val deleted = runCatching { accounts.delete(d.id) }.getOrNull()
+            when (deleted) {
+                true -> draft.value = null
+                false -> fail(AccountFormError.HasTransactions)
+                null -> fail(AccountFormError.SaveFailed)
+            }
         }
     }
 

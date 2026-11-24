@@ -26,6 +26,11 @@ data class AppSettings(
     val lockTimeout: LockTimeout = LockTimeout.MIN_5,
     /** FLAG_SECURE is on unless this is true. There is no UI for it yet. */
     val allowScreenshots: Boolean = false,
+    /**
+     * "Count transfers between my own accounts" (docs/04 §6, ADR-007). Off by default: in a combined view a transfer
+     * between your own accounts is not spending. Turning it on counts both legs, by design.
+     */
+    val countOwnTransfers: Boolean = false,
 )
 
 /** Small key-value settings in DataStore (docs/05 §1 "setting lives in DataStore"). */
@@ -40,7 +45,12 @@ class SettingsRepository @Inject constructor(
             lockTimeout = prefs[LOCK_TIMEOUT_MINUTES]?.let { minutes -> LockTimeout.entries.firstOrNull { it.minutes == minutes } }
                 ?: LockTimeout.MIN_5,
             allowScreenshots = prefs[ALLOW_SCREENSHOTS] ?: false,
+            countOwnTransfers = prefs[COUNT_OWN_TRANSFERS] ?: false,
         )
+    }
+
+    suspend fun setCountOwnTransfers(count: Boolean) {
+        dataStore.edit { it[COUNT_OWN_TRANSFERS] = count }
     }
 
     suspend fun setThemeMode(mode: ThemeMode) {
@@ -59,5 +69,6 @@ class SettingsRepository @Inject constructor(
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val LOCK_TIMEOUT_MINUTES = intPreferencesKey("lock_timeout_minutes")
         val ALLOW_SCREENSHOTS = booleanPreferencesKey("allow_screenshots")
+        val COUNT_OWN_TRANSFERS = booleanPreferencesKey("count_own_transfers")
     }
 }

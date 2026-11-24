@@ -19,6 +19,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -52,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ledgr.app.R
 import com.ledgr.app.ui.icons.CategoryIcons
 import com.ledgr.app.ui.motion.rememberReducedMotion
+import com.ledgr.app.ui.review.ReviewCountViewModel
 
 /** The Profile tab (docs/08 §2.4): accounts as cards, then the places that hold the rest of the profile. */
 @Composable
@@ -61,11 +63,13 @@ fun ProfileScreen(
     onOpenCategories: () -> Unit,
     onOpenMerchants: () -> Unit,
     onOpenSenders: () -> Unit,
+    onOpenReview: () -> Unit,
     onOpenScanDebug: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val reviewCount by hiltViewModel<ReviewCountViewModel>().count.collectAsStateWithLifecycle()
     val reducedMotion = rememberReducedMotion()
 
     LazyColumn(
@@ -155,6 +159,18 @@ fun ProfileScreen(
                 title = stringResource(R.string.profile_senders),
                 summary = stringResource(R.string.profile_senders_summary),
                 onClick = onOpenSenders,
+            )
+        }
+        item(key = "row-review") {
+            NavRow(
+                icon = Icons.Outlined.Info,
+                title = stringResource(R.string.profile_review),
+                summary = if (reviewCount > 0) {
+                    pluralStringResource(R.plurals.review_banner, reviewCount, reviewCount)
+                } else {
+                    stringResource(R.string.profile_review_none)
+                },
+                onClick = onOpenReview,
             )
         }
         // P2 only: removed or hidden in P4.

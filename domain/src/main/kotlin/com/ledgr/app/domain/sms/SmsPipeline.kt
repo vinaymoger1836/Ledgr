@@ -4,28 +4,39 @@ import com.ledgr.app.domain.rules.RulesBundle
 import java.security.MessageDigest
 
 /**
- * Layers L5 (template match) and L6 (account match). Real templates arrive in P3; until then
- * [NoTemplates] sends every message that passed the gate to review.
+ * Layers L5 (template match) and L6 (account match). [NoTemplates] sends every message that passed the gate to
+ * review; `TemplateStageImpl` is the real one (P3).
  */
 fun interface TemplateStage {
     fun apply(sms: SmsInput, passed: GateResult.Pass): Verdict
 }
 
-/** P2 stub: no templates yet, so a gate-passing message is `REVIEW: no_template` (never a transaction). */
+/**
+ * No templates: a gate-passing transaction is `REVIEW: no_template` (never a transaction) and a balance message is
+ * `BALANCE: balance_only`. Used by gate-only goldens.
+ */
 object NoTemplates : TemplateStage {
     override fun apply(sms: SmsInput, passed: GateResult.Pass): Verdict =
-        Verdict(Outcome.REVIEW, Reasons.NO_TEMPLATE, passed.sender, passed.smsClass)
+        if (passed.smsClass == SmsClass.BALANCE_ONLY) {
+            Verdict(Outcome.BALANCE, Reasons.BALANCE_ONLY, passed.sender, passed.smsClass)
+        } else {
+            Verdict(Outcome.REVIEW, Reasons.NO_TEMPLATE, passed.sender, passed.smsClass)
+        }
 }
 
-/** Raw SMS -> verdict (docs/02 §3.3, P2 part): sender normaliser, spam gate, classifier, template stub. */
+/** Raw SMS -> verdict (docs/02 §3.3): sender normaliser, spam gate, classifier, template stage. */
 class SmsPipeline(
     private val gate: SpamGate,
     private val templates: TemplateStage = NoTemplates,
 ) {
-    constructor(rules: RulesBundle, confirmedHeaders: Set<String> = emptySet()) : this(SpamGate(rules, confirmedHeaders))
+    constructor(
+        rules: RulesBundle,
+        confirmedHeaders: Set<String> = emptySet(),
+        templates: TemplateStage = NoTemplates,
+    ) : this(SpamGate(rules, confirmedHeaders), templates)
 
-    fun process(sms: SmsInput): Verdict =
-        when (val result = gate.evaluate(sms)) {
+    fun process(sms: SmsInput, userConfirmed: Boolean = false): Verdict =
+        when (val result = gate.evaluate(sms, userConfirmed)) {
             is GateResult.Stop -> result.verdict
             is GateResult.Pass -> templates.apply(sms, result)
         }

@@ -7,9 +7,11 @@ import com.ledgr.app.data.db.RawSmsEntity
 import com.ledgr.app.data.db.ScanKind
 import com.ledgr.app.data.db.ScanRunEntity
 import com.ledgr.app.data.db.ScanStatus
-import com.ledgr.app.data.rules.RulesLoader
+import com.ledgr.app.data.db.StoredSmsKey
+import com.ledgr.app.data.db.UserDecision
+import com.ledgr.app.data.ledger.LedgerSession
+import com.ledgr.app.data.ledger.LedgerWriter
 import com.ledgr.app.data.settings.WatermarkStore
-import com.ledgr.app.domain.profile.SenderHeaders
 import com.ledgr.app.domain.sender.Sender
 import com.ledgr.app.domain.sender.SenderSuffix
 import com.ledgr.app.domain.sender.SenderType
@@ -54,9 +56,10 @@ enum class LiveResult {
 class ScanEngine @Inject constructor(
     private val databaseManager: DatabaseManager,
     private val source: SmsSource,
-    private val rulesLoader: RulesLoader,
     private val watermark: WatermarkStore,
     private val progress: ScanProgressRepository,
+    private val pipelines: PipelineFactory,
+    private val ledger: LedgerWriter,
 ) {
     private val lock = Mutex()
 
@@ -117,12 +120,9 @@ class ScanEngine @Inject constructor(
         reevaluate: Boolean,
         advanceWatermark: Boolean,
     ): ScanRunEntity = lock.withLock {
-        val rules = rulesLoader.bundle()
-        val confirmed = databaseManager.withDb { db ->
-            db.accountDao().getAll().flatMap { SenderHeaders.decode(it.senderHeaders) }.toSet()
-        }
-        val pipeline = SmsPipeline(rules, confirmed)
-        val rulesVersion = rules.version
+        val built = databaseManager.withDb { db -> pipelines.create(db) }
+        val pipeline = built.pipeline
+        val rulesVersion = built.rules.version
 
         val startedAt = Ist.now()
         var record = databaseManager.withDb { db ->
@@ -152,13 +152,16 @@ class ScanEngine @Inject constructor(
 
         try {
             pages.collect { page ->
-                val evaluated = withContext(Dispatchers.Default) { page.map { evaluate(pipeline, it) } }
+                // What is already stored, with any decision the person made in Needs review.
+                val keys = databaseManager.withDb { db -> db.rawSmsDao().storedKeys(page.map { it.providerId }) }
+                    .groupBy { it.providerId }
+                val evaluated = withContext(Dispatchers.Default) { page.map { evaluate(pipeline, it, keys) } }
                 val result = databaseManager.withDb { db ->
-                    db.withTransaction { store(db, evaluated, rulesVersion, reevaluate, counts) }
+                    db.withTransaction { store(db, evaluated, keys, rulesVersion, reevaluate, counts) }
                 }
                 read += page.size
                 skipped += result.skipped
-                errors += evaluated.count { it.failed }
+                errors += evaluated.count { it.failed } + result.ledgerErrors
                 newest = maxOf(newest, page.maxOf { it.date })
                 publish(ScanStatus.RUNNING)
             }
@@ -183,13 +186,15 @@ class ScanEngine @Inject constructor(
 
     private class Evaluated(val sms: InboxSms, val hash: String, val verdict: Verdict, val failed: Boolean)
 
-    private class StoreResult(val skipped: Int)
+    private class StoreResult(val skipped: Int, val ledgerErrors: Int)
 
     /** Runs the pure pipeline on one message. Any exception becomes `REVIEW: pipeline_error`, never a dropped message. */
-    private fun evaluate(pipeline: SmsPipeline, sms: InboxSms): Evaluated {
+    private fun evaluate(pipeline: SmsPipeline, sms: InboxSms, stored: Map<Long, List<StoredSmsKey>>): Evaluated {
         val hash = BodyHash.sha256Hex(sms.body)
+        // "It's genuine, record it" stays true on a re-scan: the message-level quarantine is lifted again.
+        val confirmed = stored[sms.providerId]?.firstOrNull { it.bodyHash == hash }?.userDecision == UserDecision.CONFIRMED
         return try {
-            Evaluated(sms, hash, pipeline.process(SmsInput(sms.address, sms.body, sms.date)), failed = false)
+            Evaluated(sms, hash, pipeline.process(SmsInput(sms.address, sms.body, sms.date), confirmed), failed = false)
         } catch (_: Exception) {
             val sender = Sender(sms.address, SenderType.INVALID, null, null, SenderSuffix.NONE)
             Evaluated(sms, hash, Verdict(Outcome.REVIEW, Reasons.PIPELINE_ERROR, sender), failed = true)
@@ -199,19 +204,52 @@ class ScanEngine @Inject constructor(
     private suspend fun store(
         db: LedgrDatabase,
         evaluated: List<Evaluated>,
+        stored: Map<Long, List<StoredSmsKey>>,
         rulesVersion: String,
         reevaluate: Boolean,
         counts: MutableMap<String, Int>,
     ): StoreResult {
         val dao = db.rawSmsDao()
-        val stored = dao.storedKeys(evaluated.map { it.sms.providerId }).groupBy { it.providerId }
         val inserts = ArrayList<RawSmsEntity>()
+        // Rows to ledger after the batch insert (their ids are not known until then), by position in [inserts].
+        val newlyStored = ArrayList<Evaluated>()
+        var session: LedgerSession? = null
+        var ledgerErrors = 0
+
+        /** Opens the ledger session on first use; most pages have no transaction at all. */
+        suspend fun ledgerSession(): LedgerSession = session ?: ledger.open(db).also { session = it }
+
+        /**
+         * Applies one message to the ledger. A failure here must not lose the whole page, so it is recorded on the
+         * message as `REVIEW: pipeline_error` and counted (nothing is dropped silently).
+         */
+        suspend fun toLedger(rawSmsId: Long, e: Evaluated, wasStored: Boolean) {
+            val v = e.verdict
+            val parsed = v.parsed
+            try {
+                if (parsed != null && (v.outcome == Outcome.TXN || v.outcome == Outcome.BALANCE)) {
+                    ledgerSession().ingest(rawSmsId, parsed, e.sms.body, rulesVersion)
+                } else if (wasStored) {
+                    // A re-evaluated message that no longer yields a transaction.
+                    ledgerSession().retract(rawSmsId)
+                }
+            } catch (ex: CancellationException) {
+                throw ex
+            } catch (_: Exception) {
+                dao.setOutcome(rawSmsId, Outcome.REVIEW.name, Reasons.PIPELINE_ERROR)
+                counts[v.code] = (counts[v.code] ?: 1) - 1
+                counts["REVIEW: ${Reasons.PIPELINE_ERROR}"] = (counts["REVIEW: ${Reasons.PIPELINE_ERROR}"] ?: 0) + 1
+                ledgerErrors++
+            }
+        }
+
         var skipped = 0
         for (e in evaluated) {
             val existing = stored[e.sms.providerId]?.firstOrNull { it.bodyHash == e.hash }
             val v = e.verdict
             when {
                 existing == null -> {
+                    newlyStored += e
                     inserts += RawSmsEntity(
                         providerId = e.sms.providerId,
                         address = e.sms.address,
@@ -228,15 +266,20 @@ class ScanEngine @Inject constructor(
                     )
                     counts[v.code] = (counts[v.code] ?: 0) + 1
                 }
-                reevaluate && existing.hasBody -> {
+                reevaluate && existing.hasBody && existing.userDecision != UserDecision.IGNORED -> {
                     dao.updateVerdict(existing.id, v.sender.header, v.sender.suffix.name, v.outcome.name, v.reason, v.templateId, rulesVersion)
                     counts[v.code] = (counts[v.code] ?: 0) + 1
+                    toLedger(existing.id, e, wasStored = true)
                 }
                 else -> skipped++
             }
         }
-        if (inserts.isNotEmpty()) dao.insertAll(inserts)
-        return StoreResult(skipped)
+        if (inserts.isNotEmpty()) {
+            val ids = dao.insertAll(inserts)
+            // `insertAll` ignores a clash and returns -1 for it; such a message is already stored and not a new one.
+            newlyStored.forEachIndexed { i, e -> if (ids[i] > 0) toLedger(ids[i], e, wasStored = false) }
+        }
+        return StoreResult(skipped, ledgerErrors)
     }
 
     private suspend fun finish(

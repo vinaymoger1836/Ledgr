@@ -41,6 +41,11 @@ tasks.register<JavaExec>("runGolden") {
         "--rules=${rulesDir.asFile}",
         "--private=${goldenDir.dir("private").asFile}",
     )
+    // `./gradlew :golden:runGolden -PgoldenEmit` also writes each case's actual output to golden/build/emitted, to read
+    // and copy into golden/expected by hand. It never touches golden/expected.
+    if (project.hasProperty("goldenEmit")) {
+        args("--emit=${layout.buildDirectory.dir("emitted").get().asFile}")
+    }
     inputs.dir(goldenDir.dir("fixtures"))
     inputs.dir(goldenDir.dir("expected"))
     inputs.dir(rulesDir)

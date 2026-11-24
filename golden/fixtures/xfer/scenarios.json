@@ -1,0 +1,152 @@
+{
+  "profile": {
+    "accounts": [
+      {
+        "id": 1,
+        "bank": "hdfc",
+        "type": "SAVINGS",
+        "last4": "1234"
+      },
+      {
+        "id": 2,
+        "bank": "hdfc",
+        "type": "CREDIT_CARD",
+        "last4": "4321"
+      },
+      {
+        "id": 3,
+        "bank": "icici",
+        "type": "SAVINGS",
+        "last4": "5678"
+      },
+      {
+        "id": 4,
+        "bank": "icici",
+        "type": "CREDIT_CARD",
+        "last4": "0099"
+      },
+      {
+        "id": 5,
+        "bank": "sbi",
+        "type": "SAVINGS",
+        "last4": "9012"
+      },
+      {
+        "id": 6,
+        "bank": "sbi",
+        "type": "CREDIT_CARD",
+        "last4": "0042"
+      }
+    ],
+    "ownUpiIds": [
+      "me@okaxis"
+    ],
+    "ownNames": [
+      "Vinay Moger"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "G-XFER-1",
+      "title": "IMPS to my own name, both sides seen",
+      "messages": [
+        {
+          "id": "G-XFER-1-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-15T11:00:00+05:30",
+          "body": "Rs 10,000.00 debited from a/c XX1234 on 15-11-25 via IMPS to VINAY MOGER (IMPS Ref 531234567801)"
+        },
+        {
+          "id": "G-XFER-1-b",
+          "address": "AD-ICICIT-T",
+          "date": "2025-11-15T11:01:00+05:30",
+          "body": "ICICI Bank Acct XX5678 credited with Rs 10,000.00 on 15-Nov-25; Info: IMPS/VINAY MOGER. Avl Bal Rs 40,000.00."
+        }
+      ]
+    },
+    {
+      "id": "G-XFER-2",
+      "title": "UPI to my own VPA, only the outgoing side seen",
+      "messages": [
+        {
+          "id": "G-XFER-2-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-16T10:00:00+05:30",
+          "body": "Rs 2,000.00 debited from a/c XX1234 on 16-11-25 to VPA me@okaxis (UPI Ref 412345678921)"
+        }
+      ]
+    },
+    {
+      "id": "G-XFER-3",
+      "title": "IMPS to a person, only the outgoing side seen: an expense, not a transfer",
+      "messages": [
+        {
+          "id": "G-XFER-3-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-16T12:00:00+05:30",
+          "body": "Rs 3,000.00 debited from a/c XX1234 on 16-11-25 via IMPS to RAHUL SHARMA (IMPS Ref 531234567803)"
+        }
+      ]
+    },
+    {
+      "id": "G-XFER-4",
+      "title": "NEFT out of SBI and the credit in HDFC the next day, same UTR",
+      "messages": [
+        {
+          "id": "G-XFER-4-a",
+          "address": "VM-SBIINB-S",
+          "date": "2025-11-16T11:00:00+05:30",
+          "body": "A/C X9012 debited by Rs 15,000.00 on 16Nov25 via NEFT to VINAY MOGER UTR SBIN525123456789"
+        },
+        {
+          "id": "G-XFER-4-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-17T09:00:00+05:30",
+          "body": "Rs 15,000.00 credited to a/c XX1234 on 17-11-25 by NEFT from VINAY MOGER (UTR SBIN525123456789)"
+        }
+      ]
+    },
+    {
+      "id": "G-XFER-5",
+      "title": "A card spend, then the card bill paid from savings",
+      "messages": [
+        {
+          "id": "G-XFER-5-a",
+          "address": "VM-HDFCCC-S",
+          "date": "2025-11-14T12:10:00+05:30",
+          "body": "Rs 2,499.00 spent on Card XX4321 at AMAZON on 14-11-25."
+        },
+        {
+          "id": "G-XFER-5-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-17T09:30:00+05:30",
+          "body": "Rs 8,450.00 debited from a/c XX1234 on 17-11-25 towards HDFC Card XX4321 bill payment"
+        },
+        {
+          "id": "G-XFER-5-c",
+          "address": "VM-HDFCCC-S",
+          "date": "2025-11-17T09:31:00+05:30",
+          "body": "Payment of Rs 8,450.00 received on Card XX4321 on 17-11-25"
+        }
+      ]
+    },
+    {
+      "id": "G-XFER-6",
+      "title": "The debit arrives first as an unknown payee; the credit side later turns it into a transfer",
+      "messages": [
+        {
+          "id": "G-XFER-6-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T10:00:00+05:30",
+          "body": "Rs 5,000.00 debited from a/c XX1234 on 18-11-25 via IMPS to VINAY M (IMPS Ref 531234567804)"
+        },
+        {
+          "id": "G-XFER-6-b",
+          "address": "AD-ICICIT-T",
+          "date": "2025-11-18T10:20:00+05:30",
+          "body": "ICICI Bank Acct XX5678 credited with Rs 5,000.00 on 18-Nov-25; Info: IMPS/VINAY MOGER. Avl Bal Rs 45,000.00."
+        }
+      ]
+    }
+  ]
+}

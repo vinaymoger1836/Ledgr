@@ -1,0 +1,581 @@
+[
+  {
+    "id": "G-XFER-1",
+    "title": "IMPS to my own name, both sides seen",
+    "messages": [
+      {
+        "id": "G-XFER-1-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-1-a"
+      },
+      {
+        "id": "G-XFER-1-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-1-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-1-a",
+        "account": 1,
+        "kind": "SELF_TRANSFER_OUT",
+        "direction": "DEBIT",
+        "amountPaise": 1000000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": "G-XFER-1-b",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-XFER-1-b",
+        "account": 3,
+        "kind": "SELF_TRANSFER_IN",
+        "direction": "CREDIT",
+        "amountPaise": 1000000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": "G-XFER-1-a",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 1000000,
+        "income": 1000000
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 1000000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 1000000
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  },
+  {
+    "id": "G-XFER-2",
+    "title": "UPI to my own VPA, only the outgoing side seen",
+    "messages": [
+      {
+        "id": "G-XFER-2-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-2-a"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-2-a",
+        "account": 1,
+        "kind": "SELF_TRANSFER_OUT",
+        "direction": "DEBIT",
+        "amountPaise": 200000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 1
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 200000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 200000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  },
+  {
+    "id": "G-XFER-3",
+    "title": "IMPS to a person, only the outgoing side seen: an expense, not a transfer",
+    "messages": [
+      {
+        "id": "G-XFER-3-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-3-a"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-3-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 300000,
+        "status": "ACTIVE",
+        "category": "transfers_to_people",
+        "counterparty": "person:rahul sharma",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 1
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 300000,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 300000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 300000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "transfers_to_people": 300000
+    }
+  },
+  {
+    "id": "G-XFER-4",
+    "title": "NEFT out of SBI and the credit in HDFC the next day, same UTR",
+    "messages": [
+      {
+        "id": "G-XFER-4-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-4-a"
+      },
+      {
+        "id": "G-XFER-4-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-4-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-4-a",
+        "account": 5,
+        "kind": "SELF_TRANSFER_OUT",
+        "direction": "DEBIT",
+        "amountPaise": 1500000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": "G-XFER-4-b",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-XFER-4-b",
+        "account": 1,
+        "kind": "SELF_TRANSFER_IN",
+        "direction": "CREDIT",
+        "amountPaise": 1500000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": "G-XFER-4-a",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 1500000,
+        "income": 1500000
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 1500000
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 1500000,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  },
+  {
+    "id": "G-XFER-5",
+    "title": "A card spend, then the card bill paid from savings",
+    "messages": [
+      {
+        "id": "G-XFER-5-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-5-a"
+      },
+      {
+        "id": "G-XFER-5-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-5-b"
+      },
+      {
+        "id": "G-XFER-5-c",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-5-c"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-5-a",
+        "account": 2,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 249900,
+        "status": "ACTIVE",
+        "category": "shopping",
+        "counterparty": "amazon",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-XFER-5-b",
+        "account": 1,
+        "kind": "CARD_BILL_PAYMENT",
+        "direction": "DEBIT",
+        "amountPaise": 845000,
+        "status": "ACTIVE",
+        "category": "card_bill_payment",
+        "counterparty": null,
+        "transferPair": "G-XFER-5-c",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-XFER-5-c",
+        "account": 2,
+        "kind": "CARD_PAYMENT_RECEIVED",
+        "direction": "CREDIT",
+        "amountPaise": 845000,
+        "status": "ACTIVE",
+        "category": "card_bill_payment",
+        "counterparty": null,
+        "transferPair": "G-XFER-5-b",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 3
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 249900,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 1094900,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 845000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 249900,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "shopping": 249900
+    }
+  },
+  {
+    "id": "G-XFER-6",
+    "title": "The debit arrives first as an unknown payee; the credit side later turns it into a transfer",
+    "messages": [
+      {
+        "id": "G-XFER-6-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-6-a"
+      },
+      {
+        "id": "G-XFER-6-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-XFER-6-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-XFER-6-a",
+        "account": 1,
+        "kind": "SELF_TRANSFER_OUT",
+        "direction": "DEBIT",
+        "amountPaise": 500000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": null,
+        "transferPair": "G-XFER-6-b",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-XFER-6-b",
+        "account": 3,
+        "kind": "SELF_TRANSFER_IN",
+        "direction": "CREDIT",
+        "amountPaise": 500000,
+        "status": "ACTIVE",
+        "category": "self_transfer",
+        "counterparty": "own",
+        "transferPair": "G-XFER-6-a",
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 500000,
+        "income": 500000
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 500000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 500000
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  }
+]

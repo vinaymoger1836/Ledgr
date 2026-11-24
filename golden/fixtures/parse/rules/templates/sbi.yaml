@@ -1,0 +1,58 @@
+# SYNTHETIC templates for the golden cases only. See hdfc.yaml in this folder.
+version: "2026.11.2"
+bank: sbi
+templates:
+  - id: sbi.upi.debit.v1
+    kind: DEBIT
+    channel: UPI
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) debited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) trf to (?<payee>.+?) Ref No (?<ref>\d{12})'
+  - id: sbi.upi.credit.v1
+    kind: CREDIT
+    channel: UPI
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) credited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) transfer from (?<payee>.+?)\. Ref No (?<ref>\d{12})'
+  - id: sbi.card.spend.v1
+    kind: DEBIT
+    channel: CARD
+    account_type: CREDIT_CARD
+    date_format: dd/MM/yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) spent on your SBI Card ending (?<last4>\d{4}) at (?<merchant>.+?) on (?<date>\d{2}/\d{2}/\d{2})'
+  - id: sbi.atm.v1
+    kind: DEBIT
+    channel: ATM
+    date_format: ddMMMyy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) withdrawn at ATM from A/C X(?<last4>\d{4}) on (?<date>\d{2}[A-Za-z]{3}\d{2})\. Avl Bal Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?)'
+  - id: sbi.neft.debit.v1
+    kind: DEBIT
+    channel: NEFT
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) debited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) via NEFT to (?<payee>.+?) UTR (?<ref>[A-Z0-9]{12,22})'
+  - id: sbi.neft.credit.v1
+    kind: CREDIT
+    channel: NEFT
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) credited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) via NEFT from (?<payee>.+?) UTR (?<ref>[A-Z0-9]{12,22})'
+  - id: sbi.imps.debit.v1
+    kind: DEBIT
+    channel: IMPS
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) debited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) via IMPS to (?<payee>.+?) Ref (?<ref>\d{12})'
+  - id: sbi.card.billpay.v1
+    kind: DEBIT
+    txn_kind: CARD_BILL_PAYMENT
+    channel: UPI
+    date_format: ddMMMyy
+    pattern: 'A/C X(?<last4>\d{4}) debited by Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) on (?<date>\d{2}[A-Za-z]{3}\d{2}) towards SBI Card ending (?<dest_last4>\d{4})'
+  - id: sbi.card.payment.received.v1
+    kind: CREDIT
+    txn_kind: CARD_PAYMENT_RECEIVED
+    channel: OTHER
+    account_type: CREDIT_CARD
+    date_format: dd/MM/yy
+    pattern: 'Payment of Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) received on your SBI Card ending (?<last4>\d{4}) on (?<date>\d{2}/\d{2}/\d{2})'
+  - id: sbi.balance.v1
+    kind: BALANCE
+    channel: OTHER
+    date_format: dd-MM-yy
+    pattern: 'available balance in A/c XX(?<last4>\d{4}) is Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?) as on (?<date>\d{2}-\d{2}-\d{2})'

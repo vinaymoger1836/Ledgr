@@ -1,0 +1,35 @@
+# Ledger rules (docs/03 §6-7, docs/04 §3-5, ADR-013). Everything the merchant resolver, categoriser and
+# transfer linker need that is not a merchant or a category lives here, so no such constant is in Kotlin.
+version: "2026.11.2"
+
+# Credit SMS that mention one of these are salary (categoriser step 3).
+salary_keywords: ["salary", "sal credit", "payroll"]
+
+# A credit whose text mentions one of these, on a template without an explicit txn_kind, is a refund.
+refund_keywords: ["refund", "refunded"]
+
+# Person heuristic (docs/03 §6 step 5).
+person:
+  # The part of a VPA before "@" that looks like a mobile number.
+  phone_vpa_pattern: "^(?:91)?[6-9][0-9]{9}$"
+  # A payee of this many capitalised words, letters only, is a person.
+  min_words: 2
+  max_words: 3
+
+# Own transfers by name variant are accepted only on these channels (docs/04 §3 rule 1).
+own_name_channels: [IMPS, NEFT, RTGS]
+
+# Categoriser step 3 (docs/03 §7). Values are keys from categories.yaml.
+categories:
+  fallback: uncategorised
+  person: transfers_to_people
+  salary: salary
+  credit_default: transfers_in
+  by_channel:
+    ATM: cash_withdrawal
+  by_kind:
+    SELF_TRANSFER_OUT: self_transfer
+    SELF_TRANSFER_IN: self_transfer
+    CARD_BILL_PAYMENT: card_bill_payment
+    CARD_PAYMENT_RECEIVED: card_bill_payment
+    REFUND: refund

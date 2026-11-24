@@ -1,0 +1,284 @@
+{
+  "profile": {
+    "accounts": [
+      {
+        "id": 1,
+        "bank": "hdfc",
+        "type": "SAVINGS",
+        "last4": "1234"
+      },
+      {
+        "id": 2,
+        "bank": "hdfc",
+        "type": "CREDIT_CARD",
+        "last4": "4321"
+      },
+      {
+        "id": 3,
+        "bank": "icici",
+        "type": "SAVINGS",
+        "last4": "5678"
+      },
+      {
+        "id": 4,
+        "bank": "icici",
+        "type": "CREDIT_CARD",
+        "last4": "0099"
+      },
+      {
+        "id": 5,
+        "bank": "sbi",
+        "type": "SAVINGS",
+        "last4": "9012"
+      },
+      {
+        "id": 6,
+        "bank": "sbi",
+        "type": "CREDIT_CARD",
+        "last4": "0042"
+      }
+    ]
+  },
+  "messages": [
+    {
+      "id": "G-PARSE-01",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:00:00+05:30",
+      "body": "Rs 1,250.00 debited from a/c XX1234 on 12-11-25 to VPA shop@upi (UPI Ref 412345678901)."
+    },
+    {
+      "id": "G-PARSE-02",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:05:00+05:30",
+      "body": "Rs 99.5 debited from a/c XX1234 on 12-11-25 to VPA tea.stall@okaxis (UPI Ref 412345678902)."
+    },
+    {
+      "id": "G-PARSE-03",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-13T09:00:00+05:30",
+      "body": "Rs 2,000 credited to a/c XX1234 on 13-11-25 by VPA rahul.s@ybl (UPI Ref 412345678903)."
+    },
+    {
+      "id": "G-PARSE-04",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-14T13:15:00+05:30",
+      "body": "Rs 349.00 debited from a/c XX1234 on 14-11-25 to VPA swiggy@icici (UPI Ref 412345678904)."
+    },
+    {
+      "id": "G-PARSE-05",
+      "address": "VM-HDFCCC-S",
+      "date": "2025-11-14T12:10:00+05:30",
+      "body": "Rs 2,499.00 spent on Card XX4321 at AMAZON on 14-11-25."
+    },
+    {
+      "id": "G-PARSE-06",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-15T16:20:00+05:30",
+      "body": "Rs 5,000 withdrawn from a/c XX1234 at ATM on 15-11-25. Avl Bal Rs 18,450.25"
+    },
+    {
+      "id": "G-PARSE-07",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-15T10:30:00+05:30",
+      "body": "Rs 85,000.00 credited to a/c XX1234 on 15-11-25 by NEFT from ACME PAYROLL (UTR N123456789012345)"
+    },
+    {
+      "id": "G-PARSE-08",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-15T11:00:00+05:30",
+      "body": "Rs 10,000.00 debited from a/c XX1234 on 15-11-25 via IMPS to RAHUL SHARMA (IMPS Ref 531234567801)"
+    },
+    {
+      "id": "G-PARSE-09",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-16T08:45:00+05:30",
+      "body": "Rs 3,500.00 credited to a/c XX1234 on 16-11-25 via IMPS from PRIYA NAIR (IMPS Ref 531234567802)"
+    },
+    {
+      "id": "G-PARSE-10",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-05T07:00:00+05:30",
+      "body": "Rs 649.00 auto-debited from a/c XX1234 on 05-11-25 for NETFLIX. Avl Bal Rs 20,000.00"
+    },
+    {
+      "id": "G-PARSE-11",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-17T09:30:00+05:30",
+      "body": "Rs 8,450.00 debited from a/c XX1234 on 17-11-25 towards HDFC Card XX4321 bill payment"
+    },
+    {
+      "id": "G-PARSE-12",
+      "address": "VM-HDFCCC-S",
+      "date": "2025-11-17T09:31:00+05:30",
+      "body": "Payment of Rs 8,450.00 received on Card XX4321 on 17-11-25"
+    },
+    {
+      "id": "G-PARSE-13",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-18T11:00:00+05:30",
+      "body": "Refund of Rs 349.00 from SWIGGY credited to a/c XX1234 on 18-11-25"
+    },
+    {
+      "id": "G-PARSE-14",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-18T11:30:00+05:30",
+      "body": "Rs 500.00 reversed and credited to a/c XX1234 on 18-11-25 for failed UPI txn (UPI Ref 412345678905)"
+    },
+    {
+      "id": "G-PARSE-15",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-18T12:00:00+05:30",
+      "body": "Avl bal in a/c XX1234 is Rs 8,000.00 as on 18-11-25"
+    },
+    {
+      "id": "G-PARSE-16",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:10:00+05:30",
+      "body": "Rs 100.00 debited from a/c XX7777 on 12-11-25 to VPA x@upi (UPI Ref 412345678906)."
+    },
+    {
+      "id": "G-PARSE-17",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:15:00+05:30",
+      "body": "Rs 75.00 debited from a/c XX1234 on 12-11-25 at KIOSK, thanks for banking"
+    },
+    {
+      "id": "G-PARSE-18",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:20:00+05:30",
+      "body": "Rs 220.00 debited from a/c XX1234 on 01-10-25 to VPA old@upi (UPI Ref 412345678907)."
+    },
+    {
+      "id": "G-PARSE-19",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-12T10:25:00+05:30",
+      "body": "Rs 12,00,000.00 debited from a/c XX1234 on 12-11-25 to VPA big@upi (UPI Ref 412345678908)."
+    },
+    {
+      "id": "G-PARSE-20",
+      "address": "VM-HDFCBK-S",
+      "date": "2025-11-15T16:25:00+05:30",
+      "body": "Rs 5,000 withdrawn from a/c XX1234 at ATM on 15-11-25. Avl Bal Rs 5,000"
+    },
+    {
+      "id": "G-PARSE-21",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-13T09:30:00+05:30",
+      "body": "ICICI Bank Acct XX5678 debited for Rs 450.00 on 13-Nov-25; Info: UPI/CAFE. Avl Bal Rs 12,300.50."
+    },
+    {
+      "id": "G-PARSE-22",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-14T10:00:00+05:30",
+      "body": "ICICI Bank Acct XX5678 credited with Rs 1,500.00 on 14-Nov-25; Info: IMPS/AMIT KUMAR. Avl Bal Rs 13,800.50."
+    },
+    {
+      "id": "G-PARSE-23",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-14T14:00:00+05:30",
+      "body": "ICICI Bank Acct XX5678 credited with Rs 25,000.00 on 14-Nov-25; Info: NEFT/ACME LTD. Avl Bal Rs 38,800.50."
+    },
+    {
+      "id": "G-PARSE-24",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-15T12:00:00+05:30",
+      "body": "ICICI Bank Acct XX5678 debited for Rs 2,000.00 on 15-Nov-25; Info: ATM-WDL/MG ROAD. Avl Bal Rs 36,800.50."
+    },
+    {
+      "id": "G-PARSE-25",
+      "address": "VM-ICICIB-S",
+      "date": "2025-11-15T19:00:00+05:30",
+      "body": "Rs 1,799.00 spent using ICICI Bank Card XX0099 on 15-Nov-25 at FLIPKART."
+    },
+    {
+      "id": "G-PARSE-26",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-16T06:00:00+05:30",
+      "body": "ICICI Bank Acct XX5678 debited for Rs 1,000.00 on 16-Nov-25; Info: ACH/SIP MUTUAL FUND. Avl Bal Rs 35,800.50."
+    },
+    {
+      "id": "G-PARSE-27",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-16T20:00:00+05:30",
+      "body": "Avl Bal in Acct XX5678 is Rs 35,800.50 on 16-Nov-25"
+    },
+    {
+      "id": "G-PARSE-28",
+      "address": "AD-ICICIT-T",
+      "date": "2025-11-16T12:30:00+05:30",
+      "body": "ICICI Bank Acct XX5678 debited for Rs 60.00 on 16-Nov-25; Info: POS/STORE. Avl Bal Rs 35,740.50."
+    },
+    {
+      "id": "G-PARSE-29",
+      "address": "VK-SBIUPI-S",
+      "date": "2025-11-15T18:05:00+05:30",
+      "body": "Dear UPI user A/C X9012 debited by Rs 150.00 on 15Nov25 trf to ZOMATO Ref No 531234567891. -SBI"
+    },
+    {
+      "id": "G-PARSE-30",
+      "address": "VK-SBIUPI-S",
+      "date": "2025-11-14T18:05:00+05:30",
+      "body": "Dear UPI user A/C X9012 credited by Rs 2000.00 on 14Nov25 transfer from AMIT KUMAR. Ref No 531234567890. -SBI"
+    },
+    {
+      "id": "G-PARSE-31",
+      "address": "VM-SBICRD-S",
+      "date": "2025-11-15T21:00:00+05:30",
+      "body": "Rs 1,499.00 spent on your SBI Card ending 0042 at AMAZON on 15/11/25."
+    },
+    {
+      "id": "G-PARSE-32",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-16T10:00:00+05:30",
+      "body": "Rs 5000 withdrawn at ATM from A/C X9012 on 16Nov25. Avl Bal Rs 20,000.00"
+    },
+    {
+      "id": "G-PARSE-33",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-16T11:00:00+05:30",
+      "body": "A/C X9012 debited by Rs 15,000.00 on 16Nov25 via NEFT to LANDLORD RAO UTR SBIN525123456789"
+    },
+    {
+      "id": "G-PARSE-34",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-17T11:00:00+05:30",
+      "body": "A/C X9012 credited by Rs 40,000.00 on 17Nov25 via NEFT from GLOBEX INC UTR GLBX525123456789"
+    },
+    {
+      "id": "G-PARSE-35",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-17T15:00:00+05:30",
+      "body": "A/C X9012 debited by Rs 2,500.00 on 17Nov25 via IMPS to PRIYA NAIR Ref 531234567810"
+    },
+    {
+      "id": "G-PARSE-36",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-20T09:00:00+05:30",
+      "body": "A/C X9012 debited by Rs 1,499.00 on 20Nov25 towards SBI Card ending 0042"
+    },
+    {
+      "id": "G-PARSE-37",
+      "address": "VM-SBICRD-S",
+      "date": "2025-11-21T09:00:00+05:30",
+      "body": "Payment of Rs 1,499.00 received on your SBI Card ending 0042 on 21/11/25"
+    },
+    {
+      "id": "G-PARSE-38",
+      "address": "VM-SBIINB-S",
+      "date": "2025-11-16T22:00:00+05:30",
+      "body": "Your available balance in A/c XX9012 is Rs 15,230.45 as on 16-11-25."
+    },
+    {
+      "id": "G-PARSE-39",
+      "address": "VK-SBIUPI-S",
+      "date": "2025-11-15T18:10:00+05:30",
+      "body": "Dear UPI user A/C X9999 debited by Rs 10.00 on 15Nov25 trf to SOMEONE Ref No 531234567899. -SBI"
+    },
+    {
+      "id": "G-PARSE-40",
+      "address": "VM-AXISBK-S",
+      "date": "2025-11-15T12:40:00+05:30",
+      "body": "Rs 300.00 spent on Card no. XX4321 at CAFE on 15-11-25."
+    }
+  ]
+}

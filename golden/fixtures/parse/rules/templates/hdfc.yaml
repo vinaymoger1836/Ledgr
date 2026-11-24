@@ -1,0 +1,85 @@
+# SYNTHETIC templates for the golden cases only (G-PARSE, G-DUP, G-XFER, G-REFUND). The wording is invented; it is not
+# any bank's real alert text. They are never copied into the app. Real templates go in
+# app/src/main/assets/rules/templates/ once written from golden/private/sms.
+version: "2026.11.2"
+bank: hdfc
+templates:
+  - id: hdfc.upi.debit.v1
+    kind: DEBIT
+    channel: UPI
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) debited from a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) to VPA (?<vpa>[\w.\-]+@[\w.\-]+) \(UPI Ref (?<ref>\d{12})\)'
+  - id: hdfc.upi.credit.v1
+    kind: CREDIT
+    channel: UPI
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) credited to a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) by VPA (?<vpa>[\w.\-]+@[\w.\-]+) \(UPI Ref (?<ref>\d{12})\)'
+  - id: hdfc.card.spend.v1
+    kind: DEBIT
+    channel: CARD
+    account_type: CREDIT_CARD
+    date_format: dd-MM-yy
+    may_duplicate_with: [hdfc.card.alert.v1]
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) spent on Card XX(?<last4>\d{4}) at (?<merchant>.+?) on (?<date>\d{2}-\d{2}-\d{2})'
+  - id: hdfc.card.alert.v1
+    kind: DEBIT
+    channel: CARD
+    account_type: CREDIT_CARD
+    date_format: dd-MM-yy
+    may_duplicate_with: [hdfc.card.spend.v1]
+    pattern: 'Card XX(?<last4>\d{4}) debited Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) at (?<merchant>.+?) on (?<date>\d{2}-\d{2}-\d{2})\. Avl limit Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?)'
+  - id: hdfc.atm.v1
+    kind: DEBIT
+    channel: ATM
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) withdrawn from a/c XX(?<last4>\d{4}) at ATM on (?<date>\d{2}-\d{2}-\d{2})\. Avl Bal Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?)'
+  - id: hdfc.neft.credit.v1
+    kind: CREDIT
+    channel: NEFT
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) credited to a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) by NEFT from (?<payee>[A-Za-z ]+?) \(UTR (?<ref>[A-Z0-9]{10,22})\)'
+  - id: hdfc.imps.debit.v1
+    kind: DEBIT
+    channel: IMPS
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) debited from a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) via IMPS to (?<payee>[A-Za-z ]+?) \(IMPS Ref (?<ref>\d{12})\)'
+  - id: hdfc.imps.credit.v1
+    kind: CREDIT
+    channel: IMPS
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) credited to a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) via IMPS from (?<payee>[A-Za-z ]+?) \(IMPS Ref (?<ref>\d{12})\)'
+  - id: hdfc.autodebit.v1
+    kind: DEBIT
+    channel: AUTO_DEBIT
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) auto-debited from a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) for (?<merchant>[A-Za-z0-9 ]+?)\. Avl Bal Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?)'
+  - id: hdfc.card.billpay.v1
+    kind: DEBIT
+    txn_kind: CARD_BILL_PAYMENT
+    channel: UPI
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) debited from a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) towards HDFC Card XX(?<dest_last4>\d{4}) bill payment'
+  - id: hdfc.card.payment.received.v1
+    kind: CREDIT
+    txn_kind: CARD_PAYMENT_RECEIVED
+    channel: OTHER
+    account_type: CREDIT_CARD
+    date_format: dd-MM-yy
+    pattern: 'Payment of Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) received on Card XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2})'
+  - id: hdfc.refund.v1
+    kind: CREDIT
+    txn_kind: REFUND
+    channel: UPI
+    date_format: dd-MM-yy
+    pattern: 'Refund of Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) from (?<merchant>[A-Za-z0-9 ]+?) credited to a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2})'
+  - id: hdfc.reversal.v1
+    kind: CREDIT
+    txn_kind: REVERSAL
+    channel: UPI
+    date_format: dd-MM-yy
+    pattern: 'Rs\s?(?<amount>[\d,]+(?:\.\d{1,2})?) reversed and credited to a/c XX(?<last4>\d{4}) on (?<date>\d{2}-\d{2}-\d{2}) for failed UPI txn \(UPI Ref (?<ref>\d{12})\)'
+  - id: hdfc.balance.v1
+    kind: BALANCE
+    channel: OTHER
+    date_format: dd-MM-yy
+    pattern: 'Avl bal in a/c XX(?<last4>\d{4}) is Rs\s?(?<balance>[\d,]+(?:\.\d{1,2})?) as on (?<date>\d{2}-\d{2}-\d{2})'

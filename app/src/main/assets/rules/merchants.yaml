@@ -6,7 +6,7 @@
 # At first run each entry becomes a Merchants row you can rename, re-categorise or give an image; after that
 # the row is yours and this file never overwrites it. Matching (vpa_prefix / keywords) is always read from here.
 # category: a key from categories.yaml
-version: "2026.11.1"
+version: "2026.11.2"
 
 # Payment aggregators: the payee is the aggregator, not the shop (docs/03 §6 step 4).
 aggregators: [razorpay, payu, cashfree, billdesk, "paytm pg", ccavenue, instamojo, juspay, phonepe pg]

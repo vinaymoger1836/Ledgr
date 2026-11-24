@@ -5,6 +5,13 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.ledgr.app.domain.ledger.Channel
+import com.ledgr.app.domain.ledger.Direction
+import com.ledgr.app.domain.ledger.ProposalType
+import com.ledgr.app.domain.ledger.ReconState
+import com.ledgr.app.domain.ledger.Source
+import com.ledgr.app.domain.ledger.TxnKind
+import com.ledgr.app.domain.ledger.TxnStatus
 import com.ledgr.app.domain.model.AccountType
 import com.ledgr.app.domain.model.AliasSource
 import com.ledgr.app.domain.model.CategoryKind
@@ -140,6 +147,134 @@ data class RawSmsEntity(
     val reason: String,
     @ColumnInfo(name = "template_id") val templateId: String?,
     @ColumnInfo(name = "rules_version") val rulesVersion: String,
+    /** A person's decision in Needs review (schema v4); a month re-scan honours it instead of re-judging the message. */
+    @ColumnInfo(name = "user_decision") val userDecision: UserDecision? = null,
+)
+
+/**
+ * What the person decided about one SMS in Needs review. [CONFIRMED]: "it's genuine, record it" (re-scans lift its
+ * quarantine again). [IGNORED]: ignored, deleted or recorded by hand (re-scans leave it alone).
+ */
+enum class UserDecision { CONFIRMED, IGNORED }
+
+/**
+ * docs/05 §1 `txn` (schema v4, P3, ADR-013). Money is paise; [occurredAt] is epoch ms UTC and [localDate] the IST
+ * `yyyy-MM-dd` computed when the row is written (ADR-009). Every row records where it came from ([source], [rawSmsId],
+ * [templateId]) and which rules produced it ([rulesVersion]).
+ *
+ * [userEditedFields] is a JSON list of `EditableField` names; a field named there is never changed by re-parse, dedup,
+ * linking or reconciliation (CLAUDE.md rule 7). [checkReason] is why the row is in Needs review → Check; null once
+ * confirmed. `refund_of` also holds a reversal's link to its debit (kind REVERSAL).
+ */
+@Entity(
+    tableName = "txn",
+    foreignKeys = [
+        ForeignKey(
+            entity = AccountEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["account_id"],
+            onDelete = ForeignKey.RESTRICT,
+        ),
+        ForeignKey(
+            entity = CounterpartyEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["counterparty_id"],
+            onDelete = ForeignKey.SET_NULL,
+        ),
+        ForeignKey(
+            entity = CategoryEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["category_id"],
+            onDelete = ForeignKey.SET_NULL,
+        ),
+    ],
+    indices = [
+        Index(value = ["account_id", "local_date"]),
+        Index(value = ["local_date"]),
+        Index(value = ["ref_no"]),
+        Index(value = ["counterparty_id", "local_date"]),
+        Index(value = ["category_id", "local_date"]),
+        Index(value = ["raw_sms_id"], unique = true),
+        Index(value = ["occurred_at"]),
+    ],
+)
+data class TxnEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "account_id") val accountId: Long,
+    val kind: TxnKind,
+    val direction: Direction,
+    /** Paise, always positive; the sign comes from [direction] and `LedgerRules`. */
+    val amount: Long,
+    @ColumnInfo(name = "occurred_at") val occurredAt: Long,
+    @ColumnInfo(name = "local_date") val localDate: String,
+    val channel: Channel,
+    @ColumnInfo(name = "counterparty_id") val counterpartyId: Long? = null,
+    /** The VPA / merchant / payee text as the SMS had it. */
+    @ColumnInfo(name = "raw_counterparty") val rawCounterparty: String? = null,
+    @ColumnInfo(name = "category_id") val categoryId: Long? = null,
+    @ColumnInfo(name = "ref_no") val refNo: String? = null,
+    @ColumnInfo(name = "balance_after") val balanceAfter: Long? = null,
+    val source: Source,
+    @ColumnInfo(name = "raw_sms_id") val rawSmsId: Long? = null,
+    /** Reserved for statement reconciliation (P5). */
+    @ColumnInfo(name = "statement_line_id") val statementLineId: Long? = null,
+    /** 0..100 (ADR-013). */
+    val confidence: Int,
+    val status: TxnStatus = TxnStatus.ACTIVE,
+    @ColumnInfo(name = "duplicate_of") val duplicateOf: Long? = null,
+    @ColumnInfo(name = "transfer_pair_id") val transferPairId: Long? = null,
+    @ColumnInfo(name = "refund_of") val refundOf: Long? = null,
+    @ColumnInfo(name = "user_edited_fields", defaultValue = "[]") val userEditedFields: String = "[]",
+    val note: String? = null,
+    @ColumnInfo(name = "recon_state", defaultValue = "UNRECONCILED") val reconState: ReconState = ReconState.UNRECONCILED,
+    @ColumnInfo(name = "template_id") val templateId: String? = null,
+    @ColumnInfo(name = "rules_version") val rulesVersion: String,
+    @ColumnInfo(name = "check_reason") val checkReason: String? = null,
+)
+
+/** docs/05 §1 `balance_snapshot` (schema v4): the balance an SMS reported for an account at a time. */
+@Entity(
+    tableName = "balance_snapshot",
+    foreignKeys = [
+        ForeignKey(
+            entity = AccountEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["account_id"],
+            onDelete = ForeignKey.RESTRICT,
+        ),
+    ],
+    indices = [Index(value = ["account_id", "at"], unique = true)],
+)
+data class BalanceSnapshotEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "account_id") val accountId: Long,
+    /** Epoch ms UTC. */
+    val at: Long,
+    /** Paise. */
+    val balance: Long,
+    val source: Source,
+)
+
+enum class ProposalState { OPEN, ACCEPTED, REJECTED }
+
+/**
+ * A duplicate or transfer link the engine was not sure about (ADR-013); the person confirms or rejects it in
+ * Needs review → Duplicates & transfers.
+ */
+@Entity(
+    tableName = "link_proposal",
+    indices = [
+        Index(value = ["type", "txn_id", "other_txn_id"], unique = true),
+        Index(value = ["state"]),
+    ],
+)
+data class LinkProposalEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val type: ProposalType,
+    @ColumnInfo(name = "txn_id") val txnId: Long,
+    @ColumnInfo(name = "other_txn_id") val otherTxnId: Long,
+    val state: ProposalState = ProposalState.OPEN,
+    @ColumnInfo(name = "created_at") val createdAt: Long,
 )
 
 enum class ScanKind { MONTH, CATCHUP, LIVE }

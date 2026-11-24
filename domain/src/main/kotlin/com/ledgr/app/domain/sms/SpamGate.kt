@@ -31,7 +31,12 @@ class SpamGate(rules: RulesBundle, confirmedHeaders: Set<String> = emptySet()) {
         rules.banks.banks.flatMap { bank -> bank.allHeaders.map { it to bank.id } }.toMap()
     private val linksOkBanks: Set<String> = rules.spam.bankExceptions.filter { it.linksOk }.map { it.bank }.toSet()
 
-    fun evaluate(sms: SmsInput): GateResult {
+    /**
+     * @param userConfirmed the owner pressed "It's genuine, record it" for this one message (Needs review →
+     * Suspicious). Only the two quarantine reasons that are about the *message* (missing suffix, red flags) are
+     * lifted. A phone-number sender is never lifted (CLAUDE.md rule 3), and no header is learned.
+     */
+    fun evaluate(sms: SmsInput, userConfirmed: Boolean = false): GateResult {
         val sender = SenderNormalizer.normalize(sms.address)
 
         // L1: sender type. A phone number is never a bank.
@@ -57,7 +62,7 @@ class SpamGate(rules: RulesBundle, confirmedHeaders: Set<String> = emptySet()) {
 
         // L2 (no suffix): fine before the roll-out cut-off or for a confirmed header; otherwise quarantine.
         // ADR-012: this runs after the L3 membership check so unknown senders do not flood Suspicious.
-        if (sender.suffix == SenderSuffix.NONE && sms.receivedAt >= cutoffMillis && header !in confirmed) {
+        if (sender.suffix == SenderSuffix.NONE && sms.receivedAt >= cutoffMillis && header !in confirmed && !userConfirmed) {
             return stop(Outcome.QUARANTINE, Reasons.MISSING_SUFFIX, sender)
         }
 
@@ -68,13 +73,15 @@ class SpamGate(rules: RulesBundle, confirmedHeaders: Set<String> = emptySet()) {
             SmsClass.REMINDER -> return stop(Outcome.IGNORED, Reasons.REMINDER, sender, smsClass)
             SmsClass.FAILED -> return stop(Outcome.IGNORED, Reasons.FAILED, sender, smsClass)
             SmsClass.PROMO -> return stop(Outcome.IGNORED, Reasons.PROMO, sender, smsClass)
-            SmsClass.BALANCE_ONLY -> return stop(Outcome.BALANCE, Reasons.BALANCE_ONLY, sender, smsClass)
             SmsClass.NONE -> return stop(Outcome.IGNORED, Reasons.NO_TXN_SIGNAL, sender, smsClass)
+            // A balance message is not a transaction, but a balance template may turn it into a snapshot (P3), so it
+            // goes on to the template stage, which files it as `BALANCE: balance_only` when no template matches.
+            SmsClass.BALANCE_ONLY -> return GateResult.Pass(sender, smsClass, bankId)
             SmsClass.TXN_CANDIDATE -> Unit
         }
 
         // L7: red flags inside an otherwise valid-looking transaction.
-        if (hasRedFlags(sms.body, bankId)) return stop(Outcome.QUARANTINE, Reasons.RED_FLAGS, sender, smsClass)
+        if (!userConfirmed && hasRedFlags(sms.body, bankId)) return stop(Outcome.QUARANTINE, Reasons.RED_FLAGS, sender, smsClass)
 
         return GateResult.Pass(sender, smsClass, bankId)
     }

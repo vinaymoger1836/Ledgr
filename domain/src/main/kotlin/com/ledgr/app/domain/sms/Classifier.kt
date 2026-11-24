@@ -74,12 +74,15 @@ class Classifier(spam: SpamFile) {
     private val promo = KeywordMatcher(spam.classes["promo"].orEmpty())
     private val balanceOnly = KeywordMatcher(spam.classes["balance_only"].orEmpty())
     private val txnVerbs = KeywordMatcher(spam.classes["txn_verbs"].orEmpty())
+    private val reversalMarkers = KeywordMatcher(spam.classes["reversal_markers"].orEmpty())
+    private val creditVerbs = KeywordMatcher(spam.classes["credit_verbs"].orEmpty())
 
     fun classify(body: String): SmsClass {
         val text = KeywordMatcher.normalize(body)
         return when {
             otp.matches(text) -> SmsClass.OTP
-            failed.matches(text) -> SmsClass.FAILED
+            // A failed payment that was reversed, or a refund, credits money back: let the templates decide.
+            failed.matches(text) && !isReversalCredit(text) -> SmsClass.FAILED
             reminder.matches(text) -> SmsClass.REMINDER
             hasAmountMarker(text) && txnVerbs.matches(text) -> SmsClass.TXN_CANDIDATE
             promo.matches(text) -> SmsClass.PROMO
@@ -87,6 +90,9 @@ class Classifier(spam: SpamFile) {
             else -> SmsClass.NONE
         }
     }
+
+    private fun isReversalCredit(text: String): Boolean =
+        hasAmountMarker(text) && reversalMarkers.matches(text) && creditVerbs.matches(text)
 
     internal companion object {
         /**

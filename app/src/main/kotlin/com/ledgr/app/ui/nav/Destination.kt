@@ -13,6 +13,9 @@ sealed class Destination(val route: String) {
     data object Dashboard : Destination("dashboard")
     data object Reconcile : Destination("reconcile")
     data object Profile : Destination("profile")
+
+    /** Needs review (docs/08 §2.5): pushed from the Home banner and from Profile. */
+    data object NeedsReview : Destination("review")
     data object Settings : Destination("profile/settings")
     data object Identities : Destination("profile/identities")
     data object Categories : Destination("profile/categories")

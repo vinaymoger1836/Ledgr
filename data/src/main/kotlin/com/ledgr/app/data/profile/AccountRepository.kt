@@ -58,8 +58,14 @@ class AccountRepository @Inject constructor(
         }
     }
 
-    suspend fun delete(id: Long) = db.withDb { database ->
+    /**
+     * Deletes an account that has no transactions. Once an account has any, it can only be archived (the "In use"
+     * switch), so history is never orphaned (P1 report). Returns false when it was kept for that reason.
+     */
+    suspend fun delete(id: Long): Boolean = db.withDb { database ->
+        if (database.txnDao().countForAccount(id) > 0) return@withDb false
         database.accountDao().get(id)?.let { database.accountDao().delete(it) }
+        true
     }
 
     /**

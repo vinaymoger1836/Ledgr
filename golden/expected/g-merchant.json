@@ -1,0 +1,130 @@
+[
+  {
+    "id": "G-MERCHANT-01",
+    "type": "MERCHANT",
+    "displayName": "Swiggy",
+    "identityKey": "swiggy",
+    "category": "food_dining",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-02",
+    "type": "MERCHANT",
+    "displayName": "Zomato",
+    "identityKey": "zomato",
+    "category": "food_dining",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-03",
+    "type": "MERCHANT",
+    "displayName": "Blinkit",
+    "identityKey": "blinkit",
+    "category": "groceries",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-04",
+    "type": "MERCHANT",
+    "displayName": "Rapido",
+    "identityKey": "rapido",
+    "category": "transport",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-05",
+    "type": "MERCHANT",
+    "displayName": "Bluebird Cafe",
+    "identityKey": "wrapped:bluebird cafe",
+    "category": "uncategorised",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-06",
+    "type": "UNKNOWN",
+    "displayName": "Razorpay · unknown merchant",
+    "identityKey": null,
+    "category": "uncategorised",
+    "needsCheck": true
+  },
+  {
+    "id": "G-MERCHANT-07",
+    "type": "PERSON",
+    "displayName": "Rahul Sharma",
+    "identityKey": "person:rahul sharma",
+    "category": "transfers_to_people",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-08",
+    "type": "PERSON",
+    "displayName": "9876543210@ybl",
+    "identityKey": "person:9876543210@ybl",
+    "category": "transfers_to_people",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-09",
+    "type": "OWN_ACCOUNT",
+    "displayName": "Own account",
+    "identityKey": "own",
+    "category": "uncategorised",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-10",
+    "type": "OWN_ACCOUNT",
+    "displayName": "Own account",
+    "identityKey": "own",
+    "category": "uncategorised",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-11",
+    "type": "PERSON",
+    "displayName": "Vinay Moger",
+    "identityKey": "person:vinay moger",
+    "category": "transfers_to_people",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-12",
+    "type": "MERCHANT",
+    "displayName": "Chai Point",
+    "identityKey": "id:1000",
+    "category": "uncategorised",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-13",
+    "type": "UNKNOWN",
+    "displayName": "KIRANA STORE 22",
+    "identityKey": null,
+    "category": "uncategorised",
+    "needsCheck": true
+  },
+  {
+    "id": "G-MERCHANT-14",
+    "type": "UNKNOWN",
+    "displayName": "",
+    "identityKey": null,
+    "category": "cash_withdrawal",
+    "needsCheck": false
+  },
+  {
+    "id": "G-MERCHANT-15",
+    "type": "UNKNOWN",
+    "displayName": "COLA DRINKS 7",
+    "identityKey": null,
+    "category": "uncategorised",
+    "needsCheck": true
+  },
+  {
+    "id": "G-MERCHANT-16",
+    "type": "PERSON",
+    "displayName": "Acme Ltd",
+    "identityKey": "person:acme ltd",
+    "category": "salary",
+    "needsCheck": false
+  }
+]

@@ -1,6 +1,7 @@
 package com.ledgr.app.domain.sms
 
 import com.ledgr.app.domain.sender.Sender
+import com.ledgr.app.domain.template.ParsedSms
 
 /** What happened to one SMS (docs/05 `raw_sms.outcome`). */
 enum class Outcome { TXN, IGNORED, REVIEW, QUARANTINE, BALANCE }
@@ -30,9 +31,21 @@ object Reasons {
     const val BALANCE_ONLY = "balance_only"
     const val NO_TXN_SIGNAL = "no_txn_signal"
 
-    // L5 / L6 (templates arrive in P3)
+    // L5 / L6 (templates, P3)
     const val NO_TEMPLATE = "no_template"
     const val UNKNOWN_ACCOUNT = "unknown_account"
+
+    // Field validation (docs/03 §8, ADR-013)
+    const val INVALID_AMOUNT = "invalid_amount"
+    const val AMOUNT_OVER_CAP = "amount_over_cap"
+    const val BALANCE_EQUALS_AMOUNT = "balance_equals_amount"
+
+    // Parsed (ADR-013)
+    const val PARSED = "parsed"
+    const val BALANCE_SNAPSHOT = "balance_snapshot"
+
+    /** The user chose "Ignore this message" in Needs review. */
+    const val USER_IGNORED = "user_ignored"
 
     // L7 red flags
     const val RED_FLAGS = "red_flags"
@@ -50,6 +63,8 @@ data class Verdict(
     val smsClass: SmsClass? = null,
     /** Set by the template stage (P3). */
     val templateId: String? = null,
+    /** What the template extracted, for `TXN` and `BALANCE` outcomes. */
+    val parsed: ParsedSms? = null,
 ) {
     /** `"IGNORED: promotional_suffix"` */
     val code: String get() = "${outcome.name}: $reason"

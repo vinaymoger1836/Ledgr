@@ -1,6 +1,6 @@
 # Spam gate and classifier data (docs/03 §4, docs/04 §1). Loaded and validated in P1; the gate that uses it
 # arrives in P2. Keywords are matched case-insensitively as whole words or phrases.
-version: "2026.11.1"
+version: "2026.11.2"
 
 # L2 (docs/04 §1): an address with no TRAI suffix passes only if the SMS is dated before this day, or its
 # header is one the user confirmed. yyyy-MM-dd, Asia/Kolkata.
@@ -15,6 +15,10 @@ classes:
   balance_only: ["available balance", "avl bal", "avl balance"]
   # An amount together with one of these is a transaction candidate.
   txn_verbs: ["debited", "spent", "withdrawn", "credited", "received", "paid", "sent"]
+  # ADR-013: a FAILED message that also has an amount, one of credit_verbs and one of reversal_markers is a
+  # reversal or refund credit, so it goes on to the templates instead of being ignored.
+  reversal_markers: ["reversed", "reversal", "refund", "refunded"]
+  credit_verbs: ["credited", "received"]
 
 # L7 (docs/04 §1): a URL or phone number together with one of these inside an otherwise valid txn
 # quarantines the message.

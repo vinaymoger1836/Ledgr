@@ -1,0 +1,27 @@
+{
+  "profile": {
+    "ownUpiIds": ["me@okaxis"],
+    "ownNames": ["Vinay Moger", "V MOGER"],
+    "aliases": [
+      { "raw": "Chai Point 22", "name": "Chai Point", "type": "MERCHANT" }
+    ]
+  },
+  "inputs": [
+    { "id": "G-MERCHANT-01", "vpa": "swiggy@icici", "channel": "UPI" },
+    { "id": "G-MERCHANT-02", "vpa": "zomato@hdfcbank", "merchant": "ZOMATO", "channel": "UPI" },
+    { "id": "G-MERCHANT-03", "vpa": "blinkit.rzp@hdfcbank", "payee": "BLINKIT", "channel": "UPI" },
+    { "id": "G-MERCHANT-04", "vpa": "rapido@axis", "channel": "UPI" },
+    { "id": "G-MERCHANT-05", "merchant": "RAZORPAY*BLUEBIRD CAFE", "channel": "CARD" },
+    { "id": "G-MERCHANT-06", "vpa": "razorpay@icici", "channel": "UPI" },
+    { "id": "G-MERCHANT-07", "payee": "RAHUL SHARMA", "channel": "IMPS" },
+    { "id": "G-MERCHANT-08", "vpa": "9876543210@ybl", "channel": "UPI" },
+    { "id": "G-MERCHANT-09", "vpa": "me@okaxis", "channel": "UPI" },
+    { "id": "G-MERCHANT-10", "payee": "VINAY MOGER", "channel": "IMPS" },
+    { "id": "G-MERCHANT-11", "payee": "VINAY MOGER", "channel": "UPI" },
+    { "id": "G-MERCHANT-12", "merchant": "chai point 22", "channel": "CARD" },
+    { "id": "G-MERCHANT-13", "merchant": "KIRANA STORE 22", "channel": "CARD" },
+    { "id": "G-MERCHANT-14", "channel": "ATM" },
+    { "id": "G-MERCHANT-15", "merchant": "COLA DRINKS 7", "channel": "CARD" },
+    { "id": "G-MERCHANT-16", "payee": "ACME LTD", "channel": "NEFT", "credit": true, "body": "Salary credit for Nov" }
+  ]
+}

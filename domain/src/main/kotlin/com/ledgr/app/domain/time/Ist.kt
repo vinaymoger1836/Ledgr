@@ -20,5 +20,12 @@ object Ist {
 
     fun startOfDay(date: LocalDate): Long = date.atStartOfDay(ZONE).toInstant().toEpochMilli()
 
+    /** The IST calendar day of an instant: the stored `local_date` (ADR-009). */
+    fun localDate(epochMillis: Long): LocalDate = Instant.ofEpochMilli(epochMillis).atZone(ZONE).toLocalDate()
+
+    /** [date] at [hour]:[minute] IST as epoch milliseconds. */
+    fun at(date: LocalDate, hour: Int, minute: Int = 0): Long =
+        date.atTime(hour, minute).atZone(ZONE).toInstant().toEpochMilli()
+
     fun now(): Long = System.currentTimeMillis()
 }

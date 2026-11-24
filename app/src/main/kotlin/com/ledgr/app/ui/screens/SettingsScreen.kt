@@ -2,6 +2,8 @@ package com.ledgr.app.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -17,13 +19,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -76,6 +81,7 @@ fun SettingsScreen(
         ) {
             ThemeSection(state.themeMode) { onIntent(SettingsIntent.SetTheme(it)) }
             LockTimeoutSection(state.lockTimeout) { onIntent(SettingsIntent.SetLockTimeout(it)) }
+            OwnTransfersSection(state.countOwnTransfers) { onIntent(SettingsIntent.SetCountOwnTransfers(it)) }
             AboutSection(state.database, state.rulesVersion)
         }
     }
@@ -139,6 +145,34 @@ private fun LockTimeoutSection(selected: LockTimeout, onSelect: (LockTimeout) ->
                 }
             }
         }
+    }
+}
+
+/** docs/04 §6: off by default; turning it on counts both legs of a transfer between own accounts, by design. */
+@Composable
+private fun OwnTransfersSection(checked: Boolean, onChange: (Boolean) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SectionTitle(stringResource(R.string.settings_transfers))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 56.dp)
+                .toggleable(value = checked, role = Role.Switch, onValueChange = onChange),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.settings_transfers_label),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f),
+            )
+            Switch(checked = checked, onCheckedChange = null)
+        }
+        Text(
+            text = stringResource(R.string.settings_transfers_hint),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

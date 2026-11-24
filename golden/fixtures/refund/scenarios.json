@@ -1,0 +1,146 @@
+{
+  "profile": {
+    "accounts": [
+      {
+        "id": 1,
+        "bank": "hdfc",
+        "type": "SAVINGS",
+        "last4": "1234"
+      },
+      {
+        "id": 2,
+        "bank": "hdfc",
+        "type": "CREDIT_CARD",
+        "last4": "4321"
+      },
+      {
+        "id": 3,
+        "bank": "icici",
+        "type": "SAVINGS",
+        "last4": "5678"
+      },
+      {
+        "id": 4,
+        "bank": "icici",
+        "type": "CREDIT_CARD",
+        "last4": "0099"
+      },
+      {
+        "id": 5,
+        "bank": "sbi",
+        "type": "SAVINGS",
+        "last4": "9012"
+      },
+      {
+        "id": 6,
+        "bank": "sbi",
+        "type": "CREDIT_CARD",
+        "last4": "0042"
+      }
+    ],
+    "ownUpiIds": [
+      "me@okaxis"
+    ],
+    "ownNames": [
+      "Vinay Moger"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "G-REFUND-1",
+      "title": "An expense and a later full refund: net spend is zero",
+      "messages": [
+        {
+          "id": "G-REFUND-1-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-14T13:15:00+05:30",
+          "body": "Rs 349.00 debited from a/c XX1234 on 14-11-25 to VPA swiggy@icici (UPI Ref 412345678904)."
+        },
+        {
+          "id": "G-REFUND-1-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T11:00:00+05:30",
+          "body": "Refund of Rs 349.00 from SWIGGY credited to a/c XX1234 on 18-11-25"
+        }
+      ]
+    },
+    {
+      "id": "G-REFUND-2",
+      "title": "A partial refund, then one that would exceed the original: the second stays income",
+      "messages": [
+        {
+          "id": "G-REFUND-2-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-10T20:00:00+05:30",
+          "body": "Rs 1,000.00 debited from a/c XX1234 on 10-11-25 to VPA zomato@hdfcbank (UPI Ref 412345678931)."
+        },
+        {
+          "id": "G-REFUND-2-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-12T11:00:00+05:30",
+          "body": "Refund of Rs 400.00 from ZOMATO credited to a/c XX1234 on 12-11-25"
+        },
+        {
+          "id": "G-REFUND-2-c",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-13T11:00:00+05:30",
+          "body": "Refund of Rs 700.00 from ZOMATO credited to a/c XX1234 on 13-11-25"
+        }
+      ]
+    },
+    {
+      "id": "G-REFUND-3",
+      "title": "The refund message arrives before the expense message",
+      "messages": [
+        {
+          "id": "G-REFUND-3-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T11:00:00+05:30",
+          "body": "Refund of Rs 349.00 from SWIGGY credited to a/c XX1234 on 18-11-25"
+        },
+        {
+          "id": "G-REFUND-3-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-14T13:15:00+05:30",
+          "body": "Rs 349.00 debited from a/c XX1234 on 14-11-25 to VPA swiggy@icici (UPI Ref 412345678904)."
+        }
+      ]
+    },
+    {
+      "id": "G-REFUND-4",
+      "title": "A failed UPI payment and its reversal: both left out of spend",
+      "messages": [
+        {
+          "id": "G-REFUND-4-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T10:00:00+05:30",
+          "body": "Rs 500.00 debited from a/c XX1234 on 18-11-25 to VPA shop@upi (UPI Ref 412345678905)."
+        },
+        {
+          "id": "G-REFUND-4-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T10:05:00+05:30",
+          "body": "Rs 500.00 reversed and credited to a/c XX1234 on 18-11-25 for failed UPI txn (UPI Ref 412345678905)"
+        }
+      ]
+    },
+    {
+      "id": "G-REFUND-5",
+      "title": "The reversal message arrives before the debit message",
+      "messages": [
+        {
+          "id": "G-REFUND-5-a",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T10:05:00+05:30",
+          "body": "Rs 500.00 reversed and credited to a/c XX1234 on 18-11-25 for failed UPI txn (UPI Ref 412345678905)"
+        },
+        {
+          "id": "G-REFUND-5-b",
+          "address": "VM-HDFCBK-S",
+          "date": "2025-11-18T10:00:00+05:30",
+          "body": "Rs 500.00 debited from a/c XX1234 on 18-11-25 to VPA shop@upi (UPI Ref 412345678905)."
+        }
+      ]
+    }
+  ]
+}

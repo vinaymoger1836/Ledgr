@@ -9,8 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Reads the four rule files in the app's `assets/rules` folder and parses them with the pure `:domain` parsers (the same code `goldenCheck`
- * runs). The result is cached for the life of the process. Blocking: call from a background thread.
+ * Reads the rule files in the app's `assets/rules` folder (the four P1 files, `ledger.yaml` and the `templates` folder) and parses
+ * them with the pure `:domain` parsers (the same code `goldenCheck` runs). The result is cached for the life of the process.
+ * Blocking: call from a background thread.
  *
  * A malformed shipped file throws `RulesFormatException`; the caller surfaces it, nothing is swallowed.
  */
@@ -31,9 +32,17 @@ class RulesLoader @Inject constructor(
             spamYaml = read("spam.yaml"),
             merchantsYaml = read("merchants.yaml"),
             categoriesYaml = read("categories.yaml"),
+            ledgerYaml = read("ledger.yaml"),
+            templateYamls = templateFiles(),
         )
         cached = bundle
         return bundle
+    }
+
+    /** `rules/templates/<bank>.yaml`, sorted by name. The folder may be missing or empty (no templates yet). */
+    private fun templateFiles(): Map<String, String> {
+        val names = context.assets.list("rules/templates").orEmpty().filter { it.endsWith(".yaml") }.sorted()
+        return names.associate { "templates/$it" to read("templates/$it") }
     }
 
     private fun read(name: String): String =

@@ -180,6 +180,7 @@ internal fun AccountSheet(
             }
 
             if (editor.error == AccountFormError.SaveFailed) ErrorText(stringResource(R.string.account_error_save))
+            if (editor.error == AccountFormError.HasTransactions) ErrorText(stringResource(R.string.account_error_has_transactions))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -68,5 +68,55 @@ object Migrations {
         }
     }
 
-    val ALL: Array<Migration> = arrayOf(MIGRATION_1_2, MIGRATION_2_3)
+    /** P3: the ledger (ADR-013). New tables only; nothing existing changes. */
+    val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // A person's decision about a message (Needs review); null for every message stored so far.
+            db.execSQL("ALTER TABLE `raw_sms` ADD COLUMN `user_decision` TEXT")
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `txn` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`account_id` INTEGER NOT NULL, `kind` TEXT NOT NULL, `direction` TEXT NOT NULL, " +
+                    "`amount` INTEGER NOT NULL, `occurred_at` INTEGER NOT NULL, `local_date` TEXT NOT NULL, " +
+                    "`channel` TEXT NOT NULL, `counterparty_id` INTEGER, `raw_counterparty` TEXT, " +
+                    "`category_id` INTEGER, `ref_no` TEXT, `balance_after` INTEGER, `source` TEXT NOT NULL, " +
+                    "`raw_sms_id` INTEGER, `statement_line_id` INTEGER, `confidence` INTEGER NOT NULL, " +
+                    "`status` TEXT NOT NULL, `duplicate_of` INTEGER, `transfer_pair_id` INTEGER, `refund_of` INTEGER, " +
+                    "`user_edited_fields` TEXT NOT NULL DEFAULT '[]', `note` TEXT, " +
+                    "`recon_state` TEXT NOT NULL DEFAULT 'UNRECONCILED', `template_id` TEXT, " +
+                    "`rules_version` TEXT NOT NULL, `check_reason` TEXT, " +
+                    "FOREIGN KEY(`account_id`) REFERENCES `account`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , " +
+                    "FOREIGN KEY(`counterparty_id`) REFERENCES `counterparty`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , " +
+                    "FOREIGN KEY(`category_id`) REFERENCES `category`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_account_id_local_date` ON `txn` (`account_id`, `local_date`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_local_date` ON `txn` (`local_date`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_ref_no` ON `txn` (`ref_no`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_counterparty_id_local_date` ON `txn` (`counterparty_id`, `local_date`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_category_id_local_date` ON `txn` (`category_id`, `local_date`)")
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_txn_raw_sms_id` ON `txn` (`raw_sms_id`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_txn_occurred_at` ON `txn` (`occurred_at`)")
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `balance_snapshot` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`account_id` INTEGER NOT NULL, `at` INTEGER NOT NULL, `balance` INTEGER NOT NULL, " +
+                    "`source` TEXT NOT NULL, " +
+                    "FOREIGN KEY(`account_id`) REFERENCES `account`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+            )
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_balance_snapshot_account_id_at` ON `balance_snapshot` (`account_id`, `at`)")
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `link_proposal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`type` TEXT NOT NULL, `txn_id` INTEGER NOT NULL, `other_txn_id` INTEGER NOT NULL, " +
+                    "`state` TEXT NOT NULL, `created_at` INTEGER NOT NULL)",
+            )
+            db.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `index_link_proposal_type_txn_id_other_txn_id` " +
+                    "ON `link_proposal` (`type`, `txn_id`, `other_txn_id`)",
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_link_proposal_state` ON `link_proposal` (`state`)")
+        }
+    }
+
+    val ALL: Array<Migration> = arrayOf(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
 }

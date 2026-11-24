@@ -8,6 +8,11 @@ import kotlin.system.exitProcess
 private val cases: List<GoldenCase> = listOf(
     GSenderCase,
     GSpamCase,
+    GParseCase,
+    GMerchantCase,
+    GDupCase,
+    GXferCase,
+    GRefundCase,
 )
 
 fun main(args: Array<String>) {
@@ -19,6 +24,10 @@ fun main(args: Array<String>) {
     val rules = opts["rules"]?.let(::File)
     val private = opts["private"]?.let(::File)
 
+    // `--emit=<dir>` writes what each case produces to <dir> (never to golden/expected). Expected files are only ever
+    // changed by hand, after reading the emitted output; the runner never updates them.
+    val emit = opts["emit"]?.let(::File)?.also { it.mkdirs() }
+
     var failures = 0
 
     // Preflight (not a golden case): the shipped rule files the app loads at start-up must parse and agree.
@@ -27,10 +36,12 @@ fun main(args: Array<String>) {
     }
 
     for (case in cases) {
-        failures += runCase(case, GoldenContext(fixtures, rules), expected)
+        failures += runCase(case, GoldenContext(fixtures, rules), expected, emit)
     }
 
-    reportPrivate(private)
+    if (private != null && private.isDirectory && rules != null) {
+        PrivateCoverage.report(private, GoldenRules.load(GoldenContext(fixtures, rules), includeSyntheticTemplates = false))
+    }
 
     if (failures > 0) {
         System.err.println("GOLDEN CHECK FAILED: $failures failure(s)")
@@ -39,16 +50,17 @@ fun main(args: Array<String>) {
     println("GOLDEN CHECK OK: ${cases.size} case(s)")
 }
 
-private fun runCase(case: GoldenCase, context: GoldenContext, expectedDir: File): Int {
+private fun runCase(case: GoldenCase, context: GoldenContext, expectedDir: File, emit: File?): Int {
     val expectedFile = File(expectedDir, case.expectedFile)
-    if (!expectedFile.isFile) {
-        System.err.println("[FAIL] ${case.id}: missing expected file ${expectedFile.path}")
-        return 1
-    }
     val actual = try {
         case.run(context)
     } catch (e: Exception) {
         System.err.println("[FAIL] ${case.id}: ${e::class.simpleName}: ${e.message}")
+        return 1
+    }
+    emit?.let { File(it, case.expectedFile).writeText(actual, Charsets.UTF_8) }
+    if (!expectedFile.isFile) {
+        System.err.println("[FAIL] ${case.id}: missing expected file ${expectedFile.path}")
         return 1
     }
     val expectedBytes = expectedFile.readBytes()
@@ -68,9 +80,9 @@ private fun runCase(case: GoldenCase, context: GoldenContext, expectedDir: File)
     return 1
 }
 
-/** Parses all four rule files through the same `:domain` code the app uses, including cross-file checks. */
+/** Parses all shipped rule files through the same `:domain` code the app uses, including cross-file checks. */
 private fun preflightRules(dir: File): Int {
-    val names = listOf("banks.yaml", "spam.yaml", "merchants.yaml", "categories.yaml")
+    val names = listOf("banks.yaml", "spam.yaml", "merchants.yaml", "categories.yaml", "ledger.yaml")
     val missing = names.map { File(dir, it) }.filterNot { it.isFile }
     if (missing.isNotEmpty()) {
         missing.forEach { System.err.println("[FAIL] rules preflight: ${it.path} not found") }
@@ -78,24 +90,23 @@ private fun preflightRules(dir: File): Int {
     }
     return try {
         fun text(name: String) = File(dir, name).readText(Charsets.UTF_8)
-        val bundle = RulesBundle.parse(text("banks.yaml"), text("spam.yaml"), text("merchants.yaml"), text("categories.yaml"))
+        val templates = File(dir, "templates").listFiles { f -> f.isFile && f.name.endsWith(".yaml") }.orEmpty()
+            .sortedBy { it.name }.associate { "templates/${it.name}" to it.readText(Charsets.UTF_8) }
+        val bundle = RulesBundle.parse(
+            text("banks.yaml"), text("spam.yaml"), text("merchants.yaml"), text("categories.yaml"),
+            ledgerYaml = text("ledger.yaml"), templateYamls = templates,
+        )
         println(
             "[ OK ] rules preflight: v${bundle.version}: ${bundle.banks.banks.size} banks " +
                 "(${bundle.unverifiedBanks} unverified), ${bundle.merchants.merchants.size} merchants " +
                 "(${bundle.unverifiedMerchants} unverified), ${bundle.categories.categories.size} categories, " +
-                "${bundle.spam.classes.size} spam classes",
+                "${bundle.spam.classes.size} spam classes, ${bundle.templates.sumOf { it.templates.size }} templates " +
+                "in ${bundle.templates.size} file(s) (${bundle.unverifiedTemplates} unverified)",
         )
         0
     } catch (e: Exception) {
         System.err.println("[FAIL] rules preflight: ${e.message}")
         1
-    }
-}
-
-/** docs/12 §4(c): private data is reported, never asserted. Nothing to run on it in P0. */
-private fun reportPrivate(dir: File?) {
-    if (dir != null && dir.isDirectory) {
-        println("[info] golden/private present: coverage reporting arrives with the parser (P3); nothing asserted.")
     }
 }
 

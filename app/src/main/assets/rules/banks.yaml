@@ -8,7 +8,7 @@
 # color:        card accent as #RRGGBB (white text on it must stay >= 4.5:1; the UI picks the text colour)
 # headers:      account/UPI alert headers, upper-case, without the 2-letter prefix or -S/-T/-P/-G suffix
 # card_headers: credit-card alert headers
-version: "2026.11.1"
+version: "2026.11.2"
 banks:
   - { id: hdfc,      name: "HDFC Bank",              color: "#004C8F", headers: [HDFCBK, HDFCBN], card_headers: [HDFCCC],  verify: true }
   - { id: icici,     name: "ICICI Bank",             color: "#A8420A", headers: [ICICIB, ICICIT], card_headers: [],         verify: true }

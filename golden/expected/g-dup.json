@@ -1,0 +1,414 @@
+[
+  {
+    "id": "G-DUP-1",
+    "title": "The same UPI reference twice: one merge",
+    "messages": [
+      {
+        "id": "G-DUP-1-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-1-a"
+      },
+      {
+        "id": "G-DUP-1-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-1-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-DUP-1-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      },
+      {
+        "label": "G-DUP-1-b",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "status": "DUPLICATE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": "G-DUP-1-a",
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 1,
+      "DUPLICATE": 1
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 125000,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 125000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 125000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "uncategorised": 125000
+    }
+  },
+  {
+    "id": "G-DUP-2",
+    "title": "Two Rs 120 coffees 3 minutes apart with different references: no merge",
+    "messages": [
+      {
+        "id": "G-DUP-2-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-2-a"
+      },
+      {
+        "id": "G-DUP-2-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-2-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-DUP-2-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 12000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      },
+      {
+        "label": "G-DUP-2-b",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 12000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 24000,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 24000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 24000,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "uncategorised": 24000
+    }
+  },
+  {
+    "id": "G-DUP-3",
+    "title": "A bank alert and a card alert for the same card spend: one merge",
+    "messages": [
+      {
+        "id": "G-DUP-3-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-3-a"
+      },
+      {
+        "id": "G-DUP-3-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-3-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-DUP-3-a",
+        "account": 2,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 30000,
+        "status": "DUPLICATE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": "G-DUP-3-b",
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-DUP-3-b",
+        "account": 2,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 30000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 1,
+      "DUPLICATE": 1
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 30000,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 30000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 30000,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "uncategorised": 30000
+    }
+  },
+  {
+    "id": "G-DUP-4",
+    "title": "Two identical card alerts a few minutes apart, templates not paired: a proposal, no merge",
+    "messages": [
+      {
+        "id": "G-DUP-4-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-4-a"
+      },
+      {
+        "id": "G-DUP-4-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-DUP-4-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-DUP-4-a",
+        "account": 2,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 30000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      },
+      {
+        "label": "G-DUP-4-b",
+        "account": 2,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 30000,
+        "status": "ACTIVE",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": "unknown_merchant"
+      }
+    ],
+    "proposals": [
+      {
+        "type": "DUPLICATE",
+        "a": "G-DUP-4-b",
+        "b": "G-DUP-4-a"
+      }
+    ],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 60000,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 60000,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 60000,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "uncategorised": 60000
+    }
+  }
+]

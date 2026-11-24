@@ -1,0 +1,522 @@
+[
+  {
+    "id": "G-REFUND-1",
+    "title": "An expense and a later full refund: net spend is zero",
+    "messages": [
+      {
+        "id": "G-REFUND-1-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-1-a"
+      },
+      {
+        "id": "G-REFUND-1-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-1-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-REFUND-1-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 34900,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "swiggy",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-REFUND-1-b",
+        "account": 1,
+        "kind": "REFUND",
+        "direction": "CREDIT",
+        "amountPaise": 34900,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "swiggy",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": "G-REFUND-1-a",
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 0,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "food_dining": 0
+    }
+  },
+  {
+    "id": "G-REFUND-2",
+    "title": "A partial refund, then one that would exceed the original: the second stays income",
+    "messages": [
+      {
+        "id": "G-REFUND-2-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-2-a"
+      },
+      {
+        "id": "G-REFUND-2-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-2-b"
+      },
+      {
+        "id": "G-REFUND-2-c",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-2-c"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-REFUND-2-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 100000,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "zomato",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-REFUND-2-b",
+        "account": 1,
+        "kind": "REFUND",
+        "direction": "CREDIT",
+        "amountPaise": 40000,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "zomato",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": "G-REFUND-2-a",
+        "check": null
+      },
+      {
+        "label": "G-REFUND-2-c",
+        "account": 1,
+        "kind": "REFUND",
+        "direction": "CREDIT",
+        "amountPaise": 70000,
+        "status": "ACTIVE",
+        "category": "refund",
+        "counterparty": "zomato",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 3
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 60000,
+        "income": 70000
+      },
+      "combinedOn": {
+        "spend": 60000,
+        "income": 70000
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 60000,
+          "income": 70000
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "food_dining": 60000
+    }
+  },
+  {
+    "id": "G-REFUND-3",
+    "title": "The refund message arrives before the expense message",
+    "messages": [
+      {
+        "id": "G-REFUND-3-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-3-a"
+      },
+      {
+        "id": "G-REFUND-3-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-3-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-REFUND-3-a",
+        "account": 1,
+        "kind": "REFUND",
+        "direction": "CREDIT",
+        "amountPaise": 34900,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "swiggy",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": "G-REFUND-3-b",
+        "check": null
+      },
+      {
+        "label": "G-REFUND-3-b",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 34900,
+        "status": "ACTIVE",
+        "category": "food_dining",
+        "counterparty": "swiggy",
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "ACTIVE": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 0,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {
+      "food_dining": 0
+    }
+  },
+  {
+    "id": "G-REFUND-4",
+    "title": "A failed UPI payment and its reversal: both left out of spend",
+    "messages": [
+      {
+        "id": "G-REFUND-4-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-4-a"
+      },
+      {
+        "id": "G-REFUND-4-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-4-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-REFUND-4-a",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 50000,
+        "status": "REVERSED",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      },
+      {
+        "label": "G-REFUND-4-b",
+        "account": 1,
+        "kind": "REVERSAL",
+        "direction": "CREDIT",
+        "amountPaise": 50000,
+        "status": "REVERSED",
+        "category": "transfers_in",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": "G-REFUND-4-a",
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "REVERSED": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 0,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  },
+  {
+    "id": "G-REFUND-5",
+    "title": "The reversal message arrives before the debit message",
+    "messages": [
+      {
+        "id": "G-REFUND-5-a",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-5-a"
+      },
+      {
+        "id": "G-REFUND-5-b",
+        "verdict": "TXN: parsed",
+        "txn": "G-REFUND-5-b"
+      }
+    ],
+    "txns": [
+      {
+        "label": "G-REFUND-5-a",
+        "account": 1,
+        "kind": "REVERSAL",
+        "direction": "CREDIT",
+        "amountPaise": 50000,
+        "status": "REVERSED",
+        "category": "transfers_in",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": "G-REFUND-5-b",
+        "check": null
+      },
+      {
+        "label": "G-REFUND-5-b",
+        "account": 1,
+        "kind": "EXPENSE",
+        "direction": "DEBIT",
+        "amountPaise": 50000,
+        "status": "REVERSED",
+        "category": "uncategorised",
+        "counterparty": null,
+        "transferPair": null,
+        "duplicateOf": null,
+        "refundOf": null,
+        "check": null
+      }
+    ],
+    "proposals": [],
+    "statusCounts": {
+      "REVERSED": 2
+    },
+    "totals": {
+      "combinedOff": {
+        "spend": 0,
+        "income": 0
+      },
+      "combinedOn": {
+        "spend": 0,
+        "income": 0
+      },
+      "perAccount": [
+        {
+          "accountId": 1,
+          "account": "hdfc-1234",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 2,
+          "account": "hdfc-4321",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 3,
+          "account": "icici-5678",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 4,
+          "account": "icici-0099",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 5,
+          "account": "sbi-9012",
+          "spend": 0,
+          "income": 0
+        },
+        {
+          "accountId": 6,
+          "account": "sbi-0042",
+          "spend": 0,
+          "income": 0
+        }
+      ]
+    },
+    "categorySpend": {}
+  }
+]

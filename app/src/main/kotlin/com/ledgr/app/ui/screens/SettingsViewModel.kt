@@ -27,12 +27,15 @@ data class SettingsUiState(
     val database: DbStatus = DbStatus.Opening,
     /** Combined version of the shipped rule files (docs/05 §2); null until read. */
     val rulesVersion: String? = null,
+    /** Count transfers between my own accounts (docs/04 §6). Off by default. */
+    val countOwnTransfers: Boolean = false,
 )
 
 /** Things the user can do on the Settings screen. */
 sealed interface SettingsIntent {
     data class SetTheme(val mode: ThemeMode) : SettingsIntent
     data class SetLockTimeout(val timeout: LockTimeout) : SettingsIntent
+    data class SetCountOwnTransfers(val count: Boolean) : SettingsIntent
 }
 
 @HiltViewModel
@@ -49,7 +52,13 @@ class SettingsViewModel @Inject constructor(
 
     val state: StateFlow<SettingsUiState> =
         combine(settings.settings, databaseManager.status, rulesVersion) { s, db, rules ->
-            SettingsUiState(themeMode = s.themeMode, lockTimeout = s.lockTimeout, database = db, rulesVersion = rules)
+            SettingsUiState(
+                themeMode = s.themeMode,
+                lockTimeout = s.lockTimeout,
+                database = db,
+                rulesVersion = rules,
+                countOwnTransfers = s.countOwnTransfers,
+            )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     fun onIntent(intent: SettingsIntent) {
@@ -57,6 +66,7 @@ class SettingsViewModel @Inject constructor(
             when (intent) {
                 is SettingsIntent.SetTheme -> settings.setThemeMode(intent.mode)
                 is SettingsIntent.SetLockTimeout -> settings.setLockTimeout(intent.timeout)
+                is SettingsIntent.SetCountOwnTransfers -> settings.setCountOwnTransfers(intent.count)
             }
         }
     }

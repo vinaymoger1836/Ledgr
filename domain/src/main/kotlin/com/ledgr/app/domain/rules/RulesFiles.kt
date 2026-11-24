@@ -1,6 +1,9 @@
 package com.ledgr.app.domain.rules
 
 import com.charleskorn.kaml.Yaml
+import com.ledgr.app.domain.ledger.Channel
+import com.ledgr.app.domain.ledger.TxnKind
+import com.ledgr.app.domain.template.TemplateCompiler
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 import kotlinx.serialization.KSerializer
@@ -81,12 +84,18 @@ data class MerchantsFile(
 
 // ───────────────────────────── the whole rule set ─────────────────────────────
 
-/** The four rule files, parsed and cross-checked. Built by [RulesBundle.parse]. */
+/**
+ * The rule files, parsed and cross-checked: the four P1 files, `ledger.yaml` and the per-bank template files
+ * (P3). Built by [RulesBundle.parse].
+ */
 data class RulesBundle(
     val banks: BanksFile,
     val spam: SpamFile,
     val merchants: MerchantsFile,
     val categories: CategoryRulesFile,
+    val ledger: LedgerFile = LedgerFile(version = banks.version),
+    /** `templates/<bank>.yaml` files, in the order given. Empty until real templates are written. */
+    val templates: List<TemplateFile> = emptyList(),
 ) {
     /**
      * The version stamped on every row the rules produce (docs/05 §2). One number when all files agree
@@ -94,13 +103,19 @@ data class RulesBundle(
      */
     val version: String
         get() {
-            val all = listOf(banks.version, spam.version, merchants.version, categories.version)
+            val all = listOf(banks.version, spam.version, merchants.version, categories.version, ledger.version) +
+                templates.map { it.version }
             return if (all.distinct().size == 1) {
                 all.first()
             } else {
-                "banks=${banks.version},spam=${spam.version},merchants=${merchants.version},categories=${categories.version}"
+                "banks=${banks.version},spam=${spam.version},merchants=${merchants.version}," +
+                    "categories=${categories.version},ledger=${ledger.version}" +
+                    templates.joinToString("") { ",${it.bank}=${it.version}" }
             }
         }
+
+    /** Templates still waiting to be checked against the owner's own messages. */
+    val unverifiedTemplates: Int get() = templates.sumOf { f -> f.templates.count { it.verify } }
 
     /** Entries still waiting to be checked against the owner's own data. */
     val unverifiedBanks: Int get() = banks.banks.count { it.verify }
@@ -109,12 +124,18 @@ data class RulesBundle(
     fun bank(id: String): BankRule? = banks.banks.firstOrNull { it.id == id }
 
     companion object {
-        /** Parses and validates all four files (and the references between them). */
+        /**
+         * Parses and validates all files (and the references between them). [ledgerYaml] and [templateYamls]
+         * are optional: a missing `ledger.yaml` falls back to defaults and no templates means nothing parses.
+         * [templateYamls] maps a file name (for error messages) to its text.
+         */
         fun parse(
             banksYaml: String,
             spamYaml: String,
             merchantsYaml: String,
             categoriesYaml: String,
+            ledgerYaml: String? = null,
+            templateYamls: Map<String, String> = emptyMap(),
         ): RulesBundle {
             val categories = CategoryRulesParser.parse(categoriesYaml)
             val banks = decode(BanksFile.serializer(), banksYaml, "banks.yaml")
@@ -123,7 +144,15 @@ data class RulesBundle(
             validateBanks(banks)
             validateSpam(spam, banks)
             validateMerchants(merchants, categories)
-            return RulesBundle(banks, spam, merchants, categories)
+            val ledger = if (ledgerYaml == null) {
+                LedgerFile(version = banks.version)
+            } else {
+                decode(LedgerFile.serializer(), ledgerYaml, "ledger.yaml")
+            }
+            validateLedger(ledger, categories)
+            val templates = templateYamls.map { (name, text) -> decode(TemplateFile.serializer(), text, name) }
+            validateTemplates(templates, banks)
+            return RulesBundle(banks, spam, merchants, categories, ledger, templates)
         }
 
         private fun <T> decode(serializer: KSerializer<T>, text: String, name: String): T =
@@ -191,6 +220,48 @@ data class RulesBundle(
                 }
                 if (m.match.vpaPrefix.isEmpty() && m.match.keywords.isEmpty()) {
                     throw RulesFormatException("merchants.yaml: '${m.id}' has nothing to match on")
+                }
+            }
+        }
+
+        private fun validateLedger(file: LedgerFile, categories: CategoryRulesFile) {
+            requireVersion("ledger.yaml", file.version)
+            val keys = categories.categories.map { it.key }.toSet()
+            val c = file.categories
+            val used = listOf(c.fallback, c.person, c.salary, c.creditDefault) + c.byChannel.values + c.byKind.values
+            for (key in used) {
+                if (key !in keys) throw RulesFormatException("ledger.yaml: unknown category '$key'")
+            }
+            val channels = Channel.entries.map { it.name }.toSet()
+            for (name in c.byChannel.keys + file.ownNameChannels) {
+                if (name !in channels) throw RulesFormatException("ledger.yaml: '$name' is not a channel")
+            }
+            val kinds = TxnKind.entries.map { it.name }.toSet()
+            for (name in c.byKind.keys) {
+                if (name !in kinds) throw RulesFormatException("ledger.yaml: '$name' is not a transaction kind")
+            }
+            try {
+                Regex(file.person.phoneVpaPattern)
+            } catch (e: IllegalArgumentException) {
+                throw RulesFormatException("ledger.yaml: person.phone_vpa_pattern is not a valid regex", e)
+            }
+            if (file.person.minWords < 1 || file.person.maxWords < file.person.minWords) {
+                throw RulesFormatException("ledger.yaml: person.min_words/max_words are not a valid range")
+            }
+        }
+
+        private fun validateTemplates(files: List<TemplateFile>, banks: BanksFile) {
+            val bankIds = banks.banks.map { it.id }.toSet()
+            val seen = HashSet<String>()
+            for (file in files) {
+                requireVersion("templates/${file.bank}.yaml", file.version)
+                if (file.bank !in bankIds) throw RulesFormatException("templates: unknown bank '${file.bank}'")
+                for (t in file.templates) {
+                    if (!t.id.startsWith("${file.bank}.")) {
+                        throw RulesFormatException("templates: '${t.id}' must start with '${file.bank}.'")
+                    }
+                    if (!seen.add(t.id)) throw RulesFormatException("templates: duplicate id '${t.id}'")
+                    TemplateCompiler.compile(t)
                 }
             }
         }

@@ -19,6 +19,7 @@ import com.ledgr.app.ui.profile.IdentitiesScreen
 import com.ledgr.app.ui.profile.MerchantsScreen
 import com.ledgr.app.ui.profile.ProfileScreen
 import com.ledgr.app.ui.profile.SendersSeenScreen
+import com.ledgr.app.ui.review.NeedsReviewScreen
 import com.ledgr.app.ui.screens.DashboardScreen
 import com.ledgr.app.ui.screens.HomeScreen
 import com.ledgr.app.ui.screens.ReconcileScreen
@@ -62,7 +63,9 @@ fun LedgrNavHost(
         popEnterTransition = { enter() },
         popExitTransition = { exit() },
     ) {
-        composable(Destination.Home.route) { HomeScreen() }
+        composable(Destination.Home.route) {
+            HomeScreen(onOpenReview = { navController.navigate(Destination.NeedsReview.route) })
+        }
         composable(Destination.Dashboard.route) { DashboardScreen() }
         composable(Destination.Reconcile.route) { ReconcileScreen() }
         composable(Destination.Profile.route) {
@@ -72,6 +75,7 @@ fun LedgrNavHost(
                 onOpenCategories = { navController.navigate(Destination.Categories.route) },
                 onOpenMerchants = { navController.navigate(Destination.Merchants.route) },
                 onOpenSenders = { navController.navigate(Destination.Senders.route) },
+                onOpenReview = { navController.navigate(Destination.NeedsReview.route) },
                 onOpenScanDebug = { navController.navigate(Destination.ScanDebug.route) },
             )
         }
@@ -82,6 +86,7 @@ fun LedgrNavHost(
         composable(Destination.Categories.route) { CategoriesScreen(onBack = { navController.popBackStack() }) }
         composable(Destination.Merchants.route) { MerchantsScreen(onBack = { navController.popBackStack() }) }
         composable(Destination.Senders.route) { SendersSeenScreen(onBack = { navController.popBackStack() }) }
+        composable(Destination.NeedsReview.route) { NeedsReviewScreen(onBack = { navController.popBackStack() }) }
         composable(Destination.ScanDebug.route) { ScanDebugScreen(onBack = { navController.popBackStack() }) }
     }
 }
