@@ -1,0 +1,104 @@
+# ─────────────────────────────────────────────────────────────
+# Ledgr .gitignore — keep secrets, private data and generated
+# files out of the public repo (see CLAUDE.md owner rule 1)
+# ─────────────────────────────────────────────────────────────
+
+# ── AI assistant / agent files (local-only) ──────────────────
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+docs/12-claude-code-handoff.md
+docs/*handoff*
+docs/claude/
+docs/phase-reports/
+.cursor/
+.cursorrules
+.aider*
+.windsurf/
+.continue/
+.github/copilot-instructions.md
+
+# ── Signing keys and secrets ─────────────────────────────────
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+keystore.properties
+signing.properties
+local.properties
+.env
+.env.*
+!.env.example
+secrets.properties
+google-services.json
+service-account*.json
+*credentials*.json
+
+# ── Private data: real SMS samples, statements, backups ──────
+golden/private/
+**/golden/private/
+*.etbak
+statements/
+private/
+*.sms.txt
+sms-export*
+sms-backup*
+# Real bank statements (synthetic ones live under golden/ and are committed)
+/*.pdf
+/*.xls
+/*.xlsx
+/*.csv
+
+# ── Gradle / Android build output ────────────────────────────
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.hprof
+output-metadata.json
+app/release/
+app/debug/
+app/*/release/
+proguard/
+mapping.txt
+
+# ── Room schema exports are source; DB files are not ─────────
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ── IDE clutter ──────────────────────────────────────────────
+.idea/*
+!.idea/codeStyles/
+!.idea/codeStyles/**
+*.iml
+*.iws
+*.ipr
+.vscode/
+.fleet/
+.project
+.classpath
+.settings/
+
+# ── Logs, temp, OS files ─────────────────────────────────────
+*.log
+*.tmp
+*.temp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
