@@ -14,6 +14,10 @@ sealed class Destination(val route: String) {
     data object Reconcile : Destination("reconcile")
     data object Profile : Destination("profile")
     data object Settings : Destination("profile/settings")
+    data object Identities : Destination("profile/identities")
+    data object Categories : Destination("profile/categories")
+    data object Merchants : Destination("profile/merchants")
+    data object Senders : Destination("profile/senders")
 }
 
 /** One bottom-bar entry. The label is always visible, so colour and icon are never the only cue. */

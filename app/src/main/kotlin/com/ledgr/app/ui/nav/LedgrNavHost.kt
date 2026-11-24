@@ -13,9 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ledgr.app.ui.profile.CategoriesScreen
+import com.ledgr.app.ui.profile.IdentitiesScreen
+import com.ledgr.app.ui.profile.MerchantsScreen
+import com.ledgr.app.ui.profile.ProfileScreen
+import com.ledgr.app.ui.profile.SendersSeenScreen
 import com.ledgr.app.ui.screens.DashboardScreen
 import com.ledgr.app.ui.screens.HomeScreen
-import com.ledgr.app.ui.screens.ProfileScreen
 import com.ledgr.app.ui.screens.ReconcileScreen
 import com.ledgr.app.ui.screens.SettingsRoute
 
@@ -61,10 +65,20 @@ fun LedgrNavHost(
         composable(Destination.Dashboard.route) { DashboardScreen() }
         composable(Destination.Reconcile.route) { ReconcileScreen() }
         composable(Destination.Profile.route) {
-            ProfileScreen(onOpenSettings = { navController.navigate(Destination.Settings.route) })
+            ProfileScreen(
+                onOpenSettings = { navController.navigate(Destination.Settings.route) },
+                onOpenIdentities = { navController.navigate(Destination.Identities.route) },
+                onOpenCategories = { navController.navigate(Destination.Categories.route) },
+                onOpenMerchants = { navController.navigate(Destination.Merchants.route) },
+                onOpenSenders = { navController.navigate(Destination.Senders.route) },
+            )
         }
         composable(Destination.Settings.route) {
             SettingsRoute(onBack = { navController.popBackStack() })
         }
+        composable(Destination.Identities.route) { IdentitiesScreen(onBack = { navController.popBackStack() }) }
+        composable(Destination.Categories.route) { CategoriesScreen(onBack = { navController.popBackStack() }) }
+        composable(Destination.Merchants.route) { MerchantsScreen(onBack = { navController.popBackStack() }) }
+        composable(Destination.Senders.route) { SendersSeenScreen(onBack = { navController.popBackStack() }) }
     }
 }

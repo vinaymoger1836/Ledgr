@@ -5,9 +5,17 @@
         Privacy by construction (CLAUDE.md non-negotiable 1, docs/09 §2):
         - No INTERNET permission here, and none may arrive from a library: `./gradlew goldenCheck`
           fails if any merged manifest declares it. Do NOT add tools:node="remove" to hide one.
-        - SMS permissions are added in P1/P2, when they are first used.
+        - READ_SMS arrived in P1 for "Senders seen" (sender and date columns only). RECEIVE_SMS is added in P2
+          with the live receiver.
         - USE_BIOMETRIC is merged in by androidx.biometric.
     -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- Reading SMS must not make Play-style filters treat the app as phone-only (and keeps lint's
+         PermissionImpliesUnsupportedHardware quiet): the app also works from statements and manual entries. -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:name=".LedgrApp"

@@ -9,6 +9,15 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_back">Back</string>
 
+    <!-- Common actions -->
+    <string name="action_add">Add</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_done">Done</string>
+    <string name="action_save">Save</string>
+    <string name="picker_selected">%1$s, selected</string>
+    <string name="picker_current">Current choice</string>
+
     <!-- Placeholder screens -->
     <string name="home_title">Home</string>
     <string name="home_placeholder">Today\'s spends, the month at a glance and recent transactions will appear here.</string>
@@ -16,10 +25,252 @@
     <string name="dashboard_placeholder">Charts, the forecast and the statement-style table will appear here.</string>
     <string name="reconcile_title">Reconcile</string>
     <string name="reconcile_placeholder">Import a bank statement and compare it with your ledger here.</string>
+
+    <!-- Profile -->
     <string name="profile_title">Profile</string>
-    <string name="profile_placeholder">Accounts, your UPI IDs, categories and merchants will live here.</string>
+    <string name="profile_accounts">Accounts</string>
+    <string name="profile_accounts_empty">Add the bank accounts and cards whose SMS you want to track. Only the last 4 digits are ever stored.</string>
+    <string name="profile_add_account">Add account</string>
+    <string name="profile_more">Your details</string>
+    <string name="profile_identities">My UPI IDs &amp; names</string>
+    <plurals name="profile_identities_summary">
+        <item quantity="one">%1$d saved</item>
+        <item quantity="other">%1$d saved</item>
+    </plurals>
+    <string name="profile_categories">Categories</string>
+    <plurals name="profile_categories_summary">
+        <item quantity="one">%1$d category shown</item>
+        <item quantity="other">%1$d categories shown</item>
+    </plurals>
+    <string name="profile_merchants">Merchants</string>
+    <plurals name="profile_merchants_summary">
+        <item quantity="one">%1$d merchant</item>
+        <item quantity="other">%1$d merchants</item>
+    </plurals>
+    <string name="profile_senders">Senders seen</string>
+    <string name="profile_senders_summary">Which senders are in your SMS inbox, and which bank each belongs to</string>
     <string name="profile_open_settings">Settings</string>
     <string name="profile_open_settings_hint">Theme, app lock and more</string>
+
+    <!-- Accounts -->
+    <string name="account_type_savings">Savings account</string>
+    <string name="account_type_current">Current account</string>
+    <string name="account_type_credit_card">Credit card</string>
+    <string name="account_type_wallet">Wallet</string>
+    <plurals name="account_card_headers">
+        <item quantity="one">%1$d sender header</item>
+        <item quantity="other">%1$d sender headers</item>
+    </plurals>
+    <string name="account_card_inactive">Not in use</string>
+    <string name="account_card_ending">ending %1$s</string>
+    <string name="account_card_edit">Edit account</string>
+    <string name="account_sheet_title_add">Add account</string>
+    <string name="account_sheet_title_edit">Edit account</string>
+    <string name="account_bank">Bank</string>
+    <string name="account_type">Type</string>
+    <string name="account_nickname">Nickname</string>
+    <string name="account_nickname_hint">HDFC Salary</string>
+    <string name="account_last4">Last 4 digits</string>
+    <string name="account_last4_hint">Only the last 4 digits. Never enter a full account or card number.</string>
+    <string name="account_error_nickname">Give the account a nickname.</string>
+    <string name="account_error_last4">Enter exactly 4 digits.</string>
+    <string name="account_error_duplicate">You already have an account at this bank ending in these digits.</string>
+    <string name="account_error_save">Couldn\'t save the account. Please try again.</string>
+    <string name="account_headers">Sender headers</string>
+    <string name="account_headers_hint">The names this bank\'s SMS come from. Tick the ones you have really received.</string>
+    <string name="account_headers_none">No headers yet. Add one below, or find them in your inbox.</string>
+    <string name="account_header_add_label">Add a header, e.g. HDFCBK</string>
+    <string name="account_header_invalid">That isn\'t a sender header. Use letters and digits, like HDFCBK.</string>
+    <string name="account_find_senders">Find headers in my inbox</string>
+    <string name="account_active">In use</string>
+    <string name="account_active_hint">Turn off for an account you have closed.</string>
+    <string name="account_delete">Delete account</string>
+    <string name="account_delete_title">Delete this account?</string>
+    <string name="account_delete_message">%1$s will be removed from Ledgr. Your bank is not affected.</string>
+    <string name="header_note_confirmed">Confirmed for this account</string>
+    <string name="header_note_unverified">From the rule list, not yet checked against your inbox</string>
+    <string name="header_note_listed">From the rule list</string>
+    <string name="header_note_manual">Added by you</string>
+
+    <!-- My UPI IDs & names -->
+    <string name="identities_title">My UPI IDs &amp; names</string>
+    <string name="identities_intro">Ledgr uses these to recognise money you move between your own accounts, so it isn\'t counted as spending.</string>
+    <string name="identities_upi">My UPI IDs</string>
+    <string name="identities_upi_label">UPI ID</string>
+    <string name="identities_upi_hint">name@bank</string>
+    <string name="identities_upi_empty">No UPI IDs yet.</string>
+    <string name="identities_upi_invalid">That doesn\'t look like a UPI ID. Use the form name@bank.</string>
+    <string name="identities_names">Name spellings</string>
+    <string name="identities_name_label">Your name as banks print it</string>
+    <string name="identities_name_hint">Vinay Moger</string>
+    <string name="identities_names_empty">No names yet. Add each way your name appears in bank SMS.</string>
+    <string name="identities_name_invalid">Enter a name with at least 2 characters.</string>
+    <string name="identities_duplicate">Already saved.</string>
+    <string name="identities_save_failed">Couldn\'t save. Please try again.</string>
+    <string name="identities_remove">Remove %1$s</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Categories</string>
+    <string name="categories_reorder">Reorder</string>
+    <string name="categories_reorder_done">Done</string>
+    <string name="categories_reorder_hint">Use the arrows to move a category up or down.</string>
+    <string name="categories_group_expense">Spending</string>
+    <string name="categories_group_income">Income</string>
+    <string name="categories_group_transfer">Transfers between my accounts</string>
+    <string name="categories_show_hidden">Show hidden (%1$d)</string>
+    <string name="categories_hide_hidden">Hide hidden (%1$d)</string>
+    <string name="categories_hidden_label">Hidden</string>
+    <string name="categories_merged_into">Merged into %1$s</string>
+    <string name="categories_edit">Edit %1$s</string>
+    <string name="categories_move_up">Move %1$s up</string>
+    <string name="categories_move_down">Move %1$s down</string>
+    <string name="categories_editor_title">Edit category</string>
+    <string name="categories_name">Name</string>
+    <string name="categories_error_blank">Give the category a name.</string>
+    <string name="categories_error_duplicate">Another category already has this name.</string>
+    <string name="categories_color">Colour</string>
+    <string name="categories_icon">Icon</string>
+    <string name="categories_hide">Hide</string>
+    <string name="categories_unhide">Show again</string>
+    <string name="categories_merge">Merge</string>
+    <string name="categories_protected_hint">Uncategorised is where anything without a category lands, so it always stays.</string>
+    <string name="categories_merge_title">Merge %1$s into…</string>
+    <string name="categories_merge_pick">Pick the category to keep:</string>
+    <string name="categories_merge_consequence">%1$s will be hidden, and everything that used it, such as merchant defaults, moves to %2$s. This can\'t be undone automatically.</string>
+    <string name="categories_merged">Merged %1$s into %2$s</string>
+    <string name="categories_protected">%1$s can\'t be hidden or merged.</string>
+    <string name="categories_failed">Couldn\'t change the category. Please try again.</string>
+
+    <!-- Merchants -->
+    <string name="merchants_title">Merchants</string>
+    <string name="merchants_intro">Names Ledgr recognises in your SMS. Change a name, category or picture and it stays that way.</string>
+    <string name="merchants_add">Add merchant</string>
+    <string name="merchants_edit">Edit %1$s</string>
+    <string name="merchants_no_category">No category</string>
+    <plurals name="merchants_aliases_count">
+        <item quantity="one">%1$d alias</item>
+        <item quantity="other">%1$d aliases</item>
+    </plurals>
+    <string name="merchants_sheet_add">Add merchant</string>
+    <string name="merchants_sheet_edit">Edit merchant</string>
+    <string name="merchants_name">Name</string>
+    <string name="merchants_error_blank">Give the merchant a name.</string>
+    <string name="merchants_error_duplicate">You already have a merchant with this name.</string>
+    <string name="merchants_category">Default category</string>
+    <string name="merchants_avatar">Picture</string>
+    <string name="merchants_avatar_letter">Letter</string>
+    <string name="merchants_avatar_category">Category icon</string>
+    <string name="merchants_avatar_picture">My picture</string>
+    <string name="merchants_image_error">Couldn\'t use that picture. Try another one.</string>
+    <string name="merchants_aliases">Also known as</string>
+    <string name="merchants_aliases_hint">Other spellings or UPI IDs that always mean this merchant.</string>
+    <string name="merchants_alias_label">Add a spelling or UPI ID</string>
+    <string name="merchants_alias_remove">Remove %1$s</string>
+    <string name="merchants_alias_invalid">Enter some text.</string>
+    <string name="merchants_alias_same">This is already listed here.</string>
+    <string name="merchants_alias_taken">This already points to %1$s.</string>
+    <string name="merchants_delete">Delete merchant</string>
+    <string name="merchants_delete_title">Delete this merchant?</string>
+    <string name="merchants_delete_message">%1$s and its aliases will be removed.</string>
+    <string name="merchants_failed">Couldn\'t save the change. Please try again.</string>
+
+    <!-- Senders seen -->
+    <string name="senders_title">Senders seen</string>
+    <string name="senders_explainer_title">See who texts you</string>
+    <string name="senders_explainer_what">Ledgr will read only the sender name and date of the messages in your SMS inbox, to list which senders (like HDFCBK) are there and how many messages each sent. It never reads message text on this screen.</string>
+    <string name="senders_explainer_why">You then tell Ledgr which sender names belong to your banks. Later, only messages from those senders can become transactions; everything else is ignored.</string>
+    <string name="senders_explainer_private">Everything stays on this phone. Ledgr has no internet access at all.</string>
+    <string name="senders_allow">Allow SMS access</string>
+    <string name="senders_skip_hint">You can skip this: type sender headers into an account instead, or import statements.</string>
+    <string name="senders_blocked_title">Android didn\'t allow SMS access</string>
+    <string name="senders_blocked_body">Phones block SMS access for apps installed outside the Play Store until you allow it once. To turn it on:</string>
+    <string name="senders_blocked_step1">1. Tap “Open app info” below.</string>
+    <string name="senders_blocked_step2">2. Tap the three-dot menu at the top right and choose “Allow restricted settings”. If you don\'t see it, go on to step 3.</string>
+    <string name="senders_blocked_step3">3. Open Permissions, then SMS, and choose Allow.</string>
+    <string name="senders_blocked_step4">4. Come back here. This screen refreshes by itself.</string>
+    <string name="senders_open_app_info">Open app info</string>
+    <string name="senders_try_again">Try again</string>
+    <string name="senders_loading">Reading sender names…</string>
+    <string name="senders_load_failed">Couldn\'t read the SMS inbox.</string>
+    <plurals name="senders_summary">
+        <item quantity="one">%1$s messages from %2$d sender</item>
+        <item quantity="other">%1$s messages from %2$d senders</item>
+    </plurals>
+    <string name="senders_privacy_note">Only sender names and dates are read, never message text.</string>
+    <string name="senders_filter_likely">Likely banks (%1$d)</string>
+    <string name="senders_filter_all">All senders (%1$d)</string>
+    <string name="senders_empty">No senders found in the inbox.</string>
+    <plurals name="senders_message_count">
+        <item quantity="one">%1$s message</item>
+        <item quantity="other">%1$s messages</item>
+    </plurals>
+    <string name="senders_last_seen">Last: %1$s</string>
+    <string name="suffix_t">Transactional</string>
+    <string name="suffix_s">Service</string>
+    <string name="suffix_p">Promotional</string>
+    <string name="suffix_g">Government</string>
+    <string name="suffix_none">No suffix</string>
+    <string name="senders_promo_only">Promotional only. These are never treated as transactions.</string>
+    <string name="senders_belongs_to">Belongs to %1$s</string>
+    <string name="senders_belongs_to_bank">Belongs to bank…</string>
+    <string name="senders_suggested">Looks like %1$s.</string>
+    <string name="senders_suggested_unverified">Looks like %1$s (from the rule list, not yet confirmed).</string>
+    <string name="senders_assign_suggested">Yes, %1$s</string>
+    <string name="senders_not_banks">Also in your inbox: %1$s messages from mobile numbers and %2$s from short codes or odd senders. These are never banks.</string>
+    <string name="senders_picker_title">%1$s belongs to…</string>
+    <string name="senders_picker_has_account">You have an account here</string>
+    <string name="senders_picker_none">Not one of my banks</string>
+    <plurals name="senders_assigned">
+        <item quantity="one">%1$s now belongs to %2$s (%3$d account)</item>
+        <item quantity="other">%1$s now belongs to %2$s (%3$d accounts)</item>
+    </plurals>
+    <string name="senders_unassigned">%1$s no longer belongs to a bank</string>
+    <string name="senders_failed">Couldn\'t save the change. Please try again.</string>
+    <string name="senders_no_account_title">No %1$s account yet</string>
+    <string name="senders_no_account_message">Add a %1$s account in Profile first, then come back and assign this sender.</string>
+    <string name="senders_no_account_go">Go to Profile</string>
+
+    <!-- Category colours (palette order) and icons -->
+    <string-array name="category_color_names">
+        <item>Coral</item>
+        <item>Amber</item>
+        <item>Green</item>
+        <item>Teal</item>
+        <item>Blue</item>
+        <item>Indigo</item>
+        <item>Purple</item>
+        <item>Pink</item>
+        <item>Brown</item>
+        <item>Slate</item>
+    </string-array>
+    <string name="icon_restaurant">Restaurant</string>
+    <string name="icon_grocery">Shopping cart</string>
+    <string name="icon_shopping">Shopping bag</string>
+    <string name="icon_transport">Car</string>
+    <string name="icon_fuel">Fuel pump</string>
+    <string name="icon_bill">Receipt</string>
+    <string name="icon_phone">Phone</string>
+    <string name="icon_home">House</string>
+    <string name="icon_loan">Bank building</string>
+    <string name="icon_investment">Rising chart</string>
+    <string name="icon_shield">Shield</string>
+    <string name="icon_health">Medical cross</string>
+    <string name="icon_entertainment">Screen with play button</string>
+    <string name="icon_travel">Suitcase</string>
+    <string name="icon_education">Graduation cap</string>
+    <string name="icon_personal">Sparkle</string>
+    <string name="icon_gift">Gift box</string>
+    <string name="icon_cash">Banknote</string>
+    <string name="icon_person">Person</string>
+    <string name="icon_fee">Percent sign</string>
+    <string name="icon_help">Question mark</string>
+    <string name="icon_salary">Wallet</string>
+    <string name="icon_refund">Return arrow</string>
+    <string name="icon_interest">Percent in a circle</string>
+    <string name="icon_cashback">Coin with arrow</string>
+    <string name="icon_income">Arrow into tray</string>
+    <string name="icon_swap">Two opposite arrows</string>
+    <string name="icon_card">Credit card</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -35,6 +286,7 @@
     </plurals>
     <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
+    <string name="settings_rules_version">Rules version %1$s</string>
     <string name="settings_db_opening">Opening the encrypted database…</string>
     <plurals name="settings_db_ready">
         <item quantity="one">Encrypted database ready · %1$d category</item>
@@ -55,5 +307,5 @@
     <string name="lock_unavailable_body">This phone can\'t show a secure unlock prompt right now, so Ledgr stays locked.</string>
 
     <!-- Errors -->
-    <string name="db_error_banner">The encrypted database could not be opened, so nothing can be saved. %1$s</string>
+    <string name="db_error_banner">Ledgr\'s data could not be prepared, so nothing can be saved. %1$s</string>
 </resources>

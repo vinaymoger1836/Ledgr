@@ -4,14 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ledgr.app.data.db.DatabaseManager
 import com.ledgr.app.data.db.DbStatus
+import com.ledgr.app.data.rules.RulesLoader
 import com.ledgr.app.data.settings.LockTimeout
 import com.ledgr.app.data.settings.SettingsRepository
 import com.ledgr.app.data.settings.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,6 +25,8 @@ data class SettingsUiState(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val lockTimeout: LockTimeout = LockTimeout.MIN_5,
     val database: DbStatus = DbStatus.Opening,
+    /** Combined version of the shipped rule files (docs/05 §2); null until read. */
+    val rulesVersion: String? = null,
 )
 
 /** Things the user can do on the Settings screen. */
@@ -32,11 +39,17 @@ sealed interface SettingsIntent {
 class SettingsViewModel @Inject constructor(
     private val settings: SettingsRepository,
     databaseManager: DatabaseManager,
+    rulesLoader: RulesLoader,
 ) : ViewModel() {
 
+    /** Read once, off the main thread; null if a shipped rules file is broken (the database banner says so). */
+    private val rulesVersion: Flow<String?> = flow<String?> { emit(rulesLoader.bundle().version) }
+        .catch { emit(null) }
+        .onStart { emit(null) }
+
     val state: StateFlow<SettingsUiState> =
-        combine(settings.settings, databaseManager.status) { s, db ->
-            SettingsUiState(themeMode = s.themeMode, lockTimeout = s.lockTimeout, database = db)
+        combine(settings.settings, databaseManager.status, rulesVersion) { s, db, rules ->
+            SettingsUiState(themeMode = s.themeMode, lockTimeout = s.lockTimeout, database = db, rulesVersion = rules)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     fun onIntent(intent: SettingsIntent) {

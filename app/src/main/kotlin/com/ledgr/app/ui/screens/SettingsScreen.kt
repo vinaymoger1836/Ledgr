@@ -76,7 +76,7 @@ fun SettingsScreen(
         ) {
             ThemeSection(state.themeMode) { onIntent(SettingsIntent.SetTheme(it)) }
             LockTimeoutSection(state.lockTimeout) { onIntent(SettingsIntent.SetLockTimeout(it)) }
-            AboutSection(state.database)
+            AboutSection(state.database, state.rulesVersion)
         }
     }
 }
@@ -143,7 +143,7 @@ private fun LockTimeoutSection(selected: LockTimeout, onSelect: (LockTimeout) ->
 }
 
 @Composable
-private fun AboutSection(database: DbStatus) {
+private fun AboutSection(database: DbStatus, rulesVersion: String?) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle(stringResource(R.string.settings_about))
         Text(
@@ -151,6 +151,13 @@ private fun AboutSection(database: DbStatus) {
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (rulesVersion != null) {
+            Text(
+                text = stringResource(R.string.settings_rules_version, rulesVersion),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         val (text, isError) = when (database) {
             DbStatus.Opening -> stringResource(R.string.settings_db_opening) to false
             is DbStatus.Ready ->

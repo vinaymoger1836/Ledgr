@@ -43,3 +43,13 @@ Status values: *Accepted*, *Proposed*, *Superseded*. New design changes are adde
 
 ## ADR-010 Pure-Kotlin domain module — *Accepted*
 Parser, filters, linker, reconciler, forecaster and aggregations have no Android imports, so golden checks run on the JVM in seconds and the logic is reusable.
+
+## ADR-011 Category ordering, merge bookkeeping and own-identity uniqueness — *Proposed*
+**Context:** P1 (Profile) needs to reorder categories, merge them, and keep own UPI IDs/names without duplicates. docs/05 has no column for any of these, and there is no `txn` table yet to re-point on a merge.
+**Decision:**
+- `category.sort_order INTEGER NOT NULL` — the user's order, unique per row so a move is a swap. Migration 1→2 sets it to `id`; the rule sync appends new shipped categories at the end.
+- `category.merged_into_id INTEGER NULL` — set when a category is merged away (it is also hidden). Merge re-points children (`parent_id`), merchant `default_category_id` and earlier merges (chains stay flat). From P3 the ledger resolves a category through this column, so transactions never need a bulk rewrite and a merge stays explainable.
+- `own_identity` has a unique index on `(kind, value COLLATE NOCASE)`.
+- `counterparty_alias.raw_key` is the primary key (docs/05 says "unique"); keys are normalised by `AliasKey.normalize` in `:domain`, the same function the merchant resolver will use.
+- The "Uncategorised" category cannot be hidden or merged (the categoriser falls back to it).
+**Consequences:** One migration (v1→v2). Shipped rows are never updated after first insert, so user edits always win (CLAUDE.md rule 7). Matching data (VPA prefixes, keywords) is read from `merchants.yaml` at runtime and is not copied into the database.
