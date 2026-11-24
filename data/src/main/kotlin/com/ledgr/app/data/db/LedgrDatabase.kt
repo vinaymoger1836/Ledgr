@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 /**
  * Schema history: v1 (P0) account + category; v2 (P1) own_identity, counterparty, counterparty_alias and
  * category.sort_order / merged_into_id; v3 (P2) raw_sms and scan_run (ADR-012); v4 (P3) txn, balance_snapshot and
- * link_proposal (ADR-013). See [Migrations]. Later tables arrive with their phases.
+ * link_proposal (ADR-013); v5 (P5) recurring_override (ADR-015). See [Migrations]. Later tables arrive with their phases.
  */
 @Database(
     entities = [
@@ -20,8 +20,9 @@ import androidx.room.RoomDatabase
         TxnEntity::class,
         BalanceSnapshotEntity::class,
         LinkProposalEntity::class,
+        RecurringOverrideEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 abstract class LedgrDatabase : RoomDatabase() {
@@ -35,6 +36,7 @@ abstract class LedgrDatabase : RoomDatabase() {
     abstract fun txnDao(): TxnDao
     abstract fun balanceSnapshotDao(): BalanceSnapshotDao
     abstract fun linkProposalDao(): LinkProposalDao
+    abstract fun recurringOverrideDao(): RecurringOverrideDao
 
     companion object {
         const val NAME = "ledgr.db"

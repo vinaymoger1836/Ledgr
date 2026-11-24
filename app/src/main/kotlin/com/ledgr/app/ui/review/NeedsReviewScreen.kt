@@ -1,12 +1,10 @@
 package com.ledgr.app.ui.review
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -51,7 +49,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -65,6 +62,7 @@ import com.ledgr.app.R
 import com.ledgr.app.domain.ledger.ProposalType
 import com.ledgr.app.domain.money.Money
 import com.ledgr.app.domain.profile.NameColor
+import com.ledgr.app.ui.motion.Appear
 import com.ledgr.app.ui.motion.rememberReducedMotion
 import com.ledgr.app.ui.profile.ConfirmDialog
 import com.ledgr.app.ui.profile.ErrorText
@@ -186,34 +184,6 @@ private fun EmptyTab(@StringRes text: Int) {
         modifier = Modifier.padding(24.dp),
     )
 }
-
-/**
- * The root of one list item: docs/08 §4 says lists fade in with an 8 dp rise, 40 ms apart, for the first eight items;
- * without animations (animator scale 0) it is instant. [modifier] carries the list's own placement motion.
- */
-@Composable
-private fun Appear(index: Int, modifier: Modifier, content: @Composable () -> Unit) {
-    val reduced = rememberReducedMotion()
-    if (reduced || index >= MAX_STAGGER) {
-        Box(modifier = modifier) { content() }
-        return
-    }
-    var shown by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { shown = true }
-    val progress by animateFloatAsState(
-        targetValue = if (shown) 1f else 0f,
-        animationSpec = tween(durationMillis = 220, delayMillis = index * 40),
-        label = "review-appear",
-    )
-    Box(
-        modifier = modifier.graphicsLayer {
-            alpha = progress
-            translationY = (1f - progress) * 8.dp.toPx()
-        },
-    ) { content() }
-}
-
-private const val MAX_STAGGER = 8
 
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 

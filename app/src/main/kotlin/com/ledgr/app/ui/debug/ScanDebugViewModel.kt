@@ -18,6 +18,7 @@ import com.ledgr.app.data.sms.ScanProgressRepository
 import com.ledgr.app.domain.sender.SenderSuffix
 import com.ledgr.app.domain.time.Ist
 import com.ledgr.app.ui.profile.SmsAccess
+import com.ledgr.app.work.ScanStarter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.YearMonth

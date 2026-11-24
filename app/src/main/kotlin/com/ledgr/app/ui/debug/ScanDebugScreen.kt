@@ -82,7 +82,8 @@ private fun needsNotificationPermission(context: Context): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
 
 /**
- * TEMPORARY (Phase 2, removed or hidden in Phase 4): scan a month, see the last scan report, the counts per reason,
+ * Developer screen (built in Phase 2, hidden behind developer options since Phase 4, ADR-014): scan a month, see the
+ * last scan report, the counts per reason,
  * and the raw SMS behind each outcome and reason. It exists to check the spam gate against the owner's real inbox.
  */
 @Composable

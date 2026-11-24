@@ -173,14 +173,16 @@ fun ProfileScreen(
                 onClick = onOpenReview,
             )
         }
-        // P2 only: removed or hidden in P4.
-        item(key = "row-scan-debug") {
-            NavRow(
-                icon = Icons.Outlined.Build,
-                title = stringResource(R.string.profile_scan_debug),
-                summary = stringResource(R.string.profile_scan_debug_summary),
-                onClick = onOpenScanDebug,
-            )
+        // Developer options only (P4: Settings → About, tap the version 7 times). Real scanning lives on Home.
+        if (state.developerMode) {
+            item(key = "row-scan-debug") {
+                NavRow(
+                    icon = Icons.Outlined.Build,
+                    title = stringResource(R.string.profile_scan_debug),
+                    summary = stringResource(R.string.profile_scan_debug_summary),
+                    onClick = onOpenScanDebug,
+                )
+            }
         }
         item(key = "row-settings") {
             NavRow(

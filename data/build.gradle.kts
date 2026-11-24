@@ -42,6 +42,9 @@ dependencies {
     // Encrypted database
     api(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    // The statement table pages straight from Room (docs/07 §3). `api` so :app can collect the PagingData.
+    api(libs.androidx.room.paging)
+    api(libs.androidx.paging.common)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.sqlite)
     implementation(libs.sqlcipher.android)

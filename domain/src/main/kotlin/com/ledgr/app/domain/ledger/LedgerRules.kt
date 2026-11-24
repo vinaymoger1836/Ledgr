@@ -26,6 +26,8 @@ data class DailyFact(
     val linked: Boolean,
     /** Sum of the group's amounts, paise (always positive; the sign comes from [LedgerRules]). */
     val amount: Long,
+    /** How many stored transactions the group holds (1 for a single event). Only used to show "3 payments". */
+    val count: Int = 1,
 )
 
 /** Spend and income in paise. Spend can be negative on a day that only has a linked refund. */
@@ -89,6 +91,23 @@ object LedgerRules {
 
     fun byAccount(facts: Iterable<DailyFact>, view: LedgerView): Map<Long, Contribution> =
         group(facts, view) { it.accountId }
+
+    /** Per merchant (the Home "Where it went" strip). `null` is "no merchant resolved". */
+    fun byCounterparty(facts: Iterable<DailyFact>, view: LedgerView): Map<Long?, Contribution> =
+        group(facts, view) { it.counterpartyId }
+
+    /**
+     * How many transactions in each group contribute to spend or income (a group that nets to zero but holds rows still
+     * counts them; a group `LedgerRules` leaves out, such as a skipped own transfer, does not). Used for "12 payments".
+     */
+    fun <K> counts(facts: Iterable<DailyFact>, view: LedgerView, key: (DailyFact) -> K): Map<K, Int> {
+        val out = LinkedHashMap<K, Int>()
+        for (f in facts) {
+            if (contribution(f, view) == Contribution.ZERO && f.amount != 0L) continue
+            out[key(f)] = (out[key(f)] ?: 0) + f.count
+        }
+        return out
+    }
 
     private fun <K> group(facts: Iterable<DailyFact>, view: LedgerView, key: (DailyFact) -> K): Map<K, Contribution> {
         val out = LinkedHashMap<K, Contribution>()

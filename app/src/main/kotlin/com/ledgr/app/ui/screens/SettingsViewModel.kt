@@ -29,6 +29,8 @@ data class SettingsUiState(
     val rulesVersion: String? = null,
     /** Count transfers between my own accounts (docs/04 §6). Off by default. */
     val countOwnTransfers: Boolean = false,
+    /** Developer options are on (tap the version 7 times); reveals the scan debug screen in Profile. */
+    val developerMode: Boolean = false,
 )
 
 /** Things the user can do on the Settings screen. */
@@ -36,6 +38,7 @@ sealed interface SettingsIntent {
     data class SetTheme(val mode: ThemeMode) : SettingsIntent
     data class SetLockTimeout(val timeout: LockTimeout) : SettingsIntent
     data class SetCountOwnTransfers(val count: Boolean) : SettingsIntent
+    data class SetDeveloperMode(val on: Boolean) : SettingsIntent
 }
 
 @HiltViewModel
@@ -58,6 +61,7 @@ class SettingsViewModel @Inject constructor(
                 database = db,
                 rulesVersion = rules,
                 countOwnTransfers = s.countOwnTransfers,
+                developerMode = s.developerMode,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
@@ -67,6 +71,7 @@ class SettingsViewModel @Inject constructor(
                 is SettingsIntent.SetTheme -> settings.setThemeMode(intent.mode)
                 is SettingsIntent.SetLockTimeout -> settings.setLockTimeout(intent.timeout)
                 is SettingsIntent.SetCountOwnTransfers -> settings.setCountOwnTransfers(intent.count)
+                is SettingsIntent.SetDeveloperMode -> settings.setDeveloperMode(intent.on)
             }
         }
     }

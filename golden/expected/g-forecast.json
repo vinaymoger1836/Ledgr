@@ -1,0 +1,159 @@
+{
+  "recurringDetected": [
+    {
+      "key": "cp:2",
+      "label": "Netflix",
+      "cadence": "MONTHLY",
+      "amount": 64900,
+      "intervalDays": 30,
+      "last": "2026-10-18",
+      "next": "2026-11-17",
+      "occurrences": 5
+    },
+    {
+      "key": "cp:3",
+      "label": "Airtel",
+      "cadence": "MONTHLY",
+      "amount": 39900,
+      "intervalDays": 30,
+      "last": "2026-10-22",
+      "next": "2026-11-21",
+      "occurrences": 5
+    },
+    {
+      "key": "cp:4",
+      "label": "Car EMI",
+      "cadence": "MONTHLY",
+      "amount": 520000,
+      "intervalDays": 30,
+      "last": "2026-10-25",
+      "next": "2026-11-24",
+      "occurrences": 5
+    },
+    {
+      "key": "cp:1",
+      "label": "Rent",
+      "cadence": "MONTHLY",
+      "amount": 1800000,
+      "intervalDays": 31,
+      "last": "2026-11-01",
+      "next": "2026-12-02",
+      "occurrences": 6
+    }
+  ],
+  "recurringExact": true,
+  "recurringAfterDismissingRent": [
+    "Netflix",
+    "Airtel",
+    "Car EMI"
+  ],
+  "monthForecastOnDay15": {
+    "today": "2026-11-15",
+    "periodStart": "2026-11-01",
+    "periodEnd": "2026-11-30",
+    "spentSoFar": 2500860,
+    "recurringTotal": 624800,
+    "recurring": [
+      {
+        "label": "Netflix",
+        "date": "2026-11-17",
+        "amount": 64900
+      },
+      {
+        "label": "Airtel",
+        "date": "2026-11-21",
+        "amount": 39900
+      },
+      {
+        "label": "Car EMI",
+        "date": "2026-11-24",
+        "amount": 520000
+      }
+    ],
+    "remainingDays": 15,
+    "discretionary": 612217,
+    "perDay": 40814,
+    "expected": 3737877,
+    "low": 3640780,
+    "high": 3807580,
+    "confidence": "GOOD",
+    "historyDays": 167,
+    "usedOverallMedian": false,
+    "pathPoints": 16
+  },
+  "actualMonthTotal": 3735250,
+  "errorBasisPoints": 7,
+  "withinEightPercent": true,
+  "rangeContainsActual": true,
+  "weekForecast": {
+    "today": "2026-11-11",
+    "periodStart": "2026-11-09",
+    "periodEnd": "2026-11-15",
+    "spentSoFar": 89040,
+    "recurringTotal": 0,
+    "recurring": [],
+    "remainingDays": 4,
+    "discretionary": 202005,
+    "perDay": 50501,
+    "expected": 291045,
+    "low": 260640,
+    "high": 316490,
+    "confidence": "GOOD",
+    "historyDays": 163,
+    "usedOverallMedian": false,
+    "pathPoints": 5
+  },
+  "shortHistoryForecast": {
+    "today": "2026-06-20",
+    "periodStart": "2026-06-01",
+    "periodEnd": "2026-06-30",
+    "spentSoFar": 2711590,
+    "recurringTotal": 0,
+    "recurring": [],
+    "remainingDays": 10,
+    "discretionary": 378000,
+    "perDay": 37800,
+    "expected": 3089590,
+    "low": 2977190,
+    "high": 3335590,
+    "confidence": "LOW",
+    "historyDays": 19,
+    "usedOverallMedian": true,
+    "pathPoints": 11
+  },
+  "agreement": [
+    {
+      "view": "combined, own transfers off",
+      "spent": 3735250,
+      "income": 6000000,
+      "sumDailyBars": 3735250,
+      "sumCategorySlices": 3735250,
+      "sumMerchants": 3735250,
+      "footerSpent": 3735250,
+      "footerIncome": 6000000,
+      "consistent": true
+    },
+    {
+      "view": "combined, own transfers on",
+      "spent": 4235250,
+      "income": 6500000,
+      "sumDailyBars": 4235250,
+      "sumCategorySlices": 4235250,
+      "sumMerchants": 4235250,
+      "footerSpent": 4235250,
+      "footerIncome": 6500000,
+      "consistent": true
+    },
+    {
+      "view": "account 1 on its own",
+      "spent": 2820000,
+      "income": 6000000,
+      "sumDailyBars": 2820000,
+      "sumCategorySlices": 2820000,
+      "sumMerchants": 2820000,
+      "footerSpent": 2820000,
+      "footerIncome": 6000000,
+      "consistent": true
+    }
+  ]
+}

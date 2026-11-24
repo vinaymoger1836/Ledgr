@@ -31,6 +31,12 @@ data class AppSettings(
      * between your own accounts is not spending. Turning it on counts both legs, by design.
      */
     val countOwnTransfers: Boolean = false,
+    /** The month Home shows, `yyyy-MM`; null until the person picks one (Home then opens on the current month). */
+    val selectedMonth: String? = null,
+    /** Reveals developer-only screens (the scan debug screen). Off by default; Settings → About, tap the version 7 times. */
+    val developerMode: Boolean = false,
+    /** The 3-step first-run flow (docs/08 §6) has been finished or skipped. */
+    val onboardingDone: Boolean = false,
 )
 
 /** Small key-value settings in DataStore (docs/05 §1 "setting lives in DataStore"). */
@@ -46,7 +52,22 @@ class SettingsRepository @Inject constructor(
                 ?: LockTimeout.MIN_5,
             allowScreenshots = prefs[ALLOW_SCREENSHOTS] ?: false,
             countOwnTransfers = prefs[COUNT_OWN_TRANSFERS] ?: false,
+            selectedMonth = prefs[SELECTED_MONTH],
+            developerMode = prefs[DEVELOPER_MODE] ?: false,
+            onboardingDone = prefs[ONBOARDING_DONE] ?: false,
         )
+    }
+
+    suspend fun setSelectedMonth(month: String) {
+        dataStore.edit { it[SELECTED_MONTH] = month }
+    }
+
+    suspend fun setDeveloperMode(on: Boolean) {
+        dataStore.edit { it[DEVELOPER_MODE] = on }
+    }
+
+    suspend fun setOnboardingDone(done: Boolean) {
+        dataStore.edit { it[ONBOARDING_DONE] = done }
     }
 
     suspend fun setCountOwnTransfers(count: Boolean) {
@@ -70,5 +91,8 @@ class SettingsRepository @Inject constructor(
         val LOCK_TIMEOUT_MINUTES = intPreferencesKey("lock_timeout_minutes")
         val ALLOW_SCREENSHOTS = booleanPreferencesKey("allow_screenshots")
         val COUNT_OWN_TRANSFERS = booleanPreferencesKey("count_own_transfers")
+        val SELECTED_MONTH = stringPreferencesKey("selected_month")
+        val DEVELOPER_MODE = booleanPreferencesKey("developer_mode")
+        val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
     }
 }

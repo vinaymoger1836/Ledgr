@@ -13,6 +13,7 @@ private val cases: List<GoldenCase> = listOf(
     GDupCase,
     GXferCase,
     GRefundCase,
+    GForecastCase,
 )
 
 fun main(args: Array<String>) {

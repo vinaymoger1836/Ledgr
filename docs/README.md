@@ -2,7 +2,7 @@
 
 A personal Android app that reads bank and card SMS on the phone, turns them into a clean ledger (who you paid, how much, from which account), shows today's and monthly spends, forecasts the month, and reconciles the ledger against bank statements (PDF, Excel, CSV). Everything stays on the device.
 
-**Status (2026-11-23):** design agreed. Next step: Claude Code phase **P0** (`12-claude-code-handoff.md`).
+**Status (2026-11-24):** P0–P5 built (`goldenCheck` green with 8 cases; none yet run on a phone). Next: the P3 follow-up (real templates), then **P6** (`12-claude-code-handoff.md` §0).
 
 ## Decisions so far
 

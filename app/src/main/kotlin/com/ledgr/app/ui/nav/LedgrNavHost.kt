@@ -2,6 +2,8 @@ package com.ledgr.app.ui.nav
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -9,19 +11,24 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.navArgument
 import com.ledgr.app.ui.debug.ScanDebugScreen
+import com.ledgr.app.ui.dashboard.DashboardScreen
+import com.ledgr.app.ui.home.HomeScreen
+import com.ledgr.app.ui.txn.TxnDetailScreen
 import com.ledgr.app.ui.profile.CategoriesScreen
 import com.ledgr.app.ui.profile.IdentitiesScreen
 import com.ledgr.app.ui.profile.MerchantsScreen
 import com.ledgr.app.ui.profile.ProfileScreen
 import com.ledgr.app.ui.profile.SendersSeenScreen
 import com.ledgr.app.ui.review.NeedsReviewScreen
-import com.ledgr.app.ui.screens.DashboardScreen
-import com.ledgr.app.ui.screens.HomeScreen
 import com.ledgr.app.ui.screens.ReconcileScreen
 import com.ledgr.app.ui.screens.SettingsRoute
 
@@ -45,6 +52,7 @@ private fun fadeThroughExit(): ExitTransition =
  * The four tab destinations plus Settings. With [reducedMotion] (system animator scale 0) every transition
  * is instant.
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun LedgrNavHost(
     navController: NavHostController,
@@ -54,19 +62,61 @@ fun LedgrNavHost(
     val enter: () -> EnterTransition = { if (reducedMotion) EnterTransition.None else fadeThroughEnter() }
     val exit: () -> ExitTransition = { if (reducedMotion) ExitTransition.None else fadeThroughExit() }
 
+    SharedTransitionLayout(modifier = modifier) {
+        // With animations off there is no scope, so the shared-element modifiers do nothing.
+        CompositionLocalProvider(LocalSharedTransitionScope provides if (reducedMotion) null else this) {
+            LedgrNavGraph(navController, enter, exit)
+        }
+    }
+}
+
+@Composable
+private fun LedgrNavGraph(
+    navController: NavHostController,
+    enter: () -> EnterTransition,
+    exit: () -> ExitTransition,
+) {
+    fun openTab(destination: Destination) {
+        navController.navigate(destination.route) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Destination.Home.route,
-        modifier = modifier,
         enterTransition = { enter() },
         exitTransition = { exit() },
         popEnterTransition = { enter() },
         popExitTransition = { exit() },
     ) {
         composable(Destination.Home.route) {
-            HomeScreen(onOpenReview = { navController.navigate(Destination.NeedsReview.route) })
+            CompositionLocalProvider(LocalNavVisibilityScope provides this) {
+                HomeScreen(
+                    onOpenReview = { navController.navigate(Destination.NeedsReview.route) },
+                    onOpenTxn = { navController.navigate(Destination.TxnDetail.route(it)) },
+                    onNewTxn = { navController.navigate(Destination.TxnNew.route) },
+                    onSeeAll = { openTab(Destination.Dashboard) },
+                    onOpenProfile = { openTab(Destination.Profile) },
+                    onOpenImport = { openTab(Destination.Reconcile) },
+                    onOpenSenders = { navController.navigate(Destination.Senders.route) },
+                )
+            }
         }
-        composable(Destination.Dashboard.route) { DashboardScreen() }
+        composable(Destination.TxnNew.route) { TxnDetailScreen(onBack = { navController.popBackStack() }) }
+        composable(
+            route = Destination.TxnDetail.route,
+            arguments = listOf(navArgument(Destination.TxnDetail.ARG_ID) { type = NavType.LongType }),
+        ) {
+            CompositionLocalProvider(LocalNavVisibilityScope provides this) {
+                TxnDetailScreen(onBack = { navController.popBackStack() })
+            }
+        }
+        composable(Destination.Dashboard.route) {
+            DashboardScreen(onOpenTxn = { navController.navigate(Destination.TxnDetail.route(it)) })
+        }
         composable(Destination.Reconcile.route) { ReconcileScreen() }
         composable(Destination.Profile.route) {
             ProfileScreen(

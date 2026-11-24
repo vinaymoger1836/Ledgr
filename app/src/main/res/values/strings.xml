@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Ledgr</string>
 
     <!-- Navigation -->
@@ -19,10 +19,6 @@
     <string name="picker_current">Current choice</string>
 
     <!-- Placeholder screens -->
-    <string name="home_title">Home</string>
-    <string name="home_placeholder">Today\'s spends, the month at a glance and recent transactions will appear here.</string>
-    <string name="dashboard_title">Dashboard</string>
-    <string name="dashboard_placeholder">Charts, the forecast and the statement-style table will appear here.</string>
     <string name="reconcile_title">Reconcile</string>
     <string name="reconcile_placeholder">Import a bank statement and compare it with your ledger here.</string>
 
@@ -308,10 +304,10 @@
     <string name="lock_unavailable_body">This phone can\'t show a secure unlock prompt right now, so Ledgr stays locked.</string>
 
     <!-- Phase 2: SMS scan (temporary debug screen, removed or hidden in Phase 4) and scan notification -->
-    <string name="profile_scan_debug">SMS scan (temporary)</string>
+    <string name="profile_scan_debug">SMS scan (developer)</string>
     <string name="profile_scan_debug_summary">Scan a month and see why each message was kept or set aside</string>
-    <string name="scan_title">SMS scan (temporary)</string>
-    <string name="scan_temp_notice">Developer screen for Phase 2. It will be removed or hidden in Phase 4.</string>
+    <string name="scan_title">SMS scan (developer)</string>
+    <string name="scan_temp_notice">Developer screen. It is shown only while developer options are on (Settings → About).</string>
     <string name="scan_explainer_title">Allow Ledgr to read your SMS</string>
     <string name="scan_explainer_what">To find bank transactions, Ledgr reads the text of the messages in your SMS inbox, and sees new messages as they arrive.</string>
     <string name="scan_explainer_why">Every message is checked on this phone by fixed rules. Promotional messages, one-time passwords and messages from mobile numbers are set aside, and nothing is guessed.</string>
@@ -444,6 +440,330 @@
     <string name="settings_transfers">Transfers between my accounts</string>
     <string name="settings_transfers_label">Count transfers between my own accounts</string>
     <string name="settings_transfers_hint">Off by default, so moving money between your own accounts is not counted as spending. Turn it on to count both sides; this double-counts by design.</string>
+
+    <!-- Phase 4: Home, transaction detail, onboarding (docs/08 §2.1, §6) -->
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_month_chip_description">Month: %1$s. Double tap to change.</string>
+    <string name="home_add_txn">Add a transaction</string>
+    <string name="home_hero_today">Today\'s spends</string>
+    <string name="home_hero_month_total">%1$s total</string>
+    <string name="home_hero_month_line">This month %1$s · Income %2$s</string>
+    <string name="home_hero_month_line_spoken">This month, %1$s spent, %2$s income</string>
+    <string name="home_delta_up">▲ %1$d%% vs your usual %2$s</string>
+    <string name="home_delta_down">▼ %1$d%% vs your usual %2$s</string>
+    <string name="home_delta_same">On par with your usual %1$s</string>
+    <string name="home_delta_up_spoken" tools:ignore="PluralsCandidate">%1$d percent more than your usual %2$s</string>
+    <string name="home_delta_down_spoken" tools:ignore="PluralsCandidate">%1$d percent less than your usual %2$s</string>
+    <string name="home_scan_button">Scan %1$s SMS</string>
+    <string name="home_scan_read">Read %1$s of %2$s</string>
+    <plurals name="home_scan_txns">
+        <item quantity="one">%d transaction</item>
+        <item quantity="other">%d transactions</item>
+    </plurals>
+    <plurals name="home_scan_to_review">
+        <item quantity="one">%d to review</item>
+        <item quantity="other">%d to review</item>
+    </plurals>
+    <string name="home_scan_ignored" tools:ignore="PluralsCandidate">%1$d ignored</string>
+    <string name="home_scan_review">%1$d to review</string>
+    <plurals name="home_scan_errors">
+        <item quantity="one">%d error</item>
+        <item quantity="other">%d errors</item>
+    </plurals>
+    <string name="home_scan_done">%1$s · %2$s</string>
+    <string name="home_scan_up_to_date">You\'re up to date.</string>
+    <string name="home_scan_failed">The scan stopped. Please try again.</string>
+    <string name="home_category_changed">Category changed.</string>
+    <string name="home_review_open">Open</string>
+    <string name="home_seven_title">Last 7 days</string>
+    <string name="home_seven_summary_none">Last 7 days. No spending.</string>
+    <string name="home_seven_summary_peak">Last 7 days. Spending peaked on %1$s at %2$s.</string>
+    <string name="home_seven_day_description">%1$s, %2$s</string>
+    <string name="home_seven_open_day">Show this day</string>
+    <string name="home_where_it_went">Where it went</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_merchant_other">Other</string>
+    <string name="home_merchant_description">%1$s, %2$s</string>
+    <string name="home_day_today">Today</string>
+    <string name="home_day_yesterday">Yesterday</string>
+    <string name="home_day_spent">Spent %1$s</string>
+    <string name="home_day_none">No transactions on this day in this month.</string>
+    <string name="home_change_category">Change category</string>
+    <string name="home_row_check">Needs a look</string>
+    <string name="home_category_title">Choose a category</string>
+    <string name="home_category_current">Current category</string>
+    <string name="home_month_prev_year">Previous year</string>
+    <string name="home_month_next_year">Next year</string>
+    <string name="home_month_future">Not available yet</string>
+    <string name="home_month_has_data">Has transactions</string>
+    <string name="home_month_no_data">No transactions yet</string>
+    <string name="home_perm_title">Allow SMS access</string>
+    <string name="home_perm_body">Ledgr reads your bank messages on this phone to build your ledger. Nothing leaves the phone, and it has no internet access at all.</string>
+    <string name="home_perm_blocked_title">Android didn\'t allow SMS access</string>
+    <string name="home_perm_blocked_body">Phones block SMS access for apps installed outside the Play Store until you allow it once. Open app info, choose “Allow restricted settings” if you see it, then Permissions → SMS → Allow.</string>
+    <string name="home_perm_import">Import a statement instead</string>
+    <string name="home_empty_title" tools:ignore="PluralsCandidate">Nothing for %1$s %2$d yet</string>
+    <string name="home_empty_body">Scan this month\'s SMS to find your bank transactions, or add one by hand with the + button.</string>
+    <string name="home_empty_body_no_accounts">Add the account whose SMS you want to track, then scan. You can also add a transaction by hand with the + button.</string>
+    <string name="home_empty_add_account">Add an account</string>
+
+    <string name="onboarding_step">Step %1$d of %2$d</string>
+    <string name="onboarding_welcome_title">Welcome to Ledgr</string>
+    <string name="onboarding_welcome_what">Ledgr reads your bank and card SMS and turns them into a clear ledger: what you spent, where, and what needs a second look.</string>
+    <string name="onboarding_welcome_private">Everything stays on this phone. Ledgr has no internet access at all, and nothing is ever sent anywhere.</string>
+    <string name="onboarding_accounts_title">Add your accounts</string>
+    <string name="onboarding_accounts_body">Tell Ledgr which bank accounts and cards to track. Only the last 4 digits are ever stored. You can skip this and add them later under Profile.</string>
+    <string name="onboarding_scan_title">Allow SMS and scan</string>
+    <string name="onboarding_scan_button">Allow SMS and scan this month</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip for now</string>
+
+    <string name="txn_title">Transaction</string>
+    <string name="txn_title_new">Add a transaction</string>
+    <string name="txn_not_found">This transaction no longer exists.</string>
+    <string name="txn_delete">Delete</string>
+    <string name="txn_delete_title">Delete this transaction?</string>
+    <string name="txn_delete_message">It is removed from your totals. If it came from an SMS, a later scan will not bring it back.</string>
+    <string name="txn_direction_spent">Spent</string>
+    <string name="txn_direction_received">Received</string>
+    <string name="txn_amount">Amount</string>
+    <string name="txn_amount_error">Enter an amount greater than zero.</string>
+    <string name="txn_kind">Kind</string>
+    <string name="txn_kind_expense">Expense</string>
+    <string name="txn_kind_income">Income</string>
+    <string name="txn_kind_refund">Refund</string>
+    <string name="txn_kind_transfer_out">Transfer out</string>
+    <string name="txn_kind_transfer_in">Transfer in</string>
+    <string name="txn_kind_card_bill">Card bill payment</string>
+    <string name="txn_kind_card_payment_received">Card payment received</string>
+    <string name="txn_kind_reversal">Reversal</string>
+    <string name="txn_merchant">Merchant or payee</string>
+    <string name="txn_merchant_none">None</string>
+    <string name="txn_category">Category</string>
+    <string name="txn_apply_all">Apply to all from this merchant</string>
+    <string name="txn_apply_all_hint">Also changes this merchant\'s other transactions, except ones whose category you chose yourself, and uses it for new ones.</string>
+    <string name="txn_account">Account</string>
+    <string name="txn_note">Note</string>
+    <string name="txn_provenance">Where this came from</string>
+    <string name="txn_source_sms">SMS</string>
+    <string name="txn_source_statement">Statement</string>
+    <string name="txn_source_manual">Added by hand</string>
+    <string name="txn_prov_source">Source: %1$s</string>
+    <string name="txn_prov_template">Template: %1$s</string>
+    <string name="txn_prov_rules">Rules version: %1$s</string>
+    <string name="txn_prov_confidence" tools:ignore="PluralsCandidate">Confidence: %1$d out of 100</string>
+    <string name="txn_prov_raw">As written in the message: %1$s</string>
+
+    <string name="settings_developer_on">Developer options are on.</string>
+    <string name="settings_developer_turn_off">Turn off</string>
+    <plurals name="settings_developer_taps_left">
+        <item quantity="one">%d more tap to turn on developer options</item>
+        <item quantity="other">%d more taps to turn on developer options</item>
+    </plurals>
+
+    <!-- Phase 5: Dashboard, forecast, statement-style table (docs/07, docs/08 §2.2) -->
+    <string name="dash_all_accounts">All accounts</string>
+    <string name="dash_week">Week</string>
+    <string name="dash_month">Month</string>
+    <string name="dash_previous_period">Previous period</string>
+    <string name="dash_next_period">Next period</string>
+    <string name="dash_own_transfers">Own transfers</string>
+    <string name="dash_own_transfers_on_description">Transfers between your own accounts are counted. Tap to stop counting them.</string>
+    <string name="dash_own_transfers_off_description">Transfers between your own accounts are not counted. Tap to count them.</string>
+    <string name="dash_view_as_table">View as table</string>
+    <string name="dash_show_in_table">Show in table</string>
+    <string name="dash_no_spend">No spending in this period.</string>
+    <string name="dash_other">Other</string>
+    <string name="dash_uncategorised">Uncategorised</string>
+    <string name="dash_unknown_merchant">No merchant</string>
+    <string name="dash_today">Today</string>
+    <string name="dash_yesterday">Yesterday</string>
+    <string name="dash_minus_spoken">minus %1$s</string>
+    <string name="dash_empty_title">No transactions yet</string>
+    <string name="dash_empty_body">Scan your SMS on Home or add a transaction, and the charts and the table will fill in.</string>
+
+    <!-- KPI row -->
+    <string name="dash_kpi_spent">Spent</string>
+    <string name="dash_kpi_income">Income</string>
+    <string name="dash_kpi_net">Net</string>
+    <string name="dash_kpi_forecast">Forecast</string>
+    <string name="dash_kpi_spent_spoken">Spent, %1$s</string>
+    <string name="dash_kpi_income_spoken">Income, %1$s</string>
+    <string name="dash_kpi_net_spoken">Net, %1$s</string>
+    <string name="dash_kpi_show_debits">Show only money spent in the table</string>
+    <string name="dash_kpi_show_credits">Show only money received in the table</string>
+    <string name="dash_kpi_show_all">Show everything in the table</string>
+    <string name="dash_kpi_forecast_spoken">Forecast %1$s, likely between %2$s and %3$s, %4$s confidence</string>
+    <string name="dash_kpi_forecast_none_spoken">No forecast for this period</string>
+    <string name="dash_forecast_range">%1$s – %2$s</string>
+    <string name="dash_forecast_confidence">%1$s confidence</string>
+    <string name="dash_forecast_no_history">Not enough history yet</string>
+    <string name="dash_forecast_current_only">A forecast is shown for the current week or month.</string>
+    <string name="dash_confidence_low">Low</string>
+    <string name="dash_confidence_medium">Medium</string>
+    <string name="dash_confidence_good">Good</string>
+
+    <!-- Charts -->
+    <string name="dash_spend_title">Spending by day</string>
+    <string name="dash_spend_summary_none">No spending in this period.</string>
+    <string name="dash_spend_summary_peak">Spending peaked on %1$s at %2$s.</string>
+    <string name="dash_spend_hint">Press and drag across the bars for a day\'s amount and top merchant.</string>
+    <string name="dash_legend_daily">Daily spend</string>
+    <string name="dash_legend_running">Running total</string>
+    <string name="dash_legend_previous">Previous period</string>
+    <string name="dash_forecast_title">Forecast</string>
+    <string name="dash_forecast_summary">Forecast %1$s, likely between %2$s and %3$s. %4$s confidence.</string>
+    <string name="dash_forecast_summary_none">No forecast for this period.</string>
+    <string name="dash_forecast_line">Expected %1$s, likely %2$s to %3$s</string>
+    <string name="dash_forecast_how">How this is calculated</string>
+    <string name="dash_forecast_low">Low</string>
+    <string name="dash_forecast_high">High</string>
+    <string name="dash_legend_actual">Spent so far</string>
+    <string name="dash_legend_projection">Projection</string>
+    <string name="dash_legend_range">Likely range</string>
+    <string name="dash_legend_last_period">Previous period</string>
+    <string name="dash_categories_title">Categories</string>
+    <string name="dash_categories_centre">Spent</string>
+    <string name="dash_categories_summary">Biggest category %1$s, %2$s of the %3$s spent.</string>
+    <string name="dash_categories_summary_none">No category spending in this period.</string>
+    <string name="dash_slice_spoken">%1$s, %2$s, %3$s of spending</string>
+    <string name="dash_filter_table_by">Show %1$s in the table</string>
+    <string name="dash_merchants_title">Where money went</string>
+    <string name="dash_merchants_summary">Most spent at %1$s, %2$s.</string>
+    <string name="dash_merchants_summary_none">No merchant spending in this period.</string>
+    <string name="dash_merchant_open">Open merchant details</string>
+    <string name="dash_merchant_spoken">%1$s, %2$s, %3$s, %4$s of spending</string>
+    <string name="dash_weekly_title">Last 12 weeks</string>
+    <string name="dash_weekly_summary">Last week %1$s, four-week average %2$s.</string>
+    <string name="dash_weekly_summary_none">No spending in the last 12 weeks.</string>
+    <string name="dash_legend_weekly">Weekly spend</string>
+    <string name="dash_legend_average">4-week average</string>
+    <string name="dash_monthly_title">Last 12 months</string>
+    <string name="dash_monthly_summary">%1$s: spent %2$s, income %3$s.</string>
+    <string name="dash_monthly_summary_none">No months to show.</string>
+    <string name="dash_monthly_hint">Press a month for its totals.</string>
+    <string name="dash_monthly_selected">%1$s: spent %2$s, income %3$s</string>
+    <string name="dash_open_month">Open month</string>
+    <string name="dash_legend_spent">Spent</string>
+    <string name="dash_legend_income">Income</string>
+
+    <!-- Recurring -->
+    <string name="dash_recurring_title">Recurring payments</string>
+    <string name="dash_recurring_summary_none">No recurring payments found.</string>
+    <string name="dash_recurring_none">None yet. A payment shows up here after three regular ones to the same place.</string>
+    <string name="dash_recurring_next">%1$s · next %2$s</string>
+    <string name="dash_recurring_spoken">%1$s, %2$s, %3$s, next on %4$s</string>
+    <string name="dash_recurring_confirm">Confirm</string>
+    <string name="dash_recurring_dismiss">Not recurring</string>
+    <string name="dash_recurring_confirmed">Confirmed</string>
+    <string name="dash_cadence_weekly">Weekly</string>
+    <string name="dash_cadence_monthly">Monthly</string>
+
+    <!-- Statement-style table -->
+    <string name="dash_table_title">Statement</string>
+    <string name="dash_search">Search merchant, text or reference</string>
+    <string name="dash_search_clear">Clear search</string>
+    <string name="dash_filters">Filters</string>
+    <string name="dash_filters_count">Filters (%1$d)</string>
+    <string name="dash_filters_clear">Clear</string>
+    <string name="dash_filters_apply">Apply</string>
+    <string name="dash_filters_title">Filter the table</string>
+    <string name="dash_filter_direction">Direction</string>
+    <string name="dash_filter_kind">Kind</string>
+    <string name="dash_filter_source">Source</string>
+    <string name="dash_filter_recon">Reconciliation</string>
+    <string name="dash_filter_category">Category</string>
+    <string name="dash_filter_merchant">Merchant</string>
+    <string name="dash_filter_amount">Amount (₹)</string>
+    <string name="dash_filter_min">From</string>
+    <string name="dash_filter_max">To</string>
+    <string name="dash_recon_matched">Matched</string>
+    <string name="dash_recon_fuzzy">Near match</string>
+    <string name="dash_recon_none">Not reconciled</string>
+    <string name="dash_export_csv">Export CSV</string>
+    <string name="dash_export_failed">Could not save the file.</string>
+    <string name="dash_sort_newest">Newest first</string>
+    <string name="dash_sort_oldest">Oldest first</string>
+    <string name="dash_sort_amount_high">Amount, high to low</string>
+    <string name="dash_sort_amount_low">Amount, low to high</string>
+    <string name="dash_col_date">Date</string>
+    <string name="dash_col_description">Description</string>
+    <string name="dash_col_ref">Ref no</string>
+    <string name="dash_col_debit">Debit</string>
+    <string name="dash_col_credit">Credit</string>
+    <string name="dash_col_balance">Balance</string>
+    <string name="dash_col_account">Account</string>
+    <string name="dash_col_category">Category</string>
+    <string name="dash_col_source">Source</string>
+    <string name="dash_col_recon">Recon</string>
+    <string name="dash_col_week_of">Week of</string>
+    <string name="dash_col_month">Month</string>
+    <string name="dash_col_share">Share</string>
+    <string name="dash_col_merchant">Merchant</string>
+    <string name="dash_col_payments">Payments</string>
+    <string name="dash_col_average">Average</string>
+    <string name="dash_source_sms">SMS</string>
+    <string name="dash_source_statement">Statement</string>
+    <string name="dash_source_manual">Manual</string>
+    <string name="dash_not_counted">Own transfer, not counted</string>
+    <string name="dash_table_empty">No transactions in this period.</string>
+    <string name="dash_table_empty_filtered">Nothing matches these filters.</string>
+    <string name="dash_row_open">Open transaction</string>
+    <string name="dash_row_show_text">Show original text</string>
+    <string name="dash_row_hide_text">Hide original text</string>
+    <string name="dash_row_no_text">The original text is not stored for this transaction.</string>
+    <string name="dash_row_spoken">%1$s %2$s, %3$s, %4$s, %5$s, %6$s</string>
+    <string name="dash_spoken_spent">Spent</string>
+    <string name="dash_spoken_received">Received</string>
+    <string name="dash_day_subtotal_spoken">%1$s, spent %2$s, income %3$s</string>
+    <string name="dash_footer_title">Totals for these rows</string>
+    <string name="dash_footer_spoken">Debits %1$s, credits %2$s, net %3$s</string>
+    <string name="dash_footer_transfers_note">Transfers between your own accounts are listed but not counted.</string>
+
+    <!-- Sheets -->
+    <string name="dash_explain_title">How this forecast is calculated</string>
+    <string name="dash_explain_none">There is no forecast yet: it needs some recorded spending and a period that is still running.</string>
+    <string name="dash_explain_sentence">%1$s spent so far + %2$s expected bills (%3$s) + about %4$s a day for %5$s = %6$s (likely %7$s – %8$s)</string>
+    <string name="dash_explain_sentence_no_bills">%1$s spent so far + about %2$s a day for %3$s = %4$s (likely %5$s – %6$s)</string>
+    <string name="dash_explain_month_note">Bills are payments to the same place on a regular schedule. The daily figure is your usual spending for each day of the week, without those bills. The range uses your quieter and busier days.</string>
+    <string name="dash_explain_week_note">The same method, over this week only.</string>
+    <string name="dash_explain_bills">Expected bills</string>
+    <string name="dash_explain_confidence_title">%1$s confidence</string>
+    <string name="dash_explain_median">With under 8 weeks of data, one overall daily median is used instead of a rate for each weekday.</string>
+    <string name="dash_explain_weekday">Daily rates are the average for each weekday over the last 90 days.</string>
+    <string name="dash_merchant_sheet_total">%1$s in this period</string>
+    <string name="dash_merchant_sheet_average">average %1$s a payment</string>
+    <string name="dash_merchant_sheet_months">Last 12 months</string>
+    <string name="dash_merchant_sheet_month_ago">%1$d mo ago</string>
+    <string name="dash_merchant_sheet_this_month">This month</string>
+    <string name="dash_merchant_sheet_spoken">%1$s over %2$s, average %3$s</string>
+
+    <plurals name="dash_payments">
+        <item quantity="one">%d payment</item>
+        <item quantity="other">%d payments</item>
+    </plurals>
+    <plurals name="dash_recurring_summary">
+        <item quantity="one">%1$d recurring payment, about %2$s a month.</item>
+        <item quantity="other">%1$d recurring payments, about %2$s a month.</item>
+    </plurals>
+    <plurals name="dash_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="dash_rows">
+        <item quantity="one">%d row</item>
+        <item quantity="other">%d rows</item>
+    </plurals>
+    <plurals name="dash_export_done">
+        <item quantity="one">Saved %d row.</item>
+        <item quantity="other">Saved %d rows.</item>
+    </plurals>
+    <plurals name="dash_explain_history">
+        <item quantity="one">Based on %d day of history.</item>
+        <item quantity="other">Based on %d days of history.</item>
+    </plurals>
 
     <!-- Errors -->
     <string name="db_error_banner">Ledgr\'s data could not be prepared, so nothing can be saved. %1$s</string>

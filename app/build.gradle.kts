@@ -75,6 +75,9 @@ dependencies {
     // Charts are used from P4; present now so the merged-manifest check covers them.
     implementation(libs.vico.compose.m3)
 
+    // The statement-style table (P5) collects Room's PagingSource as lazy items.
+    implementation(libs.androidx.paging.compose)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

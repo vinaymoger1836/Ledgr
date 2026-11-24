@@ -22,8 +22,18 @@ sealed class Destination(val route: String) {
     data object Merchants : Destination("profile/merchants")
     data object Senders : Destination("profile/senders")
 
-    /** P2 only: temporary scan report and raw SMS list. Removed or hidden in P4. */
+    /** Developer screen: scan report and raw SMS list. Only reachable once developer options are on (ADR-014). */
     data object ScanDebug : Destination("profile/debug-scan")
+
+    /** Add a transaction by hand (Home "+"). */
+    data object TxnNew : Destination("txn/new")
+
+    /** Transaction detail and edit; the id is the `txn.id`. */
+    data object TxnDetail : Destination("txn/edit/{id}") {
+        const val ARG_ID = "id"
+
+        fun route(id: Long) = "txn/edit/$id"
+    }
 }
 
 /** One bottom-bar entry. The label is always visible, so colour and icon are never the only cue. */

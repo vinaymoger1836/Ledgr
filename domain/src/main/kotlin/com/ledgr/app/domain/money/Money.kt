@@ -16,6 +16,28 @@ object Money {
         return (if (negative) "-" else "") + symbol + body
     }
 
+    /**
+     * Short form for chips and chart labels (docs/08 §3): `₹850`, `₹12.4K`, `₹1.2L`, `₹3.5Cr`. Integer maths only; the
+     * single decimal is truncated, never rounded up, so a label never overstates the amount.
+     */
+    fun formatCompact(paise: Long, symbol: String = "₹"): String {
+        val negative = paise < 0
+        val rupees = (if (paise == Long.MIN_VALUE) Long.MAX_VALUE else kotlin.math.abs(paise)) / 100
+        val body = when {
+            rupees < 1_000L -> rupees.toString()
+            rupees < 100_000L -> scaled(rupees, 1_000L, "K")
+            rupees < 10_000_000L -> scaled(rupees, 100_000L, "L")
+            else -> scaled(rupees, 10_000_000L, "Cr")
+        }
+        return (if (negative) "-" else "") + symbol + body
+    }
+
+    private fun scaled(rupees: Long, unit: Long, suffix: String): String {
+        val whole = rupees / unit
+        val tenth = (rupees % unit) * 10 / unit
+        return if (tenth == 0L) "$whole$suffix" else "$whole.$tenth$suffix"
+    }
+
     /** Indian grouping: the last three digits, then pairs. */
     private fun group(value: Long): String {
         val digits = value.toString()

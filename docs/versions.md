@@ -33,7 +33,9 @@ permissive (docs/02 §2). New dependencies are added here in the same change.
 | sqlcipher-android | 4.20.0 | BSD-style (Zetetic, SQLCipher Community Edition) | `:data`. Ships native libs for arm64-v8a, armeabi-v7a, x86, x86_64. Keep the Zetetic copyright notice in any "licences" screen. |
 | androidx.datastore-preferences | 1.3.0 | Apache-2.0 | `:data` |
 | androidx.work-runtime-ktx | 2.12.0 | Apache-2.0 | `:data` (first used in P2) |
-| Vico compose-m3 | 3.3.1 | Apache-2.0 | `:app` (first used in P4/P5) |
+| Vico compose-m3 | 3.3.1 | Apache-2.0 | `:app` (Dashboard charts, P5; the 7-day bars on Home are plain layout) |
+| androidx.room:room-paging | 2.8.5 (same as Room) | Apache-2.0 | `:data` (P5, the statement-style table's `PagingSource`) |
+| androidx.paging:paging-common / paging-compose | 3.5.3 | Apache-2.0 | `:data` / `:app` (P5). 3.6.0 is alpha; 3.5.3 is the newest stable on Google Maven, 2026-11-24 |
 | kaml | 0.104.0 | Apache-2.0 | `:domain` (rule YAML) |
 | kotlinx-serialization-json | 1.13.0 | Apache-2.0 | `:golden` |
 | kotlinx-coroutines | 1.11.0 | Apache-2.0 | `:app`, `:data` |

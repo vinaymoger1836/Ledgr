@@ -9,6 +9,7 @@ import com.ledgr.app.data.profile.CategoryRepository
 import com.ledgr.app.data.profile.IdentityRepository
 import com.ledgr.app.data.profile.MerchantRepository
 import com.ledgr.app.data.rules.RulesLoader
+import com.ledgr.app.data.settings.SettingsRepository
 import com.ledgr.app.domain.model.AccountType
 import com.ledgr.app.domain.profile.Last4
 import com.ledgr.app.domain.profile.SenderHeaders
@@ -19,7 +20,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -80,6 +83,8 @@ data class ProfileUiState(
     val visibleCategoryCount: Int = 0,
     val merchantCount: Int = 0,
     val editor: AccountEditorUi? = null,
+    /** Developer options are on (Settings → About, tap the version 7 times): the scan debug row is shown. */
+    val developerMode: Boolean = false,
 )
 
 sealed interface ProfileIntent {
@@ -127,7 +132,10 @@ class ProfileViewModel @Inject constructor(
     categories: CategoryRepository,
     merchants: MerchantRepository,
     rulesLoader: RulesLoader,
+    settings: SettingsRepository,
 ) : ViewModel() {
+
+    private val developerMode = settings.settings.map { it.developerMode }.distinctUntilChanged()
 
     private val banks: StateFlow<List<BankOption>?> = flow {
         emit(
@@ -170,8 +178,8 @@ class ProfileViewModel @Inject constructor(
         )
     }
 
-    val state: StateFlow<ProfileUiState> = combine(lists, draft, banks) { base, d, bankRows ->
-        base.copy(editor = d?.toUi(bankRows.orEmpty()))
+    val state: StateFlow<ProfileUiState> = combine(lists, draft, banks, developerMode) { base, d, bankRows, dev ->
+        base.copy(editor = d?.toUi(bankRows.orEmpty()), developerMode = dev)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProfileUiState())
 
     fun onIntent(intent: ProfileIntent) {

@@ -1,7 +1,9 @@
 package com.ledgr.app.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,16 +23,22 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -82,7 +90,12 @@ fun SettingsScreen(
             ThemeSection(state.themeMode) { onIntent(SettingsIntent.SetTheme(it)) }
             LockTimeoutSection(state.lockTimeout) { onIntent(SettingsIntent.SetLockTimeout(it)) }
             OwnTransfersSection(state.countOwnTransfers) { onIntent(SettingsIntent.SetCountOwnTransfers(it)) }
-            AboutSection(state.database, state.rulesVersion)
+            AboutSection(
+                database = state.database,
+                rulesVersion = state.rulesVersion,
+                developerMode = state.developerMode,
+                onDeveloperMode = { onIntent(SettingsIntent.SetDeveloperMode(it)) },
+            )
         }
     }
 }
@@ -176,15 +189,68 @@ private fun OwnTransfersSection(checked: Boolean, onChange: (Boolean) -> Unit) {
     }
 }
 
+/** Taps on the version line that turn developer options on, as on Android's own Settings. */
+private const val DEVELOPER_TAPS = 7
+
+/** From this many taps on, say how many are left, so a stray tap or two stays unremarked. */
+private const val DEVELOPER_HINT_FROM = 3
+
 @Composable
-private fun AboutSection(database: DbStatus, rulesVersion: String?) {
+private fun AboutSection(
+    database: DbStatus,
+    rulesVersion: String?,
+    developerMode: Boolean,
+    onDeveloperMode: (Boolean) -> Unit,
+) {
+    var taps by rememberSaveable { mutableIntStateOf(0) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle(stringResource(R.string.settings_about))
+        // Tapping the version seven times reveals developer options (docs/12 P4 item 6, ADR-014).
         Text(
             text = stringResource(R.string.settings_version, BuildConfig.VERSION_NAME),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 48.dp)
+                .clickable(role = Role.Button) {
+                    if (!developerMode) {
+                        taps += 1
+                        if (taps >= DEVELOPER_TAPS) {
+                            taps = 0
+                            onDeveloperMode(true)
+                        }
+                    }
+                }
+                .wrapContentHeight(Alignment.CenterVertically),
         )
+        if (!developerMode && taps >= DEVELOPER_HINT_FROM) {
+            Text(
+                text = pluralStringResource(R.plurals.settings_developer_taps_left, DEVELOPER_TAPS - taps, DEVELOPER_TAPS - taps),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            )
+        }
+        if (developerMode) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_developer_on),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics { liveRegion = LiveRegionMode.Polite },
+                )
+                TextButton(onClick = { onDeveloperMode(false) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text(stringResource(R.string.settings_developer_turn_off))
+                }
+            }
+        }
         if (rulesVersion != null) {
             Text(
                 text = stringResource(R.string.settings_rules_version, rulesVersion),

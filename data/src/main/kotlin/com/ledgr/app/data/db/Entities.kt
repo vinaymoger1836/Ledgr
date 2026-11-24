@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.ledgr.app.domain.forecast.RecurringStatus
 import com.ledgr.app.domain.ledger.Channel
 import com.ledgr.app.domain.ledger.Direction
 import com.ledgr.app.domain.ledger.ProposalType
@@ -274,6 +275,22 @@ data class LinkProposalEntity(
     @ColumnInfo(name = "txn_id") val txnId: Long,
     @ColumnInfo(name = "other_txn_id") val otherTxnId: Long,
     val state: ProposalState = ProposalState.OPEN,
+    @ColumnInfo(name = "created_at") val createdAt: Long,
+)
+
+/**
+ * A person's answer to "is this a recurring payment?" on the Dashboard (docs/07 W8, schema v5, ADR-015). [key] is the
+ * detector's series key (`cp:<counterparty id>` or `raw:<normalised text>`). Only answers are stored; the series
+ * themselves are recomputed from the ledger every time.
+ */
+@Entity(
+    tableName = "recurring_override",
+    indices = [Index(value = ["key"], unique = true)],
+)
+data class RecurringOverrideEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val key: String,
+    val status: RecurringStatus,
     @ColumnInfo(name = "created_at") val createdAt: Long,
 )
 
