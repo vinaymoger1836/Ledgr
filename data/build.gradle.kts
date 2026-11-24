@@ -1,0 +1,55 @@
+// :data — Room + SQLCipher, key handling, DataStore settings, (later) SMS source, workers, readers.
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.room)
+}
+
+android {
+    namespace = "com.ledgr.app.data"
+    compileSdk = 37
+
+    defaultConfig {
+        minSdk = 29
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
+// Room schema exports are source (docs/05); they are committed so migrations can be reviewed.
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    api(project(":domain"))
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Encrypted database
+    api(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.sqlite)
+    implementation(libs.sqlcipher.android)
+
+    // Settings and background work (workers arrive in P2; dependency is here so the manifest check covers it)
+    api(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // DI
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+}

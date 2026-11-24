@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launch theme: splash screen API (also used on API 29–30 via the compat library). -->
+    <style name="Theme.Ledgr" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/window_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.Ledgr.Base</item>
+    </style>
+
+    <!-- Compose draws everything; this only supplies the window background behind it. -->
+    <style name="Theme.Ledgr.Base" parent="android:Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

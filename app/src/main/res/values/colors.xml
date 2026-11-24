@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Must match the surface token in ui/theme/Color.kt so the window never flashes a wrong colour. -->
+    <color name="window_background">#FFFBF8FF</color>
+    <color name="ic_launcher_background">#FF3730A3</color>
+    <color name="splash_icon">#FF3730A3</color>
+</resources>

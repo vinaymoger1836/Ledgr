@@ -1,0 +1,100 @@
+[
+  {
+    "input": "VM-HDFCBK-S",
+    "type": "HEADER",
+    "prefix": "VM",
+    "header": "HDFCBK",
+    "suffix": "S"
+  },
+  {
+    "input": "AD-ICICIT-T",
+    "type": "HEADER",
+    "prefix": "AD",
+    "header": "ICICIT",
+    "suffix": "T"
+  },
+  {
+    "input": "JD-XYZOFR-P",
+    "type": "HEADER",
+    "prefix": "JD",
+    "header": "XYZOFR",
+    "suffix": "P"
+  },
+  {
+    "input": "HDFCBK",
+    "type": "HEADER",
+    "prefix": null,
+    "header": "HDFCBK",
+    "suffix": "NONE"
+  },
+  {
+    "input": "+919800000001",
+    "type": "PHONE_NUMBER",
+    "prefix": null,
+    "header": null,
+    "suffix": "NONE"
+  },
+  {
+    "input": "JD-SBIUPI",
+    "type": "HEADER",
+    "prefix": "JD",
+    "header": "SBIUPI",
+    "suffix": "NONE"
+  },
+  {
+    "input": " vm-hdfcbk-s ",
+    "type": "HEADER",
+    "prefix": "VM",
+    "header": "HDFCBK",
+    "suffix": "S"
+  },
+  {
+    "input": "VM-HDFCBK",
+    "type": "HEADER",
+    "prefix": "VM",
+    "header": "HDFCBK",
+    "suffix": "NONE"
+  },
+  {
+    "input": "HDFCBK-S",
+    "type": "HEADER",
+    "prefix": null,
+    "header": "HDFCBK",
+    "suffix": "S"
+  },
+  {
+    "input": "AD-HDFCBK-G",
+    "type": "HEADER",
+    "prefix": "AD",
+    "header": "HDFCBK",
+    "suffix": "G"
+  },
+  {
+    "input": "9800000001",
+    "type": "PHONE_NUMBER",
+    "prefix": null,
+    "header": null,
+    "suffix": "NONE"
+  },
+  {
+    "input": "+9198000000012345",
+    "type": "INVALID",
+    "prefix": null,
+    "header": null,
+    "suffix": "NONE"
+  },
+  {
+    "input": "56767",
+    "type": "INVALID",
+    "prefix": null,
+    "header": null,
+    "suffix": "NONE"
+  },
+  {
+    "input": "",
+    "type": "INVALID",
+    "prefix": null,
+    "header": null,
+    "suffix": "NONE"
+  }
+]
