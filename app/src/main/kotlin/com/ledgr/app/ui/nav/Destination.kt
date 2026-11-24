@@ -14,6 +14,20 @@ sealed class Destination(val route: String) {
     data object Reconcile : Destination("reconcile")
     data object Profile : Destination("profile")
 
+    /** Column-map screen for a picked statement (docs/06 §1.6). The id is process-local (a draft in memory). */
+    data object ReconcileMap : Destination("reconcile/map/{draftId}") {
+        const val ARG_DRAFT = "draftId"
+
+        fun route(draftId: Long) = "reconcile/map/$draftId"
+    }
+
+    /** Results of one imported statement (docs/06 §4); the id is `statement_import.id`. */
+    data object ReconcileResults : Destination("reconcile/results/{importId}") {
+        const val ARG_IMPORT = "importId"
+
+        fun route(importId: Long) = "reconcile/results/$importId"
+    }
+
     /** Needs review (docs/08 §2.5): pushed from the Home banner and from Profile. */
     data object NeedsReview : Destination("review")
     data object Settings : Destination("profile/settings")

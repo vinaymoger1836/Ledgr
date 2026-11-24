@@ -1,0 +1,21 @@
+{
+  "bank": "hdfc",
+  "password": "test1234",
+  "wrongPassword": "wrong99",
+  "columns": {"date": 40, "narration": 100, "ref": 300, "debitRight": 440, "creditRight": 500, "balanceRight": 570},
+  "header": ["Date", "Narration", "Chq./Ref.No.", "Withdrawal Amt.", "Deposit Amt.", "Closing Balance"],
+  "pages": [
+    [
+      {"date": "01/11/26", "text": ["UPI-SWIGGY-swiggy@icici-ICIC0001"], "ref": "430112345678", "debit": "1,250.00", "credit": "", "balance": "1,23,750.00"},
+      {"date": "02/11/26", "text": ["NEFT CR-ACME LTD-SALARY", "NOVEMBER PAYROLL", "BANGALORE KA"], "ref": "N330112345", "debit": "", "credit": "85,000.00", "balance": "2,08,750.00"}
+    ],
+    [
+      {"date": "03/11/26", "text": ["ATM WDL-ATM ID 1234"], "ref": "771", "debit": "5,000.00", "credit": "", "balance": "2,03,750.00"},
+      {"date": "05/11/26", "text": ["UPI-BLUE TOKAI-bluetokai@hdfcbank", "-HDFC0001-431212345678"], "ref": "431212345678", "debit": "120.00", "credit": "", "balance": "2,03,630.00"}
+    ],
+    [
+      {"date": "07/11/26", "text": ["ACH D- BAJAJ FINANCE-12345"], "ref": "12345", "debit": "12,345.67", "credit": "", "balance": "1,91,284.33"},
+      {"date": "10/11/26", "text": ["UPI-RAHUL SHARMA-rahul@okaxis", "REFUND"], "ref": "432212345678", "debit": "", "credit": "450.00", "balance": "1,91,734.33"}
+    ]
+  ]
+}

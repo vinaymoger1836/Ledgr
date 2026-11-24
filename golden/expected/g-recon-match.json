@@ -1,0 +1,127 @@
+{
+  "counts": {
+    "MATCHED": 4,
+    "MATCHED_FUZZY": 1,
+    "AMOUNT_MISMATCH": 1,
+    "STATEMENT_ONLY": 3,
+    "LEDGER_ONLY": 4
+  },
+  "matchRateBp": 6666,
+  "matches": [
+    {
+      "line": 0,
+      "txn": 1,
+      "status": "MATCHED",
+      "scorePm": 1000,
+      "reasons": [
+        "ref"
+      ]
+    },
+    {
+      "line": 1,
+      "txn": 2,
+      "status": "AMOUNT_MISMATCH",
+      "scorePm": 1000,
+      "reasons": [
+        "ref",
+        "amount_differs"
+      ]
+    },
+    {
+      "line": 2,
+      "txn": 3,
+      "status": "MATCHED",
+      "scorePm": 1000,
+      "reasons": [
+        "ref"
+      ]
+    },
+    {
+      "line": 3,
+      "txn": 4,
+      "status": "MATCHED_FUZZY",
+      "scorePm": 791,
+      "reasons": [
+        "scored"
+      ]
+    },
+    {
+      "line": 4,
+      "txn": 6,
+      "status": "MATCHED",
+      "scorePm": 880,
+      "reasons": [
+        "scored"
+      ]
+    },
+    {
+      "line": 5,
+      "txn": 5,
+      "status": "MATCHED",
+      "scorePm": 880,
+      "reasons": [
+        "scored"
+      ]
+    },
+    {
+      "line": 6,
+      "txn": null,
+      "status": "STATEMENT_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    },
+    {
+      "line": 7,
+      "txn": null,
+      "status": "STATEMENT_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    },
+    {
+      "line": 8,
+      "txn": null,
+      "status": "STATEMENT_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    },
+    {
+      "line": null,
+      "txn": 9,
+      "status": "LEDGER_ONLY",
+      "scorePm": 0,
+      "reasons": [
+        "outside_period"
+      ]
+    },
+    {
+      "line": null,
+      "txn": 8,
+      "status": "LEDGER_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    },
+    {
+      "line": null,
+      "txn": 7,
+      "status": "LEDGER_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    },
+    {
+      "line": null,
+      "txn": 10,
+      "status": "LEDGER_ONLY",
+      "scorePm": 0,
+      "reasons": []
+    }
+  ],
+  "balanceHints": [
+    {
+      "line": 0,
+      "txn": 1,
+      "statement": 12375000,
+      "ledger": 12374000
+    }
+  ],
+  "sameWhenInputsReordered": true
+}

@@ -543,6 +543,30 @@ interface TxnDao {
     @Query("SELECT COUNT(*) FROM txn WHERE check_reason IS NOT NULL AND status = 'ACTIVE'")
     fun observeCheckCount(): Flow<Int>
 
+    // ── Reconciliation (P6, docs/06 §3). Only recon_state and statement_line_id are written here, never a field the person edits. ──
+
+    /** The ledger side of a reconciliation: ACTIVE rows of one account between two IST dates, inclusive. */
+    @Query("SELECT * FROM txn WHERE account_id = :accountId AND local_date BETWEEN :fromDate AND :toDate AND status = 'ACTIVE'")
+    suspend fun reconCandidates(accountId: Long, fromDate: String, toDate: String): List<TxnEntity>
+
+    @Query("UPDATE txn SET recon_state = :state, statement_line_id = :lineId WHERE id = :id")
+    suspend fun setRecon(id: Long, state: String, lineId: Long?)
+
+    /** Forgets what an import told the ledger: pairs found through its lines and transactions it called "not in statement". */
+    @Query(
+        "UPDATE txn SET recon_state = 'UNRECONCILED', statement_line_id = NULL WHERE " +
+            "statement_line_id IN (SELECT id FROM statement_line WHERE import_id = :importId) OR " +
+            "(recon_state = 'LEDGER_ONLY' AND id IN (SELECT txn_id FROM recon_match WHERE import_id = :importId AND txn_id IS NOT NULL))",
+    )
+    suspend fun resetReconForImport(importId: Long)
+
+    /** "Also delete added transactions" when an import is deleted (docs/09 §3): those it created, marked deleted like any other. */
+    @Query(
+        "UPDATE txn SET status = 'DELETED', check_reason = NULL WHERE source = 'STATEMENT' AND " +
+            "statement_line_id IN (SELECT id FROM statement_line WHERE import_id = :importId)",
+    )
+    suspend fun deleteStatementAdded(importId: Long)
+
     @Query("SELECT * FROM txn WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<Long>): List<TxnEntity>
 

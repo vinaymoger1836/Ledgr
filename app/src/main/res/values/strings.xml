@@ -20,7 +20,6 @@
 
     <!-- Placeholder screens -->
     <string name="reconcile_title">Reconcile</string>
-    <string name="reconcile_placeholder">Import a bank statement and compare it with your ledger here.</string>
 
     <!-- Profile -->
     <string name="profile_title">Profile</string>
@@ -767,4 +766,185 @@
 
     <!-- Errors -->
     <string name="db_error_banner">Ledgr\'s data could not be prepared, so nothing can be saved. %1$s</string>
+
+    <!-- Phase 6: statement import and reconciliation (docs/06, docs/08 §2.3) -->
+    <string name="recon_pick_account">Which account is the statement for?</string>
+    <string name="recon_import">Import a statement</string>
+    <string name="recon_reading">Reading the file…</string>
+    <string name="recon_import_description">Import a statement. PDF, Excel or CSV. Opens the file picker.</string>
+    <string name="recon_no_accounts">Add the account this statement is for in Profile first, then come back.</string>
+    <string name="recon_open_profile">Open Profile</string>
+    <string name="recon_history">Earlier imports</string>
+    <string name="recon_history_empty">Nothing imported yet. Pick a statement above to see what your SMS missed.</string>
+    <string name="recon_history_description">%1$s, %2$s, %3$s, match rate %4$d%%. Opens the results.</string>
+    <string name="recon_more_actions">More actions</string>
+    <string name="recon_rerun">Check again</string>
+    <string name="recon_delete">Delete import</string>
+    <string name="recon_delete_title">Delete this import?</string>
+    <string name="recon_delete_body">Its lines and matches are removed and your ledger’s reconciled marks reset. Transactions you added from it stay.</string>
+    <string name="recon_delete_also_added">Also delete the transactions added from this statement</string>
+    <string name="recon_cancel">Cancel</string>
+    <string name="recon_ok">OK</string>
+    <string name="recon_back_to_start">Back to Reconcile</string>
+    <string name="recon_error_title">Could not import</string>
+    <string name="recon_loading">Loading…</string>
+    <string name="recon_results_gone">This import no longer exists.</string>
+    <string name="recon_updated">Updated</string>
+    <string name="recon_forget_map">Forget the saved column layout</string>
+    <string name="recon_forget_done">Saved layout forgotten. The next import from this bank asks for the columns again.</string>
+    <string name="recon_forget_none">This import has no saved layout to forget.</string>
+
+    <string name="recon_err_too_large">This file is larger than 20 MB, or too big to read on this phone. Export a shorter period from net banking.</string>
+    <string name="recon_err_unsupported">This file type cannot be read. Export the statement as PDF, XLSX or CSV from net banking.</string>
+    <string name="recon_err_corrupt">The file looks damaged or is not a statement. Download it again and retry.</string>
+    <string name="recon_err_zip_bomb">The workbook expands to an unsafe size, so it was not opened.</string>
+    <string name="recon_err_no_text">This PDF has no text (it is a scan). Download the e-statement, or export CSV or XLSX.</string>
+    <string name="recon_err_no_header">The column headings could not be found in this file. Try the bank’s CSV or Excel download.</string>
+    <string name="recon_err_timeout">Reading the file took too long, so it was stopped. Try a shorter period or another format.</string>
+    <string name="recon_err_no_rows">No transaction lines were found in this file.</string>
+    <string name="recon_err_no_account">That account no longer exists.</string>
+    <string name="recon_err_draft_lost">The file was closed when the app restarted. Pick it again.</string>
+    <string name="recon_err_generic">The file could not be imported.</string>
+    <string name="recon_err_wrong_password">That password did not open the PDF. Try again.</string>
+
+    <string name="recon_password_title">This PDF is password protected</string>
+    <string name="recon_password_hint">Banks often use a date of birth or customer ID. The password is used once to open the file and is never saved.</string>
+    <string name="recon_password_label">PDF password</string>
+    <string name="recon_password_show">Show password</string>
+    <string name="recon_password_open">Open</string>
+
+    <string name="recon_map_title">Match the columns</string>
+    <string name="recon_map_intro">This is the first time Ledgr sees this layout in %1$s. Check which column is which. It is remembered for this bank, so next time nothing is asked.</string>
+    <string name="recon_style_title">How are amounts written?</string>
+    <string name="recon_style_columns">Separate debit and credit columns</string>
+    <string name="recon_style_signed">One amount, minus for money out</string>
+    <string name="recon_style_drcr">One amount with Dr / Cr</string>
+    <string name="recon_fields_title">Columns</string>
+    <string name="recon_field_none">Not in this file</string>
+    <string name="recon_field_required">%1$s (needed)</string>
+    <string name="recon_field_description_format">%1$s column: %2$s. Opens a list of columns.</string>
+    <string name="recon_column_blank">no heading</string>
+    <string name="recon_column_label">Column %1$d · %2$s</string>
+    <string name="recon_field_date">Date</string>
+    <string name="recon_field_value_date">Value date</string>
+    <string name="recon_field_description">Narration</string>
+    <string name="recon_field_ref">Reference</string>
+    <string name="recon_field_debit">Money out (debit)</string>
+    <string name="recon_field_credit">Money in (credit)</string>
+    <string name="recon_field_amount">Amount</string>
+    <string name="recon_field_dr_cr">Dr / Cr</string>
+    <string name="recon_field_balance">Balance</string>
+    <string name="recon_date_title">Date format</string>
+    <string name="recon_date_example">Example from your file: %1$s</string>
+    <string name="recon_date_unknown">Choose a format</string>
+    <string name="recon_date_choose">Choose a date format</string>
+    <string name="recon_preview_title">Check the first lines</string>
+    <string name="recon_preview_none">No lines can be read with these settings yet. The first rows of the file are shown instead.</string>
+    <string name="recon_preview_row_spent">%1$s, %2$s, paid %3$s</string>
+    <string name="recon_preview_row_received">%1$s, %2$s, received %3$s</string>
+    <string name="recon_balance_short">Balance %1$s</string>
+    <string name="recon_map_remember">Remember this layout for this bank</string>
+    <string name="recon_map_missing">Still needed: %1$s</string>
+    <string name="recon_map_save">Save and compare</string>
+    <string name="recon_dividers_title">Column dividers</string>
+    <string name="recon_dividers_hint">Drag a numbered handle left or right so each divider sits in the gap between two columns. With TalkBack, use the actions menu on a handle.</string>
+    <string name="recon_dividers_reset">Reset dividers</string>
+    <string name="recon_divider_label">Divider %1$d of %2$d</string>
+    <string name="recon_divider_left">Move left</string>
+    <string name="recon_divider_right">Move right</string>
+
+    <string name="recon_results_title">Statement results</string>
+    <string name="recon_rate_description">Match rate %1$d%%: share of statement lines found in your ledger</string>
+    <string name="recon_rate_label">%1$d%% found in your ledger</string>
+    <string name="recon_total_debits">Money out (debits)</string>
+    <string name="recon_total_credits">Money in (credits)</string>
+    <string name="recon_col_statement">Statement</string>
+    <string name="recon_col_app">Your ledger</string>
+    <string name="recon_col_difference">Difference</string>
+    <string name="recon_diff_none">None</string>
+    <string name="recon_diff_statement_more">%1$s more on the statement</string>
+    <string name="recon_diff_app_more">%1$s more in your ledger</string>
+    <string name="recon_total_description">%1$s. Statement %2$s. Your ledger %3$s. %4$s.</string>
+    <string name="recon_tab_matched">Matched (%1$d)</string>
+    <string name="recon_tab_confirm">Needs confirm (%1$d)</string>
+    <string name="recon_tab_missing">Missing in app (%1$d)</string>
+    <string name="recon_tab_not_in_statement">Not in statement (%1$d)</string>
+    <string name="recon_hint_matched">These statement lines are already in your ledger.</string>
+    <string name="recon_hint_confirm">Near matches and different amounts. Confirm the ones that are the same payment.</string>
+    <string name="recon_hint_missing">On the statement but not in your ledger: no alert, a deleted SMS or an unknown format. Add them to your ledger.</string>
+    <string name="recon_hint_not_in_statement">In your ledger but not on the statement: pending, the wrong account, a duplicate, or outside the period.</string>
+    <string name="recon_tab_empty">Nothing here.</string>
+    <string name="recon_status_matched">Matched</string>
+    <string name="recon_status_matched_user">Matched (you confirmed)</string>
+    <string name="recon_status_fuzzy">Near match %1$d%%</string>
+    <string name="recon_status_mismatch">Amount differs</string>
+    <string name="recon_status_missing">Missing in app</string>
+    <string name="recon_status_not_in_statement">Not in statement</string>
+    <string name="recon_unknown_name">Unknown</string>
+    <string name="recon_balance_differs">Balance differs: statement %1$s, your ledger %2$s</string>
+    <string name="recon_spoken_paid">paid</string>
+    <string name="recon_spoken_received">received</string>
+    <string name="recon_side_description">%1$s, %2$s, %3$s, %4$s %5$s</string>
+    <string name="recon_action_confirm">Same payment</string>
+    <string name="recon_action_reject">Not the same</string>
+    <string name="recon_action_use_statement">Use statement amount</string>
+    <string name="recon_action_keep_app_amount">Keep my amount</string>
+    <string name="recon_action_add">Add to ledger</string>
+    <string name="recon_action_duplicate">It is a duplicate</string>
+    <string name="recon_action_move">Move to another account</string>
+    <string name="recon_action_keep">Keep</string>
+    <string name="recon_move_title">Move to which account?</string>
+    <string name="recon_move_none">There is no other account yet.</string>
+    <string name="recon_add_all">Add all (%1$d)</string>
+    <string name="recon_select_row">Select this line to add to your ledger</string>
+    <string name="recon_select_all">Select all</string>
+    <string name="recon_select_none">Select none</string>
+    <string name="recon_warn_bad_date">Row %1$d: the date “%2$s” could not be read.</string>
+    <string name="recon_warn_bad_amount">Row %1$d: the amount “%2$s” could not be read.</string>
+    <string name="recon_warn_no_amount">Row %1$d: no amount, so the row was left out.</string>
+    <string name="recon_warn_both_amounts">Row %1$d: both debit and credit are filled; the difference was used.</string>
+    <string name="recon_warn_balance_break">Row %1$d: the balance should be %2$s but the statement shows %3$s.</string>
+    <string name="recon_warn_sum_mismatch">Opening balance plus credits minus debits does not equal the closing balance (off by %1$s). A row may have been misread.</string>
+    <string name="recon_warn_no_balance">This statement has no balance column, so the running balance could not be checked.</string>
+    <string name="recon_warn_other">Row %1$d: %2$s</string>
+
+    <plurals name="recon_dividers_summary">
+        <item quantity="one">First page of the PDF with %1$d column. Dividers can be dragged.</item>
+        <item quantity="other">First page of the PDF with %1$d columns. Dividers can be dragged.</item>
+    </plurals>
+    <plurals name="recon_divider_position">
+        <item quantity="one">%1$d point from the left edge</item>
+        <item quantity="other">%1$d points from the left edge</item>
+    </plurals>
+    <plurals name="recon_warnings_more">
+        <item quantity="one">… and %1$d more</item>
+        <item quantity="other">… and %1$d more</item>
+    </plurals>
+    <plurals name="recon_lines">
+        <item quantity="one">%1$d line</item>
+        <item quantity="other">%1$d lines</item>
+    </plurals>
+    <plurals name="recon_preview_count">
+        <item quantity="one">%1$d line found. The first lines:</item>
+        <item quantity="other">%1$d lines found. The first lines:</item>
+    </plurals>
+    <plurals name="recon_map_warnings">
+        <item quantity="one">%1$d row could not be read with these settings.</item>
+        <item quantity="other">%1$d rows could not be read with these settings.</item>
+    </plurals>
+    <plurals name="recon_warnings">
+        <item quantity="one">%1$d thing to check</item>
+        <item quantity="other">%1$d things to check</item>
+    </plurals>
+    <plurals name="recon_added">
+        <item quantity="one">Added %1$d transaction</item>
+        <item quantity="other">Added %1$d transactions</item>
+    </plurals>
+    <plurals name="recon_add_selected">
+        <item quantity="one">Add %1$d selected</item>
+        <item quantity="other">Add %1$d selected</item>
+    </plurals>
+
+    <!-- Dashboard table: the fuller recon marks (docs/06 §4) -->
+    <string name="dash_recon_ledger_only">Not in statement</string>
 </resources>

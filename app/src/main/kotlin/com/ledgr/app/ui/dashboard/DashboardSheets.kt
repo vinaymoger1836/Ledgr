@@ -346,7 +346,7 @@ internal fun FiltersSheet(
                 }
             }
             FilterGroup(R.string.dash_filter_recon) {
-                listOf(ReconState.MATCHED to R.string.dash_recon_matched, ReconState.MATCHED_FUZZY to R.string.dash_recon_fuzzy, ReconState.UNRECONCILED to R.string.dash_recon_none)
+                listOf(ReconState.MATCHED to R.string.dash_recon_matched, ReconState.MATCHED_FUZZY to R.string.dash_recon_fuzzy, ReconState.LEDGER_ONLY to R.string.dash_recon_ledger_only, ReconState.UNRECONCILED to R.string.dash_recon_none)
                     .forEach { (state, label) ->
                         ChoiceChip(
                             selected = state in draft.recon,

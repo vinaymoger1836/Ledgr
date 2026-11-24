@@ -129,5 +129,53 @@ object Migrations {
         }
     }
 
-    val ALL: Array<Migration> = arrayOf(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+    /** v6 (P6, ADR-016): saved column maps, imported statements with their lines, and the reconciliation result. */
+    val MIGRATION_5_6 = object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `column_map` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`bank_id` TEXT NOT NULL, `file_type` TEXT NOT NULL, `header_signature` TEXT NOT NULL, " +
+                    "`mapping` TEXT NOT NULL, `pdf_columns` TEXT, `updated_at` INTEGER NOT NULL)",
+            )
+            db.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `index_column_map_bank_id_file_type_header_signature` " +
+                    "ON `column_map` (`bank_id`, `file_type`, `header_signature`)",
+            )
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `statement_import` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`account_id` INTEGER NOT NULL, `bank_id` TEXT NOT NULL, `file_name` TEXT NOT NULL, " +
+                    "`file_type` TEXT NOT NULL, `period_from` TEXT NOT NULL, `period_to` TEXT NOT NULL, " +
+                    "`imported_at` INTEGER NOT NULL, `column_map_id` INTEGER, `opening_balance` INTEGER, " +
+                    "`closing_balance` INTEGER, `line_count` INTEGER NOT NULL, `skipped_rows` INTEGER NOT NULL DEFAULT 0, " +
+                    "`warnings_json` TEXT NOT NULL DEFAULT '[]', `match_rate_bp` INTEGER NOT NULL DEFAULT 0, " +
+                    "FOREIGN KEY(`account_id`) REFERENCES `account`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_statement_import_account_id_imported_at` ON `statement_import` (`account_id`, `imported_at`)")
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `statement_line` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`import_id` INTEGER NOT NULL, `ordinal` INTEGER NOT NULL, `row_index` INTEGER NOT NULL, " +
+                    "`txn_date` TEXT NOT NULL, `value_date` TEXT, `description` TEXT NOT NULL, `ref_no` TEXT, " +
+                    "`debit` INTEGER NOT NULL, `credit` INTEGER NOT NULL, `balance` INTEGER, `raw_row` TEXT NOT NULL, " +
+                    "FOREIGN KEY(`import_id`) REFERENCES `statement_import`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+            )
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_statement_line_import_id_ordinal` ON `statement_line` (`import_id`, `ordinal`)")
+
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS `recon_match` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`import_id` INTEGER NOT NULL, `statement_line_id` INTEGER, `txn_id` INTEGER, " +
+                    "`status` TEXT NOT NULL, `score_pm` INTEGER NOT NULL, `reasons` TEXT NOT NULL, " +
+                    "`resolved_by_user` INTEGER NOT NULL DEFAULT 0, " +
+                    "FOREIGN KEY(`import_id`) REFERENCES `statement_import`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , " +
+                    "FOREIGN KEY(`statement_line_id`) REFERENCES `statement_line`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , " +
+                    "FOREIGN KEY(`txn_id`) REFERENCES `txn`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_recon_match_import_id` ON `recon_match` (`import_id`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_recon_match_statement_line_id` ON `recon_match` (`statement_line_id`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_recon_match_txn_id` ON `recon_match` (`txn_id`)")
+        }
+    }
+
+    val ALL: Array<Migration> = arrayOf(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
 }

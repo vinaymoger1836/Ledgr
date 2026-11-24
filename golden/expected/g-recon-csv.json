@@ -1,0 +1,115 @@
+{
+  "type": "CSV",
+  "headerRow": 6,
+  "headerCells": [
+    "Date",
+    "Narration",
+    "Chq./Ref.No.",
+    "Value Dt",
+    "Withdrawal Amt.",
+    "Deposit Amt.",
+    "Closing Balance"
+  ],
+  "signature": "9732f7437256ba48970fd8b4195bc98d7eb3610eae62d7490010050fcc755398",
+  "needsMapping": true,
+  "missing": [],
+  "map": {
+    "fields": {
+      "balance": 6,
+      "credit": 5,
+      "date": 0,
+      "debit": 4,
+      "description": 1,
+      "ref": 2,
+      "value_date": 3
+    },
+    "dateFormat": "dd/MM/yy",
+    "amountStyle": "DEBIT_CREDIT_COLUMNS",
+    "pdfColumns": null
+  },
+  "periodFrom": "2026-11-01",
+  "periodTo": "2026-11-10",
+  "opening": 12500000,
+  "closing": 19161433,
+  "skippedRows": 4,
+  "warnings": [],
+  "lines": [
+    {
+      "ordinal": 0,
+      "row": 7,
+      "date": "2026-11-01",
+      "valueDate": "2026-11-01",
+      "description": "UPI-SWIGGY-swiggy@icici-ICIC0001-430112345678-UPI",
+      "ref": "0000430112345678",
+      "debit": 125000,
+      "credit": 0,
+      "balance": 12375000
+    },
+    {
+      "ordinal": 1,
+      "row": 8,
+      "date": "2026-11-02",
+      "valueDate": "2026-11-02",
+      "description": "NEFT CR-ACME LTD-SALARY NOVEMBER, PAYROLL",
+      "ref": "N330112345",
+      "debit": 0,
+      "credit": 8500000,
+      "balance": 20875000
+    },
+    {
+      "ordinal": 2,
+      "row": 9,
+      "date": "2026-11-03",
+      "valueDate": "2026-11-03",
+      "description": "ATM WDL-ATM ID 1234 BANGALORE KA",
+      "ref": "0000000000771",
+      "debit": 500000,
+      "credit": 0,
+      "balance": 20375000
+    },
+    {
+      "ordinal": 3,
+      "row": 11,
+      "date": "2026-11-05",
+      "valueDate": "2026-11-05",
+      "description": "UPI-BLUE TOKAI-bluetokai@hdfcbank-HDFC0001-431212345678-UPI",
+      "ref": "0000431212345678",
+      "debit": 12000,
+      "credit": 0,
+      "balance": 20363000
+    },
+    {
+      "ordinal": 4,
+      "row": 12,
+      "date": "2026-11-05",
+      "valueDate": "2026-11-05",
+      "description": "UPI-THIRD WAVE-thirdwave@axl-UTIB0001-431212345679-UPI",
+      "ref": "0000431212345679",
+      "debit": 12000,
+      "credit": 0,
+      "balance": 20351000
+    },
+    {
+      "ordinal": 5,
+      "row": 13,
+      "date": "2026-11-07",
+      "valueDate": "2026-11-07",
+      "description": "ACH D- BAJAJ FINANCE-12345",
+      "ref": "0000000012345",
+      "debit": 1234567,
+      "credit": 0,
+      "balance": 19116433
+    },
+    {
+      "ordinal": 6,
+      "row": 14,
+      "date": "2026-11-10",
+      "valueDate": "2026-11-10",
+      "description": "UPI-RAHUL SHARMA-rahul@okaxis-UTIB0001-432212345678-REFUND",
+      "ref": "0000432212345678",
+      "debit": 0,
+      "credit": 45000,
+      "balance": 19161433
+    }
+  ]
+}

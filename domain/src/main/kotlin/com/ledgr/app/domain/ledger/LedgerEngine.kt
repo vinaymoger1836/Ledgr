@@ -1,5 +1,6 @@
 package com.ledgr.app.domain.ledger
 
+import com.ledgr.app.domain.model.CounterpartyType
 import com.ledgr.app.domain.rules.RulesBundle
 import com.ledgr.app.domain.sms.KeywordMatcher
 import com.ledgr.app.domain.template.AccountRef
@@ -39,6 +40,21 @@ class LedgerEngine(private val ctx: LedgerContext) {
 
     /** Who the other side is. Public so the data layer can fetch that counterparty's history before planning. */
     fun resolve(p: ParsedSms): Resolution = resolver.resolve(CounterpartyInput(p.vpa, p.merchant, p.payee), p.channel)
+
+    /**
+     * "Add to ledger" for a statement line (docs/06 §4): who the other side is, the base kind and the category, from the
+     * narration alone. There is no SMS, so no template, no dedup and no linking; those run if an SMS for the same payment
+     * arrives later (the shared reference makes the deduplicator merge them).
+     */
+    fun classifyStatementLine(input: CounterpartyInput, channel: Channel, direction: Direction, narration: String): StatementClassification {
+        val resolution = resolver.resolve(input, channel)
+        val kind = when {
+            resolution.type == CounterpartyType.OWN_ACCOUNT ->
+                if (direction == Direction.DEBIT) TxnKind.SELF_TRANSFER_OUT else TxnKind.SELF_TRANSFER_IN
+            else -> baseKind(direction, KeywordMatcher.normalize(narration))
+        }
+        return StatementClassification(resolution, kind, categorizer.categorize(resolution, kind, channel, direction, narration))
+    }
 
     fun plan(input: IngestInput, candidates: List<LedgerTxn>): IngestPlan {
         val p = input.parsed
@@ -144,3 +160,6 @@ class LedgerEngine(private val ctx: LedgerContext) {
             else -> null
         }
 }
+
+/** What [LedgerEngine.classifyStatementLine] decided for a statement line. */
+class StatementClassification(val resolution: Resolution, val kind: TxnKind, val categoryKey: String)

@@ -1,0 +1,98 @@
+# Statement import rules (docs/06 §1, §2, §3).
+#
+# Everything the statement reader, the normaliser and the reconciler need to *recognise* lives here, not in Kotlin
+# (CLAUDE.md rule 2). Nothing in this file has been checked against your own statements yet: a bank whose layout is
+# not recognised shows the column-mapping screen once, and the map you confirm is saved.
+#
+# Header cells are compared after normalising: lower-case, every run of non-letters/digits becomes one space.
+# So "Chq./Ref.No." is written `chq ref no`, and "Withdrawal Amt." is `withdrawal amt`.
+version: "2026.11.3"
+
+# The header row is the first row among the first `header_scan_rows` with at least `min_header_hits` cells that match
+# a synonym below (docs/06 §1.5).
+header_scan_rows: 40
+min_header_hits: 3
+
+# field -> synonyms. Fields: date, value_date, description, ref, debit, credit, amount, dr_cr, balance.
+fields:
+  date: [date, txn date, transaction date, tran date, posting date, post date, trans date]
+  value_date: [value dt, value date, val date]
+  description: [narration, description, particulars, transaction remarks, transaction details, details, remarks, transaction description]
+  ref: [chq ref no, chq no, cheque no, ref no, reference no, reference number, chq ref number, transaction id, txn id, utr no, utr, instrument no]
+  debit: [withdrawal amt, withdrawal amount, withdrawals, withdrawal, debit, debit amount, debits, dr amount, amount debited, paid out]
+  credit: [deposit amt, deposit amount, deposits, deposit, credit, credit amount, credits, cr amount, amount credited, paid in]
+  amount: [amount, transaction amount, txn amount, amt, amount inr]
+  dr_cr: [dr cr, drcr, cr dr, type, transaction type, txn type, debit credit]
+  balance: [closing balance, balance, running balance, available balance, balance inr, bal]
+
+# Date patterns (java.time) tried in this order; the first that reads every date cell wins. Month names are
+# case-insensitive English. A two-digit year means 20yy. Cells that are already real dates in XLSX/XLS arrive as `yyyy-MM-dd`.
+date_formats:
+  - "yyyy-MM-dd"
+  - "dd/MM/yyyy"
+  - "dd-MM-yyyy"
+  - "dd.MM.yyyy"
+  - "dd/MM/yy"
+  - "dd-MM-yy"
+  - "dd MMM yyyy"
+  - "dd-MMM-yyyy"
+  - "dd/MMM/yyyy"
+  - "dd MMM yy"
+  - "dd-MMM-yy"
+  - "d/M/yyyy"
+  - "d-M-yyyy"
+  - "d MMM yyyy"
+  - "MMM dd, yyyy"
+  - "dd MMMM yyyy"
+
+# Per-bank overrides (bank ids from banks.yaml). `date_formats` here are tried before the list above.
+banks: {}
+
+# Tokens that mark the direction of an amount, when it comes as a suffix ("500.00 Dr") or in a Dr/Cr column.
+debit_tokens: [dr, d, debit, db]
+credit_tokens: [cr, c, credit]
+
+# A row with no date whose text contains one of these is a summary or page furniture, not a continuation (docs/06 §2).
+skip_row_markers:
+  - opening balance
+  - closing balance
+  - statement summary
+  - brought forward
+  - carried forward
+  - total
+  - grand total
+  - page
+  - generated on
+  - end of statement
+  - this is a computer generated
+  - registered office
+
+# Words that carry no identity when comparing a statement narration with the ledger's counterparty (docs/06 §3.2).
+noise_words: [upi, imps, neft, rtgs, ach, nach, ecs, pos, atm, ecom, pcd, nwd, dr, cr, to, from, by, via, payment, paid, txn, transaction, ref, no, in, out, of, the, and, ltd, pvt]
+
+# PDF layout geometry, as percentages of the font size (docs/06 §2).
+pdf:
+  # A gap wider than this between two glyphs on a line inserts a space.
+  space_gap_pct: 15
+  # A gap wider than this starts a new phrase (a new cell candidate).
+  phrase_gap_pct: 90
+  # Two phrases whose baselines differ by less than this belong to the same line.
+  line_tolerance_pct: 55
+  max_pages: 300
+
+# Reading a narration (docs/06 §3.1 and "Add to ledger", §4).
+narration:
+  max_length: 500
+  # 12-digit UPI/IMPS reference.
+  upi_ref_pattern: '(?<![0-9])[0-9]{12}(?![0-9])'
+  # A UPI id inside the text.
+  vpa_pattern: '[A-Za-z0-9._\-]{2,}@[A-Za-z][A-Za-z0-9]{1,}'
+  # First match wins. `channel` is a txn channel name.
+  channels:
+    - { channel: UPI,        pattern: '(?i)\bUPI\b' }
+    - { channel: IMPS,       pattern: '(?i)\bIMPS\b' }
+    - { channel: NEFT,       pattern: '(?i)\bNEFT\b' }
+    - { channel: RTGS,       pattern: '(?i)\bRTGS\b' }
+    - { channel: ATM,        pattern: '(?i)\b(?:ATM|NWD|CASH WDL)\b' }
+    - { channel: AUTO_DEBIT, pattern: '(?i)\b(?:ACH|NACH|ECS|AUTO ?DEBIT|SI)\b' }
+    - { channel: CARD,       pattern: '(?i)\b(?:POS|PCD|ECOM|CARD)\b' }

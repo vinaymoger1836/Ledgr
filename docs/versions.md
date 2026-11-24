@@ -40,7 +40,17 @@ permissive (docs/02 §2). New dependencies are added here in the same change.
 | kotlinx-serialization-json | 1.13.0 | Apache-2.0 | `:golden` |
 | kotlinx-coroutines | 1.11.0 | Apache-2.0 | `:app`, `:data` |
 
-PdfBox-Android, Apache POI HSSF and any XLSX helpers are added in P6, with their licences, here.
+Statement libraries (P6) are in the table further down.
+
+## Statement import (P6, ADR-016)
+
+| Library | Version | Licence | Used in |
+|---|---|---|---|
+| com.tom-roush:pdfbox-android | 2.0.27.0 | Apache-2.0 | `:data` (PDF text positions; the newest release, January 2023). Brings BouncyCastle `bcprov / bcpkix / bcutil-jdk15to18` 1.72 (MIT) for encrypted files. |
+| xmlpull | 1.1.3.1 | public domain | `:domain`, **compile-only** (Android's platform ships `org.xmlpull.v1`); also on the `:golden` runtime path |
+| kxml2 | 2.3.0 | BSD-style (Enhydra) | `:golden` runtime only (an `XmlPullParser` for the JVM; never shipped) |
+| org.apache.pdfbox:pdfbox | 3.0.8 | Apache-2.0 | `:golden` only: authors the synthetic encrypted PDF and reads private PDFs. Never shipped. |
+| org.apache.poi:poi | 6.0.0 | Apache-2.0 | `:golden` only: authors the `.xls` fixture (HSSF). Never shipped. ADR-016 replaces POI in the app with an own BIFF8 reader. |
 
 ## Network check
 

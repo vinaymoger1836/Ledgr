@@ -41,7 +41,7 @@ Gradle modules: `:app`, `:data`, `:domain`, plus `:golden` (JVM-only runner for 
 | Rule data | YAML in `assets/rules/` parsed with kaml (kotlinx.serialization) | Human-editable, comments allowed |
 | PDF | PdfBox-Android | Text with positions; opens password-protected PDFs |
 | XLSX | Own reader: unzip + `XmlPullParser` over `sharedStrings.xml` and sheet XML | Avoids heavy POI/StAX on Android |
-| XLS (old binary) | Apache POI HSSF only (verify on Android in P6; fallback: ask for CSV/XLSX) | Many Indian banks still export `.xls` |
+| XLS (old binary) | Own BIFF8 reader in `:domain` (ADR-016; POI is used only to author the golden fixture). Fallback message: export CSV or XLSX | Many Indian banks still export `.xls` |
 | CSV | Small own parser (quotes, BOM, `;`/`,` detection) | No dependency needed |
 | App lock | AndroidX Biometric (`BiometricPrompt`, device credential fallback) | |
 | Min / target SDK | minSdk 29; targetSdk = latest stable at build time | Personal phone, modern APIs |

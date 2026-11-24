@@ -387,14 +387,25 @@ private fun TableRow(
             Box(modifier = Modifier.width(W_SOURCE).padding(horizontal = 8.dp)) {
                 AssistChip(onClick = {}, enabled = false, label = { Text(sourceLabel(row.source), style = MaterialTheme.typography.labelSmall) })
             }
+            // The mark is text, not colour, and says its meaning aloud (docs/06 §4: reconciled rows show a check).
+            val reconWords = when (row.reconState) {
+                ReconState.MATCHED -> stringResource(R.string.dash_recon_matched)
+                ReconState.MATCHED_FUZZY -> stringResource(R.string.dash_recon_fuzzy)
+                ReconState.LEDGER_ONLY -> stringResource(R.string.dash_recon_ledger_only)
+                ReconState.UNRECONCILED -> ""
+            }
             Text(
                 text = when (row.reconState) {
                     ReconState.MATCHED -> "✓"
                     ReconState.MATCHED_FUZZY -> "~"
-                    else -> ""
+                    ReconState.LEDGER_ONLY -> "!"
+                    ReconState.UNRECONCILED -> ""
                 },
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.width(W_RECON).padding(horizontal = 8.dp),
+                modifier = Modifier
+                    .width(W_RECON)
+                    .padding(horizontal = 8.dp)
+                    .semantics { if (reconWords.isNotEmpty()) contentDescription = reconWords },
             )
         }
         Row(modifier = Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {

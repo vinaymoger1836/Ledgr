@@ -6,9 +6,14 @@ import com.ledgr.app.data.db.CounterpartyAliasEntity
 import com.ledgr.app.data.db.CounterpartyEntity
 import com.ledgr.app.data.db.LedgrDatabase
 import com.ledgr.app.data.db.LinkProposalEntity
+import com.ledgr.app.data.db.StatementLineEntity
 import com.ledgr.app.data.db.TxnEntity
 import com.ledgr.app.data.rules.RulesLoader
 import com.ledgr.app.domain.ledger.AliasTarget
+import com.ledgr.app.domain.ledger.CheckReasons
+import com.ledgr.app.domain.ledger.CounterpartyInput
+import com.ledgr.app.domain.ledger.Direction
+import com.ledgr.app.domain.ledger.ReconState
 import com.ledgr.app.domain.ledger.EditableField
 import com.ledgr.app.domain.ledger.IngestInput
 import com.ledgr.app.domain.ledger.IngestPlan
@@ -30,9 +35,11 @@ import com.ledgr.app.domain.profile.NameColor
 import com.ledgr.app.domain.profile.SenderHeaders
 import com.ledgr.app.domain.rules.RulesBundle
 import com.ledgr.app.domain.rules.TemplateKind
+import com.ledgr.app.domain.statement.NarrationInfo
 import com.ledgr.app.domain.template.AccountRef
 import com.ledgr.app.domain.template.ParsedSms
 import com.ledgr.app.domain.time.Ist
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -169,6 +176,46 @@ class LedgerSession internal constructor(
         val plan = engine.plan(IngestInput(parsed, body, rawSmsId, rulesVersion), candidates)
         if (existing == null) insertNew(plan) else refresh(existing, plan)
         snapshot(parsed)
+    }
+
+    /**
+     * "Add to ledger" for a statement line the SMS missed (docs/06 §4): merchant resolution and categorisation run on the
+     * narration, exactly as for an SMS. The row records `source = STATEMENT`, the line it came from, no template, and the rules
+     * version. The statement only has a date, so the time is noon IST (the `local_date` is the statement's own date, ADR-009).
+     * Returns the new transaction id.
+     */
+    suspend fun addFromStatement(accountId: Long, line: StatementLineEntity, info: NarrationInfo, rulesVersion: String): Long {
+        val direction = if (line.debit != 0L) Direction.DEBIT else Direction.CREDIT
+        val amount = if (direction == Direction.DEBIT) line.debit else line.credit
+        val text = info.name ?: info.vpa
+        val cls = engine.classifyStatementLine(
+            CounterpartyInput(vpa = info.vpa, merchant = info.name, payee = text),
+            info.channel, direction, line.description,
+        )
+        val date = LocalDate.parse(line.txnDate)
+        return dao.insert(
+            TxnEntity(
+                accountId = accountId,
+                kind = cls.kind,
+                direction = direction,
+                amount = amount,
+                occurredAt = Ist.at(date, STATEMENT_HOUR),
+                localDate = date.toString(),
+                channel = info.channel,
+                counterpartyId = counterpartyId(cls.resolution),
+                rawCounterparty = (info.vpa ?: info.name ?: line.description).take(MAX_RAW),
+                categoryId = categoryId(cls.categoryKey),
+                refNo = line.refNo ?: info.refs.firstOrNull(),
+                balanceAfter = line.balance,
+                source = Source.STATEMENT,
+                statementLineId = line.id,
+                confidence = STATEMENT_CONFIDENCE,
+                reconState = ReconState.MATCHED,
+                templateId = null,
+                rulesVersion = rulesVersion,
+                checkReason = if (cls.resolution.needsCheck) CheckReasons.UNKNOWN_MERCHANT else null,
+            ),
+        )
     }
 
     /** The message no longer parses as a transaction: detach and delete the row unless the person edited it. */
@@ -369,6 +416,11 @@ class LedgerSession internal constructor(
 
     private companion object {
         const val MAX_MERGE_HOPS = 10
+
+        /** A line copied from a bank statement is certain about amount and date, less so about who the other side is. */
+        const val STATEMENT_CONFIDENCE = 85
+        const val STATEMENT_HOUR = 12
+        const val MAX_RAW = 120
         const val DAY_MS = 24 * 60 * 60 * 1000L
 
         /** Dedup, transfer and reversal windows are at most 3 days. */

@@ -14,6 +14,10 @@ private val cases: List<GoldenCase> = listOf(
     GXferCase,
     GRefundCase,
     GForecastCase,
+    GReconCsvCase,
+    GReconXlsxCase,
+    GReconPdfCase,
+    GReconMatchCase,
 )
 
 fun main(args: Array<String>) {
@@ -42,6 +46,7 @@ fun main(args: Array<String>) {
 
     if (private != null && private.isDirectory && rules != null) {
         PrivateCoverage.report(private, GoldenRules.load(GoldenContext(fixtures, rules), includeSyntheticTemplates = false))
+        PrivateStatements.report(private, GoldenRules.load(GoldenContext(fixtures, rules), includeSyntheticTemplates = false))
     }
 
     if (failures > 0) {

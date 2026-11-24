@@ -1,0 +1,13 @@
+{
+  "title": "Axis Bank Statement of Account",
+  "bank": "axis",
+  "preamble": ["Customer ID: 123456789", "Statement for the period 01-Nov-2026 to 30-Nov-2026"],
+  "header": ["Tran Date", "Particulars", "Chq No", "Amount", "Balance"],
+  "fillerStrings": 700,
+  "rows": [
+    {"date": "2026-11-01", "text": "UPI/430112345678/Swiggy/swiggy@icici", "ref": "430112345678", "amount": "-1250", "balance": "123750"},
+    {"date": "2026-11-02", "text": "NEFT/ACME LTD/SALARY NOVEMBER", "ref": "N330112345", "amount": "85000", "balance": "208750"},
+    {"date": "2026-11-05", "text": "POS/AMAZON PAY INDIA/MUMBAI", "ref": "", "amount": "-12345.670000000002", "balance": "196404.33"},
+    {"date": "2026-11-10", "text": "UPI/432212345678/Rahul Sharma/rahul@okaxis", "ref": "432212345678", "amount": "450.5", "balance": "196854.83"}
+  ]
+}

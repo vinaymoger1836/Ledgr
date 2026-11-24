@@ -1,0 +1,91 @@
+{
+  "xlsx": {
+    "type": "XLSX",
+    "headerRow": 5,
+    "headerCells": [
+      "Tran Date",
+      "Particulars",
+      "Chq No",
+      "Amount",
+      "Balance"
+    ],
+    "signature": "9da0fcb16f27454a5806a4902110a4ea723cd0a6b91958bbd6334ad6727f3ecd",
+    "needsMapping": true,
+    "missing": [],
+    "map": {
+      "fields": {
+        "amount": 3,
+        "balance": 4,
+        "date": 0,
+        "description": 1,
+        "ref": 2
+      },
+      "dateFormat": "yyyy-MM-dd",
+      "amountStyle": "SIGNED",
+      "pdfColumns": null
+    },
+    "periodFrom": "2026-11-01",
+    "periodTo": "2026-11-10",
+    "opening": 12500000,
+    "closing": 19685483,
+    "skippedRows": 0,
+    "warnings": [],
+    "lines": [
+      {
+        "ordinal": 0,
+        "row": 6,
+        "date": "2026-11-01",
+        "valueDate": null,
+        "description": "UPI/430112345678/Swiggy/swiggy@icici",
+        "ref": "430112345678",
+        "debit": 125000,
+        "credit": 0,
+        "balance": 12375000
+      },
+      {
+        "ordinal": 1,
+        "row": 7,
+        "date": "2026-11-02",
+        "valueDate": null,
+        "description": "NEFT/ACME LTD/SALARY NOVEMBER",
+        "ref": "N330112345",
+        "debit": 0,
+        "credit": 8500000,
+        "balance": 20875000
+      },
+      {
+        "ordinal": 2,
+        "row": 8,
+        "date": "2026-11-05",
+        "valueDate": null,
+        "description": "POS/AMAZON PAY INDIA/MUMBAI",
+        "ref": null,
+        "debit": 1234567,
+        "credit": 0,
+        "balance": 19640433
+      },
+      {
+        "ordinal": 3,
+        "row": 9,
+        "date": "2026-11-10",
+        "valueDate": null,
+        "description": "UPI/432212345678/Rahul Sharma/rahul@okaxis",
+        "ref": "432212345678",
+        "debit": 0,
+        "credit": 45050,
+        "balance": 19685483
+      }
+    ]
+  },
+  "xlsType": "XLS",
+  "xlsLinesEqualXlsxLines": true,
+  "xlsHeaderRowEqual": true,
+  "guards": {
+    "empty": "no_rows",
+    "html": "unsupported",
+    "notAZipDirectory": "bad_zip",
+    "otherZip": "unsupported",
+    "tooLarge": "too_large",
+    "zipBomb": "zip_bomb"
+  }
+}

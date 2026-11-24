@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.sqlite)
     implementation(libs.sqlcipher.android)
 
+    // Statement PDFs (P6): text positions for the column layout. MIT-style licence; brings BouncyCastle for encrypted files.
+    implementation(libs.pdfbox.android)
+
     // Settings and background work (the workers themselves live in :app)
     api(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)

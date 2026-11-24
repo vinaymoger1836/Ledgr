@@ -1,0 +1,155 @@
+{
+  "noPassword": "needs_password",
+  "wrongPassword": "wrong_password",
+  "pageCount": 3,
+  "headerPhrases": [
+    {
+      "text": "Date",
+      "x": 400,
+      "xEnd": 568
+    },
+    {
+      "text": "Narration",
+      "x": 1000,
+      "xEnd": 1328
+    },
+    {
+      "text": "Chq./Ref.No.",
+      "x": 3000,
+      "xEnd": 3462
+    },
+    {
+      "text": "Withdrawal Amt.",
+      "x": 3818,
+      "xEnd": 4400
+    },
+    {
+      "text": "Deposit Amt.",
+      "x": 4542,
+      "xEnd": 5000
+    },
+    {
+      "text": "Closing Balance",
+      "x": 5122,
+      "xEnd": 5700
+    }
+  ],
+  "autoDividers": [
+    784,
+    2164,
+    3640,
+    4471,
+    5061
+  ],
+  "statement": {
+    "type": "PDF",
+    "headerRow": 2,
+    "headerCells": [
+      "Date",
+      "Narration",
+      "Chq./Ref.No.",
+      "Withdrawal Amt.",
+      "Deposit Amt.",
+      "Closing Balance"
+    ],
+    "signature": "9f6175cf69607108683471c2d65c9483487e3ec4e1aa3ba42a4b47d67eafc961",
+    "needsMapping": true,
+    "missing": [],
+    "map": {
+      "fields": {
+        "balance": 5,
+        "credit": 4,
+        "date": 0,
+        "debit": 3,
+        "description": 1,
+        "ref": 2
+      },
+      "dateFormat": "dd/MM/yy",
+      "amountStyle": "DEBIT_CREDIT_COLUMNS",
+      "pdfColumns": [
+        784,
+        2164,
+        3640,
+        4471,
+        5061
+      ]
+    },
+    "periodFrom": "2026-11-01",
+    "periodTo": "2026-11-10",
+    "opening": 12500000,
+    "closing": 19173433,
+    "skippedRows": 7,
+    "warnings": [],
+    "lines": [
+      {
+        "ordinal": 0,
+        "row": 3,
+        "date": "2026-11-01",
+        "valueDate": null,
+        "description": "UPI-SWIGGY-swiggy@icici-ICIC0001",
+        "ref": "430112345678",
+        "debit": 125000,
+        "credit": 0,
+        "balance": 12375000
+      },
+      {
+        "ordinal": 1,
+        "row": 4,
+        "date": "2026-11-02",
+        "valueDate": null,
+        "description": "NEFT CR-ACME LTD-SALARY NOVEMBER PAYROLL BANGALORE KA",
+        "ref": "N330112345",
+        "debit": 0,
+        "credit": 8500000,
+        "balance": 20875000
+      },
+      {
+        "ordinal": 2,
+        "row": 10,
+        "date": "2026-11-03",
+        "valueDate": null,
+        "description": "ATM WDL-ATM ID 1234",
+        "ref": "771",
+        "debit": 500000,
+        "credit": 0,
+        "balance": 20375000
+      },
+      {
+        "ordinal": 3,
+        "row": 11,
+        "date": "2026-11-05",
+        "valueDate": null,
+        "description": "UPI-BLUE TOKAI-bluetokai@hdfcbank -HDFC0001-431212345678",
+        "ref": "431212345678",
+        "debit": 12000,
+        "credit": 0,
+        "balance": 20363000
+      },
+      {
+        "ordinal": 4,
+        "row": 16,
+        "date": "2026-11-07",
+        "valueDate": null,
+        "description": "ACH D- BAJAJ FINANCE-12345",
+        "ref": "12345",
+        "debit": 1234567,
+        "credit": 0,
+        "balance": 19128433
+      },
+      {
+        "ordinal": 5,
+        "row": 17,
+        "date": "2026-11-10",
+        "valueDate": null,
+        "description": "UPI-RAHUL SHARMA-rahul@okaxis REFUND",
+        "ref": "432212345678",
+        "debit": 0,
+        "credit": 45000,
+        "balance": 19173433
+      }
+    ]
+  },
+  "savedMapSkipsMapping": true,
+  "savedMapSameLines": true,
+  "draggedDividersSameLines": true
+}

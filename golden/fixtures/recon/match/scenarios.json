@@ -1,0 +1,27 @@
+{
+  "from": "2026-11-01",
+  "to": "2026-11-30",
+  "lines": [
+    {"ordinal": 0, "date": "2026-11-01", "description": "UPI-SWIGGY-swiggy@icici-ICIC0001-430112345678-UPI", "ref": "0000430112345678", "debit": 125000, "credit": 0, "balance": 12375000},
+    {"ordinal": 1, "date": "2026-11-02", "description": "NEFT CR-ACME LTD-SALARY NOVEMBER", "ref": "N330112345", "debit": 0, "credit": 8500000, "balance": 20875000},
+    {"ordinal": 2, "date": "2026-11-03", "description": "UPI/432212345678/Payment from PhonePe/rahul@okaxis", "ref": null, "debit": 0, "credit": 45000, "balance": null},
+    {"ordinal": 3, "date": "2026-11-05", "description": "NETFLIX COM", "ref": null, "debit": 39900, "credit": 0, "balance": null},
+    {"ordinal": 4, "date": "2026-11-07", "description": "UPI-BLUE TOKAI-bluetokai@hdfcbank-HDFC0001", "ref": null, "debit": 12000, "credit": 0, "balance": null},
+    {"ordinal": 5, "date": "2026-11-07", "description": "UPI-THIRD WAVE-thirdwave@axl-UTIB0001", "ref": null, "debit": 12000, "credit": 0, "balance": null},
+    {"ordinal": 6, "date": "2026-11-03", "description": "ATM WDL-ATM ID 1234 BANGALORE KA", "ref": "771", "debit": 500000, "credit": 0, "balance": null},
+    {"ordinal": 7, "date": "2026-11-09", "description": "IMPS-P2A-555555555555-SOMEONE", "ref": "555555555555", "debit": 70000, "credit": 0, "balance": null},
+    {"ordinal": 8, "date": "2026-11-12", "description": "POS 4XXX1234 BOOKSHOP", "ref": null, "debit": 25000, "credit": 0, "balance": null}
+  ],
+  "ledger": [
+    {"id": 1, "date": "2026-11-01", "direction": "DEBIT", "amount": 125000, "ref": "430112345678", "description": "swiggy@icici", "balanceAfter": 12374000},
+    {"id": 2, "date": "2026-11-02", "direction": "CREDIT", "amount": 8400000, "ref": "N330112345", "description": "ACME LTD", "balanceAfter": null},
+    {"id": 3, "date": "2026-11-03", "direction": "CREDIT", "amount": 45000, "ref": "432212345678", "description": "rahul@okaxis", "balanceAfter": null},
+    {"id": 4, "date": "2026-11-06", "direction": "DEBIT", "amount": 39900, "ref": null, "description": "netflix@icici", "balanceAfter": null},
+    {"id": 5, "date": "2026-11-07", "direction": "DEBIT", "amount": 12000, "ref": null, "description": "thirdwave@axl", "balanceAfter": null},
+    {"id": 6, "date": "2026-11-07", "direction": "DEBIT", "amount": 12000, "ref": null, "description": "bluetokai@hdfcbank", "balanceAfter": null},
+    {"id": 7, "date": "2026-11-09", "direction": "CREDIT", "amount": 70000, "ref": "555555555555", "description": "someone", "balanceAfter": null},
+    {"id": 8, "date": "2026-11-04", "direction": "DEBIT", "amount": 99900, "ref": null, "description": "unknown shop", "balanceAfter": null},
+    {"id": 9, "date": "2026-10-30", "direction": "DEBIT", "amount": 5000, "ref": null, "description": "tea stall", "balanceAfter": null},
+    {"id": 10, "date": "2026-11-16", "direction": "DEBIT", "amount": 25000, "ref": null, "description": "bookshop", "balanceAfter": null}
+  ]
+}

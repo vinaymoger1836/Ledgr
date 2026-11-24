@@ -160,9 +160,10 @@ data class RulesBundle(
             val statementProfiles = if (statementProfilesYaml == null) {
                 StatementProfiles.empty(banks.version)
             } else {
-                decode(StatementProfiles.serializer(), statementProfilesYaml, "statement_profiles.yaml")
+                decode(StatementProfiles.serializer(), statementProfilesYaml, "statement_profiles.yaml").also {
+                    StatementProfilesValidator.validate(it, banks.banks.map { b -> b.id }.toSet())
+                }
             }
-            StatementProfilesValidator.validate(statementProfiles, banks.banks.map { it.id }.toSet())
             return RulesBundle(banks, spam, merchants, categories, ledger, templates, statementProfiles)
         }
 

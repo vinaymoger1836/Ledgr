@@ -53,6 +53,8 @@ tasks.register<JavaExec>("runGolden") {
     if (project.hasProperty("goldenEmit")) {
         args("--emit=${layout.buildDirectory.dir("emitted").get().asFile}")
     }
+    // POI (authoring the .xls fixture) logs through log4j-api; the built-in simple context avoids a "no logging provider" notice.
+    systemProperty("log4j2.loggerContextFactory", "org.apache.logging.log4j.simple.SimpleLoggerContextFactory")
     inputs.dir(goldenDir.dir("fixtures"))
     inputs.dir(goldenDir.dir("expected"))
     inputs.dir(rulesDir)

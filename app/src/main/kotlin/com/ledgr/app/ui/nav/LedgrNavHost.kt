@@ -29,7 +29,9 @@ import com.ledgr.app.ui.profile.MerchantsScreen
 import com.ledgr.app.ui.profile.ProfileScreen
 import com.ledgr.app.ui.profile.SendersSeenScreen
 import com.ledgr.app.ui.review.NeedsReviewScreen
-import com.ledgr.app.ui.screens.ReconcileScreen
+import com.ledgr.app.ui.reconcile.MappingScreen
+import com.ledgr.app.ui.reconcile.ReconcileScreen
+import com.ledgr.app.ui.reconcile.ResultsScreen
 import com.ledgr.app.ui.screens.SettingsRoute
 
 // Material "fade through" (docs/08 §4, tab switch 250 ms): the old screen fades out in 90 ms, then the
@@ -117,7 +119,33 @@ private fun LedgrNavGraph(
         composable(Destination.Dashboard.route) {
             DashboardScreen(onOpenTxn = { navController.navigate(Destination.TxnDetail.route(it)) })
         }
-        composable(Destination.Reconcile.route) { ReconcileScreen() }
+        composable(Destination.Reconcile.route) {
+            ReconcileScreen(
+                onOpenMapping = { navController.navigate(Destination.ReconcileMap.route(it)) },
+                onOpenResults = { navController.navigate(Destination.ReconcileResults.route(it)) },
+                onOpenProfile = { openTab(Destination.Profile) },
+            )
+        }
+        composable(
+            route = Destination.ReconcileMap.route,
+            arguments = listOf(navArgument(Destination.ReconcileMap.ARG_DRAFT) { type = NavType.LongType }),
+        ) {
+            MappingScreen(
+                // The map is saved: replace the mapping screen with the results so Back returns to the Reconcile tab.
+                onSaved = { importId ->
+                    navController.navigate(Destination.ReconcileResults.route(importId)) {
+                        popUpTo(Destination.Reconcile.route)
+                    }
+                },
+                onClosed = { navController.popBackStack() },
+            )
+        }
+        composable(
+            route = Destination.ReconcileResults.route,
+            arguments = listOf(navArgument(Destination.ReconcileResults.ARG_IMPORT) { type = NavType.LongType }),
+        ) {
+            ResultsScreen(onBack = { navController.popBackStack() })
+        }
         composable(Destination.Profile.route) {
             ProfileScreen(
                 onOpenSettings = { navController.navigate(Destination.Settings.route) },
