@@ -16,6 +16,7 @@ import com.ledgr.app.data.db.DbStatus
 import com.ledgr.app.ui.LedgrRoot
 import com.ledgr.app.ui.lock.BiometricAuthenticator
 import com.ledgr.app.ui.lock.LockViewModel
+import com.ledgr.app.work.ScanScheduler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -78,6 +79,12 @@ class MainActivity : FragmentActivity() {
                 )
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // docs/02 §3.2: catch up from the watermark whenever the app is opened (quiet; needs SMS access).
+        ScanScheduler.catchUpNow(applicationContext)
     }
 
     private fun applySystemBars(dark: Boolean) {

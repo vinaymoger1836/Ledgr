@@ -20,10 +20,10 @@ object GSenderCase : GoldenCase {
         val suffix: String,
     )
 
-    override fun run(fixturesDir: File): String {
+    override fun run(context: GoldenContext): String {
         val addresses = GoldenJson.json.decodeFromString(
             ListSerializer(String.serializer()),
-            File(fixturesDir, "sender/addresses.json").readText(Charsets.UTF_8),
+            File(context.fixturesDir, "sender/addresses.json").readText(Charsets.UTF_8),
         )
         val rows = addresses.map { address ->
             val s = SenderNormalizer.normalize(address)

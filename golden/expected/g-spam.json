@@ -1,0 +1,242 @@
+[
+  {
+    "id": "G-SPAM-01",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-02",
+    "header": "ICICIT",
+    "suffix": "T",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-03",
+    "header": "SBIUPI",
+    "suffix": "S",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-04",
+    "header": "AXISBK",
+    "suffix": "G",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-05",
+    "header": "HDFCBK",
+    "suffix": "P",
+    "outcome": "IGNORED",
+    "reason": "promotional_suffix",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-06",
+    "header": "ICICIB",
+    "suffix": "P",
+    "outcome": "IGNORED",
+    "reason": "promotional_suffix",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-07",
+    "header": "SBIINB",
+    "suffix": "P",
+    "outcome": "IGNORED",
+    "reason": "promotional_suffix",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-08",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "otp",
+    "smsClass": "OTP"
+  },
+  {
+    "id": "G-SPAM-09",
+    "header": "AXISBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "otp",
+    "smsClass": "OTP"
+  },
+  {
+    "id": "G-SPAM-10",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "reminder",
+    "smsClass": "REMINDER"
+  },
+  {
+    "id": "G-SPAM-11",
+    "header": "ICICIB",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "reminder",
+    "smsClass": "REMINDER"
+  },
+  {
+    "id": "G-SPAM-12",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "failed",
+    "smsClass": "FAILED"
+  },
+  {
+    "id": "G-SPAM-13",
+    "header": "SBIINB",
+    "suffix": "T",
+    "outcome": "IGNORED",
+    "reason": "failed",
+    "smsClass": "FAILED"
+  },
+  {
+    "id": "G-SPAM-14",
+    "header": "AXISBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "failed",
+    "smsClass": "FAILED"
+  },
+  {
+    "id": "G-SPAM-15",
+    "header": "ICICIB",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "promo",
+    "smsClass": "PROMO"
+  },
+  {
+    "id": "G-SPAM-16",
+    "header": "HDFCBK",
+    "suffix": "T",
+    "outcome": "IGNORED",
+    "reason": "promo",
+    "smsClass": "PROMO"
+  },
+  {
+    "id": "G-SPAM-17",
+    "header": "SBIINB",
+    "suffix": "S",
+    "outcome": "BALANCE",
+    "reason": "balance_only",
+    "smsClass": "BALANCE_ONLY"
+  },
+  {
+    "id": "G-SPAM-18",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "BALANCE",
+    "reason": "balance_only",
+    "smsClass": "BALANCE_ONLY"
+  },
+  {
+    "id": "G-SPAM-19",
+    "header": null,
+    "suffix": "NONE",
+    "outcome": "QUARANTINE",
+    "reason": "phone_sender_txn_like",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-20",
+    "header": null,
+    "suffix": "NONE",
+    "outcome": "IGNORED",
+    "reason": "phone_sender",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-21",
+    "header": null,
+    "suffix": "NONE",
+    "outcome": "IGNORED",
+    "reason": "invalid_sender",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-22",
+    "header": "XYZOFR",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "unknown_sender",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-23",
+    "header": "HDFCBK",
+    "suffix": "NONE",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-24",
+    "header": "ICICIB",
+    "suffix": "NONE",
+    "outcome": "QUARANTINE",
+    "reason": "missing_suffix",
+    "smsClass": null
+  },
+  {
+    "id": "G-SPAM-25",
+    "header": "MYCOOP",
+    "suffix": "NONE",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-26",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "QUARANTINE",
+    "reason": "red_flags",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-27",
+    "header": "SBIINB",
+    "suffix": "S",
+    "outcome": "QUARANTINE",
+    "reason": "red_flags",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-28",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "REVIEW",
+    "reason": "no_template",
+    "smsClass": "TXN_CANDIDATE"
+  },
+  {
+    "id": "G-SPAM-29",
+    "header": "HDFCBK",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "no_txn_signal",
+    "smsClass": "NONE"
+  },
+  {
+    "id": "G-SPAM-30",
+    "header": "KOTAKB",
+    "suffix": "S",
+    "outcome": "IGNORED",
+    "reason": "reminder",
+    "smsClass": "REMINDER"
+  }
+]

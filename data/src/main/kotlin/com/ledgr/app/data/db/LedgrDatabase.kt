@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 /**
  * Schema history: v1 (P0) account + category; v2 (P1) own_identity, counterparty, counterparty_alias and
- * category.sort_order / merged_into_id (see [Migrations]). Later tables arrive with their phases.
+ * category.sort_order / merged_into_id; v3 (P2) raw_sms and scan_run (ADR-012). See [Migrations]. Later tables arrive with their phases.
  */
 @Database(
     entities = [
@@ -14,8 +14,10 @@ import androidx.room.RoomDatabase
         OwnIdentityEntity::class,
         CounterpartyEntity::class,
         CounterpartyAliasEntity::class,
+        RawSmsEntity::class,
+        ScanRunEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class LedgrDatabase : RoomDatabase() {
@@ -24,6 +26,8 @@ abstract class LedgrDatabase : RoomDatabase() {
     abstract fun ownIdentityDao(): OwnIdentityDao
     abstract fun counterpartyDao(): CounterpartyDao
     abstract fun counterpartyAliasDao(): CounterpartyAliasDao
+    abstract fun rawSmsDao(): RawSmsDao
+    abstract fun scanRunDao(): ScanRunDao
 
     companion object {
         const val NAME = "ledgr.db"

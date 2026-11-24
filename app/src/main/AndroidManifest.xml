@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--
         Privacy by construction (CLAUDE.md non-negotiable 1, docs/09 §2):
         - No INTERNET permission here, and none may arrive from a library: `./gradlew goldenCheck`
           fails if any merged manifest declares it. Do NOT add tools:node="remove" to hide one.
-        - READ_SMS arrived in P1 for "Senders seen" (sender and date columns only). RECEIVE_SMS is added in P2
-          with the live receiver.
+        - READ_SMS (P1: "Senders seen"; P2: month scans and catch-up) and RECEIVE_SMS (P2: live updates).
+        - POST_NOTIFICATIONS: the progress notification of a month scan (asked before the first scan).
+        - FOREGROUND_SERVICE_DATA_SYNC: a month scan runs as a foreground worker of type dataSync (ADR-012).
         - USE_BIOMETRIC is merged in by androidx.biometric.
     -->
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <!-- Reading SMS must not make Play-style filters treat the app as phone-only (and keeps lint's
          PermissionImpliesUnsupportedHardware quiet): the app also works from statements and manual entries. -->
@@ -37,5 +42,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Live updates (docs/02 §3.2). Only the system may send this broadcast (BROADCAST_SMS). The receiver
+             assembles multi-part messages and hands one unit of work to WorkManager; it does nothing else. -->
+        <receiver
+            android:name=".work.SmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- WorkManager's foreground service, given the type a month scan runs under. -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
     </application>
 </manifest>

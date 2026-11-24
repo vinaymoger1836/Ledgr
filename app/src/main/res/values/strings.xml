@@ -306,6 +306,61 @@
     <string name="lock_open_security_settings">Open security settings</string>
     <string name="lock_unavailable_body">This phone can\'t show a secure unlock prompt right now, so Ledgr stays locked.</string>
 
+    <!-- Phase 2: SMS scan (temporary debug screen, removed or hidden in Phase 4) and scan notification -->
+    <string name="profile_scan_debug">SMS scan (temporary)</string>
+    <string name="profile_scan_debug_summary">Scan a month and see why each message was kept or set aside</string>
+    <string name="scan_title">SMS scan (temporary)</string>
+    <string name="scan_temp_notice">Developer screen for Phase 2. It will be removed or hidden in Phase 4.</string>
+    <string name="scan_explainer_title">Allow Ledgr to read your SMS</string>
+    <string name="scan_explainer_what">To find bank transactions, Ledgr reads the text of the messages in your SMS inbox, and sees new messages as they arrive.</string>
+    <string name="scan_explainer_why">Every message is checked on this phone by fixed rules. Promotional messages, one-time passwords and messages from mobile numbers are set aside, and nothing is guessed.</string>
+    <string name="scan_explainer_private">Message text is stored encrypted on this phone only. Ledgr has no internet access at all.</string>
+    <string name="scan_allow">Allow SMS access</string>
+    <string name="scan_live_off">Live updates are off. Allow receiving SMS to see new messages as they arrive.</string>
+    <string name="scan_live_allow">Allow live updates</string>
+    <string name="scan_prev_month">Previous month</string>
+    <string name="scan_next_month">Next month</string>
+    <string name="scan_action_scan">Scan this month</string>
+    <string name="scan_action_catch_up">Catch up now</string>
+    <string name="scan_progress_title">Scanning %1$s</string>
+    <string name="scan_progress_read">Read %1$s of %2$s</string>
+    <string name="scan_progress_errors">%1$s messages could not be processed and were set aside for review.</string>
+    <string name="scan_report_title">Last scan of this month</string>
+    <string name="scan_report_none">This month has not been scanned yet.</string>
+    <string name="scan_status_running">Running</string>
+    <string name="scan_status_done">Finished</string>
+    <string name="scan_status_failed">Failed</string>
+    <string name="scan_status_cancelled">Stopped</string>
+    <string name="scan_report_duration">Took %1$s</string>
+    <string name="scan_report_counts">%1$s read · %2$s already stored · %3$s errors</string>
+    <string name="scan_report_rules">Rules version %1$s</string>
+    <string name="scan_counts_title">Counts by reason</string>
+    <string name="scan_counts_total">%1$s messages stored for this month. Tap a reason to list its messages.</string>
+    <string name="scan_counts_empty">Nothing is stored for this month yet.</string>
+    <string name="scan_count_row_desc">%1$s, %2$s: %3$s messages</string>
+    <string name="scan_count_row_action">List these messages</string>
+    <string name="scan_outcome_txn">Transactions</string>
+    <string name="scan_outcome_review">Needs review</string>
+    <string name="scan_outcome_quarantine">Suspicious</string>
+    <string name="scan_outcome_balance">Balance only</string>
+    <string name="scan_outcome_ignored">Ignored</string>
+    <string name="scan_messages_title">Messages</string>
+    <string name="scan_filter_all">Showing all messages, newest first</string>
+    <string name="scan_filter_showing">Showing %1$s</string>
+    <string name="scan_filter_clear">Show all</string>
+    <string name="scan_messages_empty">No messages match.</string>
+    <string name="scan_show_more">Show more</string>
+    <string name="scan_message_desc">Sender %1$s, %2$s, received %3$s, %4$s</string>
+    <string name="scan_message_toggle">Show or hide the message text</string>
+    <string name="scan_unknown_sender">(no sender name)</string>
+    <string name="scan_address_label">Address: %1$s</string>
+    <string name="scan_body_purged">The message text has been deleted. Only its outcome is kept.</string>
+    <string name="scan_channel_name">Message scan</string>
+    <string name="scan_channel_description">Shows progress while Ledgr reads your SMS inbox.</string>
+    <string name="scan_notification_title">Reading your messages</string>
+    <string name="scan_notification_starting">Starting…</string>
+    <string name="scan_notification_progress">Read %1$s of %2$s</string>
+
     <!-- Errors -->
     <string name="db_error_banner">Ledgr\'s data could not be prepared, so nothing can be saved. %1$s</string>
 </resources>

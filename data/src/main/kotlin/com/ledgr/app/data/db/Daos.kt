@@ -1,5 +1,6 @@
 package com.ledgr.app.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -143,4 +144,79 @@ interface CounterpartyAliasDao {
 
     @Query("DELETE FROM counterparty_alias WHERE raw_key = :rawKey")
     suspend fun delete(rawKey: String)
+}
+
+/** `(provider_id, body_hash)` of a stored SMS, with its row id. */
+data class StoredSmsKey(
+    val id: Long,
+    @ColumnInfo(name = "provider_id") val providerId: Long,
+    @ColumnInfo(name = "body_hash") val bodyHash: String,
+    /** False once the body was purged: such a row can no longer be re-evaluated. */
+    @ColumnInfo(name = "has_body") val hasBody: Boolean,
+)
+
+/** One group of the scan report: how many SMS got an outcome + reason. */
+data class ReasonCount(
+    val outcome: String,
+    val reason: String,
+    val n: Int,
+)
+
+@Dao
+interface RawSmsDao {
+    /** The stored rows among [providerIds] (a page of at most a few hundred ids). */
+    @Query("SELECT id, provider_id, body_hash, body IS NOT NULL AS has_body FROM raw_sms WHERE provider_id IN (:providerIds)")
+    suspend fun storedKeys(providerIds: List<Long>): List<StoredSmsKey>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(rows: List<RawSmsEntity>): List<Long>
+
+    /** Re-evaluation of a stored message with the current rules. Never touches the body or hash. */
+    @Query(
+        "UPDATE raw_sms SET sender_header = :header, sender_suffix = :suffix, outcome = :outcome, reason = :reason, " +
+            "template_id = :templateId, rules_version = :rulesVersion WHERE id = :id",
+    )
+    suspend fun updateVerdict(
+        id: Long,
+        header: String?,
+        suffix: String,
+        outcome: String,
+        reason: String,
+        templateId: String?,
+        rulesVersion: String,
+    )
+
+    @Query("SELECT outcome, reason, COUNT(*) AS n FROM raw_sms WHERE received_at >= :from AND received_at < :to GROUP BY outcome, reason")
+    fun observeCounts(from: Long, to: Long): Flow<List<ReasonCount>>
+
+    @Query("SELECT COUNT(*) FROM raw_sms WHERE received_at >= :from AND received_at < :to")
+    fun observeTotal(from: Long, to: Long): Flow<Int>
+
+    /** Newest first. [outcome] / [reason] null means "any". */
+    @Query(
+        "SELECT * FROM raw_sms WHERE received_at >= :from AND received_at < :to " +
+            "AND (:outcome IS NULL OR outcome = :outcome) AND (:reason IS NULL OR reason = :reason) " +
+            "ORDER BY received_at DESC, id DESC LIMIT :limit",
+    )
+    fun observeFiltered(from: Long, to: Long, outcome: String?, reason: String?, limit: Int): Flow<List<RawSmsEntity>>
+}
+
+@Dao
+interface ScanRunDao {
+    @Insert
+    suspend fun insert(run: ScanRunEntity): Long
+
+    @Update
+    suspend fun update(run: ScanRunEntity)
+
+    /** The latest run of [kind] for [month], for the scan report. */
+    @Query("SELECT * FROM scan_run WHERE month = :month AND kind = :kind ORDER BY id DESC LIMIT 1")
+    fun observeLatest(month: String, kind: String): Flow<ScanRunEntity?>
+
+    @Query("SELECT * FROM scan_run ORDER BY id DESC LIMIT 1")
+    fun observeLatestAny(): Flow<ScanRunEntity?>
+
+    /** A process that died mid-scan leaves RUNNING rows behind; callers hold the scan lock, so any is stale. */
+    @Query("UPDATE scan_run SET status = 'FAILED', finished_at = :now WHERE status = 'RUNNING'")
+    suspend fun failStaleRunning(now: Long)
 }

@@ -18,6 +18,9 @@ sealed class Destination(val route: String) {
     data object Categories : Destination("profile/categories")
     data object Merchants : Destination("profile/merchants")
     data object Senders : Destination("profile/senders")
+
+    /** P2 only: temporary scan report and raw SMS list. Removed or hidden in P4. */
+    data object ScanDebug : Destination("profile/debug-scan")
 }
 
 /** One bottom-bar entry. The label is always visible, so colour and icon are never the only cue. */

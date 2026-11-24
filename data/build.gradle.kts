@@ -37,6 +37,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
     // Encrypted database
     api(libs.androidx.room.runtime)
@@ -45,7 +46,7 @@ dependencies {
     implementation(libs.androidx.sqlite)
     implementation(libs.sqlcipher.android)
 
-    // Settings and background work (workers arrive in P2; dependency is here so the manifest check covers it)
+    // Settings and background work (the workers themselves live in :app)
     api(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
 

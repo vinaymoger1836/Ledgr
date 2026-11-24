@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ledgr.app.ui.debug.ScanDebugScreen
 import com.ledgr.app.ui.profile.CategoriesScreen
 import com.ledgr.app.ui.profile.IdentitiesScreen
 import com.ledgr.app.ui.profile.MerchantsScreen
@@ -71,6 +72,7 @@ fun LedgrNavHost(
                 onOpenCategories = { navController.navigate(Destination.Categories.route) },
                 onOpenMerchants = { navController.navigate(Destination.Merchants.route) },
                 onOpenSenders = { navController.navigate(Destination.Senders.route) },
+                onOpenScanDebug = { navController.navigate(Destination.ScanDebug.route) },
             )
         }
         composable(Destination.Settings.route) {
@@ -80,5 +82,6 @@ fun LedgrNavHost(
         composable(Destination.Categories.route) { CategoriesScreen(onBack = { navController.popBackStack() }) }
         composable(Destination.Merchants.route) { MerchantsScreen(onBack = { navController.popBackStack() }) }
         composable(Destination.Senders.route) { SendersSeenScreen(onBack = { navController.popBackStack() }) }
+        composable(Destination.ScanDebug.route) { ScanDebugScreen(onBack = { navController.popBackStack() }) }
     }
 }

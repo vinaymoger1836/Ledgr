@@ -164,7 +164,7 @@ fun SendersSeenScreen(onBack: () -> Unit, viewModel: SendersSeenViewModel = hilt
 }
 
 @Composable
-private fun PanelScaffold(content: @Composable () -> Unit) {
+internal fun PanelScaffold(content: @Composable () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -209,7 +209,7 @@ private fun ExplainerPanel(onAllow: () -> Unit) {
 
 /** docs/03 §1 sideload note: the grant may be refused until "Allow restricted settings" is turned on. */
 @Composable
-private fun BlockedPanel(onOpenAppInfo: () -> Unit, onTryAgain: () -> Unit) {
+internal fun BlockedPanel(onOpenAppInfo: () -> Unit, onTryAgain: () -> Unit) {
     PanelScaffold {
         Icon(
             Icons.Outlined.Info,

@@ -7,6 +7,7 @@ import kotlin.system.exitProcess
 /** Every case in the contract, in the order docs/12 §4 lists them. Later phases append here. */
 private val cases: List<GoldenCase> = listOf(
     GSenderCase,
+    GSpamCase,
 )
 
 fun main(args: Array<String>) {
@@ -26,7 +27,7 @@ fun main(args: Array<String>) {
     }
 
     for (case in cases) {
-        failures += runCase(case, fixtures, expected)
+        failures += runCase(case, GoldenContext(fixtures, rules), expected)
     }
 
     reportPrivate(private)
@@ -38,14 +39,14 @@ fun main(args: Array<String>) {
     println("GOLDEN CHECK OK: ${cases.size} case(s)")
 }
 
-private fun runCase(case: GoldenCase, fixtures: File, expectedDir: File): Int {
+private fun runCase(case: GoldenCase, context: GoldenContext, expectedDir: File): Int {
     val expectedFile = File(expectedDir, case.expectedFile)
     if (!expectedFile.isFile) {
         System.err.println("[FAIL] ${case.id}: missing expected file ${expectedFile.path}")
         return 1
     }
     val actual = try {
-        case.run(fixtures)
+        case.run(context)
     } catch (e: Exception) {
         System.err.println("[FAIL] ${case.id}: ${e::class.simpleName}: ${e.message}")
         return 1

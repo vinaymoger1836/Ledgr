@@ -10,6 +10,8 @@ import com.ledgr.app.domain.model.AliasSource
 import com.ledgr.app.domain.model.CategoryKind
 import com.ledgr.app.domain.model.CounterpartyType
 import com.ledgr.app.domain.model.OwnIdentityKind
+import com.ledgr.app.domain.sender.SenderSuffix
+import com.ledgr.app.domain.sms.Outcome
 
 /** docs/05 §1 `account`. Only the last 4 digits are ever stored (ADR-006). */
 @Entity(tableName = "account")
@@ -105,4 +107,66 @@ data class CounterpartyAliasEntity(
     @PrimaryKey @ColumnInfo(name = "raw_key") val rawKey: String,
     @ColumnInfo(name = "counterparty_id") val counterpartyId: Long,
     @ColumnInfo(name = "created_by") val createdBy: AliasSource,
+)
+
+/**
+ * docs/05 §1 `raw_sms` (schema v3, P2): every SMS the scanner or receiver has seen, with the outcome and
+ * reason it got. [body] is encrypted with the database and can be purged to null later (docs/09); [bodyHash]
+ * stays, so a re-scan still recognises the message. `sub_id` is the telephony subscription id (ADR-012).
+ */
+@Entity(
+    tableName = "raw_sms",
+    indices = [
+        Index(value = ["provider_id", "body_hash"], unique = true),
+        Index(value = ["received_at"]),
+        Index(value = ["outcome", "reason"]),
+    ],
+)
+data class RawSmsEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    /** `Telephony.Sms._id`. */
+    @ColumnInfo(name = "provider_id") val providerId: Long,
+    val address: String,
+    @ColumnInfo(name = "sender_header") val senderHeader: String?,
+    @ColumnInfo(name = "sender_suffix") val senderSuffix: SenderSuffix,
+    val body: String?,
+    /** SHA-256 hex of the UTF-8 body ([com.ledgr.app.domain.sms.BodyHash]). */
+    @ColumnInfo(name = "body_hash") val bodyHash: String,
+    /** Epoch ms UTC. */
+    @ColumnInfo(name = "received_at") val receivedAt: Long,
+    @ColumnInfo(name = "sub_id") val subId: Int?,
+    val outcome: Outcome,
+    /** The reason part of the code, e.g. `promotional_suffix` (see [com.ledgr.app.domain.sms.Reasons]). */
+    val reason: String,
+    @ColumnInfo(name = "template_id") val templateId: String?,
+    @ColumnInfo(name = "rules_version") val rulesVersion: String,
+)
+
+enum class ScanKind { MONTH, CATCHUP, LIVE }
+
+enum class ScanStatus { RUNNING, DONE, FAILED, CANCELLED }
+
+/**
+ * docs/05 §1 `scan_run` (schema v3, P2). [countsJson] maps a full reason code (`"IGNORED: otp"`) to how many
+ * messages of the run got it; outcome totals are derived from the prefix.
+ */
+@Entity(
+    tableName = "scan_run",
+    indices = [Index(value = ["started_at"])],
+)
+data class ScanRunEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    /** `yyyy-MM` (IST) the run was about; for catch-up and live runs, the month it started in. */
+    val month: String,
+    val kind: ScanKind,
+    val status: ScanStatus,
+    @ColumnInfo(name = "started_at") val startedAt: Long,
+    @ColumnInfo(name = "finished_at") val finishedAt: Long?,
+    /** Messages read from the inbox. */
+    @ColumnInfo(name = "read_count", defaultValue = "0") val readCount: Int = 0,
+    /** Messages already stored that were left as they were. */
+    @ColumnInfo(name = "skipped_count", defaultValue = "0") val skippedCount: Int = 0,
+    @ColumnInfo(name = "error_count", defaultValue = "0") val errorCount: Int = 0,
+    @ColumnInfo(name = "counts_json", defaultValue = "{}") val countsJson: String = "{}",
+    @ColumnInfo(name = "rules_version") val rulesVersion: String,
 )

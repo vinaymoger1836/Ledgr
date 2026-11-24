@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -60,6 +61,7 @@ fun ProfileScreen(
     onOpenCategories: () -> Unit,
     onOpenMerchants: () -> Unit,
     onOpenSenders: () -> Unit,
+    onOpenScanDebug: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
@@ -153,6 +155,15 @@ fun ProfileScreen(
                 title = stringResource(R.string.profile_senders),
                 summary = stringResource(R.string.profile_senders_summary),
                 onClick = onOpenSenders,
+            )
+        }
+        // P2 only: removed or hidden in P4.
+        item(key = "row-scan-debug") {
+            NavRow(
+                icon = Icons.Outlined.Build,
+                title = stringResource(R.string.profile_scan_debug),
+                summary = stringResource(R.string.profile_scan_debug_summary),
+                onClick = onOpenScanDebug,
             )
         }
         item(key = "row-settings") {
