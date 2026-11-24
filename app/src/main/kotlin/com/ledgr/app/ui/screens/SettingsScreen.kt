@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -121,7 +122,11 @@ private fun LockTimeoutSection(selected: LockTimeout, onSelect: (LockTimeout) ->
         SectionTitle(stringResource(R.string.settings_lock_timeout))
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             options.forEachIndexed { index, timeout ->
-                val spoken = stringResource(R.string.settings_lock_timeout_option_description, timeout.minutes)
+                val spoken = pluralStringResource(
+                    R.plurals.settings_lock_timeout_option_description,
+                    timeout.minutes,
+                    timeout.minutes,
+                )
                 SegmentedButton(
                     selected = timeout == selected,
                     onClick = { onSelect(timeout) },
@@ -148,7 +153,8 @@ private fun AboutSection(database: DbStatus) {
         )
         val (text, isError) = when (database) {
             DbStatus.Opening -> stringResource(R.string.settings_db_opening) to false
-            is DbStatus.Ready -> stringResource(R.string.settings_db_ready, database.categoryCount) to false
+            is DbStatus.Ready ->
+                pluralStringResource(R.plurals.settings_db_ready, database.categoryCount, database.categoryCount) to false
             is DbStatus.Failed -> stringResource(R.string.settings_db_failed, database.reason) to true
         }
         Text(
