@@ -1,0 +1,84 @@
+# Shipped merchant dictionary (docs/03 §6, docs/05 §2). Starter list.
+#
+# Every keyword and VPA prefix below is `verify: true`: written from general knowledge, not from your own
+# SMS. P3 fills in the exact VPAs and legal names from your real data.
+#
+# At first run each entry becomes a Merchants row you can rename, re-categorise or give an image; after that
+# the row is yours and this file never overwrites it. Matching (vpa_prefix / keywords) is always read from here.
+# category: a key from categories.yaml
+version: "2026.11.1"
+
+# Payment aggregators: the payee is the aggregator, not the shop (docs/03 §6 step 4).
+aggregators: [razorpay, payu, cashfree, billdesk, "paytm pg", ccavenue, instamojo, juspay, phonepe pg]
+
+merchants:
+  - id: swiggy
+    name: Swiggy
+    category: food_dining
+    verify: true
+    match: { vpa_prefix: [swiggy], keywords: [SWIGGY, BUNDL TECHNOLOGIES] }
+  - id: zomato
+    name: Zomato
+    category: food_dining
+    verify: true
+    match: { vpa_prefix: [zomato], keywords: [ZOMATO] }
+  - id: blinkit
+    name: Blinkit
+    category: groceries
+    verify: true
+    match: { vpa_prefix: [blinkit], keywords: [BLINKIT, GROFERS] }
+  - id: zepto
+    name: Zepto
+    category: groceries
+    verify: true
+    match: { vpa_prefix: [zepto], keywords: [ZEPTO, KIRANAKART] }
+  - id: bigbasket
+    name: BigBasket
+    category: groceries
+    verify: true
+    match: { vpa_prefix: [bigbasket], keywords: [BIGBASKET, SUPERMARKET GROCERY] }
+  - id: rapido
+    name: Rapido
+    category: transport
+    verify: true
+    match: { vpa_prefix: [rapido], keywords: [RAPIDO, ROPPEN] }
+  - id: uber
+    name: Uber
+    category: transport
+    verify: true
+    match: { vpa_prefix: [uber], keywords: [UBER] }
+  - id: ola
+    name: Ola
+    category: transport
+    verify: true
+    match: { vpa_prefix: [olacabs, olamoney], keywords: [OLACABS, ANI TECHNOLOGIES] }
+  - id: amazon
+    name: Amazon
+    category: shopping
+    verify: true
+    match: { vpa_prefix: [amazon, amzn], keywords: [AMAZON, AMZN] }
+  - id: flipkart
+    name: Flipkart
+    category: shopping
+    verify: true
+    match: { vpa_prefix: [flipkart], keywords: [FLIPKART] }
+  - id: netflix
+    name: Netflix
+    category: entertainment_subscriptions
+    verify: true
+    match: { vpa_prefix: [netflix], keywords: [NETFLIX] }
+  - id: spotify
+    name: Spotify
+    category: entertainment_subscriptions
+    verify: true
+    match: { vpa_prefix: [spotify], keywords: [SPOTIFY] }
+  - id: airtel
+    name: Airtel
+    category: mobile_internet
+    verify: true
+    match: { vpa_prefix: [airtel], keywords: [AIRTEL, BHARTI AIRTEL] }
+  - id: jio
+    name: Jio
+    category: mobile_internet
+    verify: true
+    match: { vpa_prefix: [jio, ril], keywords: [JIO, RELIANCE JIO] }

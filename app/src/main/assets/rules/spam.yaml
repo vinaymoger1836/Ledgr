@@ -1,0 +1,25 @@
+# Spam gate and classifier data (docs/03 §4, docs/04 §1). Loaded and validated in P1; the gate that uses it
+# arrives in P2. Keywords are matched case-insensitively as whole words or phrases.
+version: "2026.11.1"
+
+# L2 (docs/04 §1): an address with no TRAI suffix passes only if the SMS is dated before this day, or its
+# header is one the user confirmed. yyyy-MM-dd, Asia/Kolkata.
+suffix_cutoff: "2025-05-01"
+
+# Classifier keyword lists (docs/03 §4). Keys are class names; the P2 classifier decides the order.
+classes:
+  otp: ["otp", "one time password", "one-time password", "do not share", "verification code"]
+  reminder: ["is due", "will be debited", "due date", "min amt due", "minimum amount due", "mandate", "scheduled"]
+  failed: ["declined", "failed", "unsuccessful", "reversed due to", "could not be processed"]
+  promo: ["offer", "pre-approved", "pre approved", "cashback upto", "cashback up to", "apply now", "limited period", "lowest interest"]
+  balance_only: ["available balance", "avl bal", "avl balance"]
+  # An amount together with one of these is a transaction candidate.
+  txn_verbs: ["debited", "spent", "withdrawn", "credited", "received", "paid", "sent"]
+
+# L7 (docs/04 §1): a URL or phone number together with one of these inside an otherwise valid txn
+# quarantines the message.
+red_flags:
+  action_words: ["click", "update kyc", "verify", "blocked", "call", "link your", "expires today", "suspended"]
+
+# Per-bank exceptions, e.g. a bank whose genuine alerts carry a link. Empty until the owner needs one.
+bank_exceptions: []
