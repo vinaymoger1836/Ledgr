@@ -1,0 +1,38 @@
+# Default categories (docs/05 §1 "category", docs/03 §7). Seeded into the DB on first run;
+# user edits live in the DB and win over this file.
+# color: index 0..9 into the fixed category palette (app/.../ui/theme/CategoryPalette.kt)
+# icon:  string key resolved to a vector by the UI
+version: "2026.11.1"
+categories:
+  # ── Expenses ──────────────────────────────────────────────
+  - { key: food_dining,                  name: "Food & dining",                  kind: EXPENSE,  icon: restaurant,   color: 0 }
+  - { key: groceries,                    name: "Groceries",                      kind: EXPENSE,  icon: grocery,      color: 2 }
+  - { key: shopping,                     name: "Shopping",                       kind: EXPENSE,  icon: shopping,     color: 7 }
+  - { key: transport,                    name: "Transport",                      kind: EXPENSE,  icon: transport,    color: 4 }
+  - { key: fuel,                         name: "Fuel",                           kind: EXPENSE,  icon: fuel,         color: 8 }
+  - { key: bills_utilities,              name: "Bills & utilities",              kind: EXPENSE,  icon: bill,         color: 1 }
+  - { key: mobile_internet,              name: "Mobile & internet",              kind: EXPENSE,  icon: phone,        color: 3 }
+  - { key: rent,                         name: "Rent",                           kind: EXPENSE,  icon: home,         color: 5 }
+  - { key: emi_loans,                    name: "EMI & loans",                    kind: EXPENSE,  icon: loan,         color: 9 }
+  - { key: investments,                  name: "Investments",                    kind: EXPENSE,  icon: investment,   color: 6 }
+  - { key: insurance,                    name: "Insurance",                      kind: EXPENSE,  icon: shield,       color: 4 }
+  - { key: health,                       name: "Health",                         kind: EXPENSE,  icon: health,       color: 0 }
+  - { key: entertainment_subscriptions,  name: "Entertainment & subscriptions",  kind: EXPENSE,  icon: entertainment, color: 6 }
+  - { key: travel,                       name: "Travel",                         kind: EXPENSE,  icon: travel,       color: 3 }
+  - { key: education,                    name: "Education",                      kind: EXPENSE,  icon: education,    color: 5 }
+  - { key: personal_care,                name: "Personal care",                  kind: EXPENSE,  icon: personal,     color: 7 }
+  - { key: gifts_donations,              name: "Gifts & donations",              kind: EXPENSE,  icon: gift,         color: 1 }
+  - { key: cash_withdrawal,              name: "Cash withdrawal",                kind: EXPENSE,  icon: cash,         color: 8 }
+  - { key: transfers_to_people,          name: "Transfers to people",            kind: EXPENSE,  icon: person,       color: 9 }
+  - { key: fees_charges,                 name: "Fees & charges",                 kind: EXPENSE,  icon: fee,          color: 2 }
+  - { key: uncategorised,                name: "Uncategorised",                  kind: EXPENSE,  icon: help,         color: 9 }
+  # ── Income ────────────────────────────────────────────────
+  - { key: salary,                       name: "Salary",                         kind: INCOME,   icon: salary,       color: 2 }
+  - { key: transfers_in,                 name: "Transfers in",                   kind: INCOME,   icon: person,       color: 3 }
+  - { key: refund,                       name: "Refund",                         kind: INCOME,   icon: refund,       color: 4 }
+  - { key: interest,                     name: "Interest",                       kind: INCOME,   icon: interest,     color: 5 }
+  - { key: cashback,                     name: "Cashback",                       kind: INCOME,   icon: cashback,     color: 1 }
+  - { key: other_income,                 name: "Other income",                   kind: INCOME,   icon: income,       color: 9 }
+  # ── Own transfers (excluded from combined totals by default, ADR-007) ──
+  - { key: self_transfer,                name: "Self transfer",                  kind: TRANSFER, icon: swap,         color: 4 }
+  - { key: card_bill_payment,            name: "Card bill payment",              kind: TRANSFER, icon: card,         color: 6 }

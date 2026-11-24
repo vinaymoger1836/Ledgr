@@ -65,6 +65,10 @@ captures/
 *.dex
 *.class
 *.hprof
+hs_err_pid*
+replay_pid*
+*.idsig
+lint-results*
 output-metadata.json
 app/release/
 app/debug/
