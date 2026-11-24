@@ -52,6 +52,7 @@ internal object GoldenRules {
             text("banks.yaml"), text("spam.yaml"), text("merchants.yaml"), text("categories.yaml"),
             ledgerYaml = text("ledger.yaml"),
             templateYamls = templates,
+            statementProfilesYaml = text("statement_profiles.yaml"),
         )
     }
 }

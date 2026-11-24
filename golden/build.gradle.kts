@@ -20,6 +20,13 @@ java {
 dependencies {
     implementation(project(":domain"))
     implementation(libs.kotlinx.serialization.json)
+    // XML pull parser implementation for the XLSX reader (the phone has one in the platform).
+    runtimeOnly(libs.xmlpull)
+    runtimeOnly(libs.kxml2)
+    // P6, golden only (never shipped): author the synthetic PDF (encrypted, multi-page) and .xls fixtures, and read the
+    // owner's private PDFs. The app itself reads PDFs with PdfBox-Android.
+    implementation(libs.pdfbox.jvm)
+    implementation(libs.poi.hssf)
 }
 
 application {

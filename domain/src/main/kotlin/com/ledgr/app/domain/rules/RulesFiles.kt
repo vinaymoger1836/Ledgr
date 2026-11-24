@@ -3,6 +3,8 @@ package com.ledgr.app.domain.rules
 import com.charleskorn.kaml.Yaml
 import com.ledgr.app.domain.ledger.Channel
 import com.ledgr.app.domain.ledger.TxnKind
+import com.ledgr.app.domain.statement.StatementProfiles
+import com.ledgr.app.domain.statement.StatementProfilesValidator
 import com.ledgr.app.domain.template.TemplateCompiler
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -96,6 +98,8 @@ data class RulesBundle(
     val ledger: LedgerFile = LedgerFile(version = banks.version),
     /** `templates/<bank>.yaml` files, in the order given. Empty until real templates are written. */
     val templates: List<TemplateFile> = emptyList(),
+    /** `statement_profiles.yaml` (P6, ADR-016): how statements are recognised and reconciled. */
+    val statementProfiles: StatementProfiles = StatementProfiles.empty(banks.version),
 ) {
     /**
      * The version stamped on every row the rules produce (docs/05 §2). One number when all files agree
@@ -103,13 +107,13 @@ data class RulesBundle(
      */
     val version: String
         get() {
-            val all = listOf(banks.version, spam.version, merchants.version, categories.version, ledger.version) +
+            val all = listOf(banks.version, spam.version, merchants.version, categories.version, ledger.version, statementProfiles.version) +
                 templates.map { it.version }
             return if (all.distinct().size == 1) {
                 all.first()
             } else {
                 "banks=${banks.version},spam=${spam.version},merchants=${merchants.version}," +
-                    "categories=${categories.version},ledger=${ledger.version}" +
+                    "categories=${categories.version},ledger=${ledger.version},statements=${statementProfiles.version}" +
                     templates.joinToString("") { ",${it.bank}=${it.version}" }
             }
         }
@@ -136,6 +140,7 @@ data class RulesBundle(
             categoriesYaml: String,
             ledgerYaml: String? = null,
             templateYamls: Map<String, String> = emptyMap(),
+            statementProfilesYaml: String? = null,
         ): RulesBundle {
             val categories = CategoryRulesParser.parse(categoriesYaml)
             val banks = decode(BanksFile.serializer(), banksYaml, "banks.yaml")
@@ -152,7 +157,13 @@ data class RulesBundle(
             validateLedger(ledger, categories)
             val templates = templateYamls.map { (name, text) -> decode(TemplateFile.serializer(), text, name) }
             validateTemplates(templates, banks)
-            return RulesBundle(banks, spam, merchants, categories, ledger, templates)
+            val statementProfiles = if (statementProfilesYaml == null) {
+                StatementProfiles.empty(banks.version)
+            } else {
+                decode(StatementProfiles.serializer(), statementProfilesYaml, "statement_profiles.yaml")
+            }
+            StatementProfilesValidator.validate(statementProfiles, banks.banks.map { it.id }.toSet())
+            return RulesBundle(banks, spam, merchants, categories, ledger, templates, statementProfiles)
         }
 
         private fun <T> decode(serializer: KSerializer<T>, text: String, name: String): T =

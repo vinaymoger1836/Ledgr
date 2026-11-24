@@ -1,6 +1,6 @@
 # Spam gate and classifier data (docs/03 §4, docs/04 §1). Loaded and validated in P1; the gate that uses it
 # arrives in P2. Keywords are matched case-insensitively as whole words or phrases.
-version: "2026.11.2"
+version: "2026.11.3"
 
 # L2 (docs/04 §1): an address with no TRAI suffix passes only if the SMS is dated before this day, or its
 # header is one the user confirmed. yyyy-MM-dd, Asia/Kolkata.

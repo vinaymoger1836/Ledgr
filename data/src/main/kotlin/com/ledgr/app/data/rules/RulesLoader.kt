@@ -34,6 +34,7 @@ class RulesLoader @Inject constructor(
             categoriesYaml = read("categories.yaml"),
             ledgerYaml = read("ledger.yaml"),
             templateYamls = templateFiles(),
+            statementProfilesYaml = read("statement_profiles.yaml"),
         )
         cached = bundle
         return bundle

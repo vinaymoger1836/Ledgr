@@ -1,6 +1,6 @@
 # Ledger rules (docs/03 §6-7, docs/04 §3-5, ADR-013). Everything the merchant resolver, categoriser and
 # transfer linker need that is not a merchant or a category lives here, so no such constant is in Kotlin.
-version: "2026.11.2"
+version: "2026.11.3"
 
 # Credit SMS that mention one of these are salary (categoriser step 3).
 salary_keywords: ["salary", "sal credit", "payroll"]

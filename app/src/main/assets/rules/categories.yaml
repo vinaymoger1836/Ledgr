@@ -2,7 +2,7 @@
 # user edits live in the DB and win over this file.
 # color: index 0..9 into the fixed category palette (app/.../ui/theme/CategoryPalette.kt)
 # icon:  string key resolved to a vector by the UI
-version: "2026.11.2"
+version: "2026.11.3"
 categories:
   # ── Expenses ──────────────────────────────────────────────
   - { key: food_dining,                  name: "Food & dining",                  kind: EXPENSE,  icon: restaurant,   color: 0 }

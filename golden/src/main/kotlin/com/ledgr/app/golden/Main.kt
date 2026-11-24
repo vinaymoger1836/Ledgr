@@ -83,7 +83,7 @@ private fun runCase(case: GoldenCase, context: GoldenContext, expectedDir: File,
 
 /** Parses all shipped rule files through the same `:domain` code the app uses, including cross-file checks. */
 private fun preflightRules(dir: File): Int {
-    val names = listOf("banks.yaml", "spam.yaml", "merchants.yaml", "categories.yaml", "ledger.yaml")
+    val names = listOf("banks.yaml", "spam.yaml", "merchants.yaml", "categories.yaml", "ledger.yaml", "statement_profiles.yaml")
     val missing = names.map { File(dir, it) }.filterNot { it.isFile }
     if (missing.isNotEmpty()) {
         missing.forEach { System.err.println("[FAIL] rules preflight: ${it.path} not found") }
@@ -96,13 +96,15 @@ private fun preflightRules(dir: File): Int {
         val bundle = RulesBundle.parse(
             text("banks.yaml"), text("spam.yaml"), text("merchants.yaml"), text("categories.yaml"),
             ledgerYaml = text("ledger.yaml"), templateYamls = templates,
+            statementProfilesYaml = text("statement_profiles.yaml"),
         )
         println(
             "[ OK ] rules preflight: v${bundle.version}: ${bundle.banks.banks.size} banks " +
                 "(${bundle.unverifiedBanks} unverified), ${bundle.merchants.merchants.size} merchants " +
                 "(${bundle.unverifiedMerchants} unverified), ${bundle.categories.categories.size} categories, " +
                 "${bundle.spam.classes.size} spam classes, ${bundle.templates.sumOf { it.templates.size }} templates " +
-                "in ${bundle.templates.size} file(s) (${bundle.unverifiedTemplates} unverified)",
+                "in ${bundle.templates.size} file(s) (${bundle.unverifiedTemplates} unverified), " +
+                "${bundle.statementProfiles.fields.size} statement fields, ${bundle.statementProfiles.dateFormats.size} date formats",
         )
         0
     } catch (e: Exception) {
